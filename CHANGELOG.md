@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-10-03
+
+### Fixed
+- Claude Code detection in `braingrid status` command with 3-tier detection strategy
+  - Priority 1: Check `~/.claude/local/claude` (after `claude migrate-installer`)
+  - Priority 2: Try executing `claude --version` (shell alias detection)
+  - Priority 3: Check PATH with `which claude`
+  - Based on GitHub's spec-kit implementation pattern
+  - Added comprehensive test coverage for all detection methods
+
+### Changed
+- README comment alignment in usage sections for better readability
+
 ## [0.0.7] - 2025-10-03
 
 ### Added
