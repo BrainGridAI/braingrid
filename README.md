@@ -50,7 +50,6 @@ braingrid login
 
 # 2. Create a project
 braingrid project create --name "My Awesome Project"
-# Returns: PROJ-1
 
 # 3. Create a requirement for your project
 braingrid requirement create -p PROJ-1 --prompt "Add user authentication"
