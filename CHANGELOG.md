@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2025-10-03
+
+### Added
+- `braingrid init` command to initialize repositories with BrainGrid projects
+  - Auto-detects project from git remote (owner/name)
+  - Manual mode with `--project <id>` to specify project by ID
+  - Interactive wizard mode with `--wizard` flag
+  - Force reinitialization with `--force` flag
+  - Creates `.braingrid/project.json` with project configuration
+- `braingrid update` command to update CLI to latest version
+  - Automatic package manager detection (npm/pnpm/yarn)
+  - Version checking against npm registry
+  - `--check` flag for dry run without installing
+- Auto-detection of project from `.braingrid/project.json` for simpler commands
+  - `braingrid requirement list` (no longer requires `-p PROJ-123`)
+  - `braingrid requirement create --prompt "..."` (auto-detects project)
+  - `braingrid task list -r REQ-456` (auto-prepends project from config)
+  - Explicit project ID still works for managing multiple projects
+- Git user storage during authentication in encrypted config
+- Package manager detection utility for consistent install/update methods
+- Local project configuration schema with Zod validation
+- 36 new tests for init, update, and auto-detection features
+
+### Changed
+- Updated `--repository` as primary alias for `--repo` in project show command (both still work)
+- Project configuration now stores API repository data instead of git-derived data
+- Simplified QuickStart workflow with auto-detection examples
+- Enhanced error messages to guide users to run `braingrid init` when needed
+
+### Fixed
+- Terminal crash issue in status command by removing interactive shell flag
+- Data consistency by using API repository values instead of mixing git-derived data
+
 ## [0.0.6] - 2025-10-02
 
 ### Added
