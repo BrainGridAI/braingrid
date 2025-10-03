@@ -48,20 +48,20 @@ npm install -g @braingrid/cli
 # 1. Authenticate
 braingrid login
 
-# 2. Create a project
-braingrid project create --name "My Awesome Project"
+# 2. Initialize your project (auto-detects from git remote)
+braingrid init
 
-# 3. Create a requirement for your project
-braingrid requirement create -p PROJ-1 --prompt "Add user authentication"
+# 3. Create a requirement
+braingrid requirement create --prompt "Add user authentication"
 
-# 4. List requirements for the project
-braingrid requirement list -p PROJ-1
+# 4. List requirements
+braingrid requirement list
 
 # 5. Create tasks for a requirement
-braingrid task create -r PROJ-1/REQ-1 --title "Implement login endpoint"
+braingrid task create -r REQ-1 --title "Implement login endpoint"
 
 # 6. View tasks for a requirement
-braingrid task list -r PROJ-1/REQ-1
+braingrid task list -r REQ-1
 ```
 ---
 
@@ -77,39 +77,70 @@ braingrid logout               # Sign out and clear credentials
 braingrid whoami               # Show current user information
 ```
 
+### Initialization
+
+Initialize your repository with a BrainGrid project:
+
+```bash
+braingrid init                       # Auto-detects project from git remote (owner/name)
+braingrid init --project PROJ-123    # Manually specify project by ID (short ID or UUID)
+braingrid init --wizard              # Run interactive wizard with confirmation prompt
+braingrid init --force               # Force reinitialization if already initialized
+braingrid init --project PROJ-123 --force  # Manually specify and force reinitialization
+```
+
+The `init` command:
+- **Auto-detect mode** (default): Fetches the project linked to your current git repository
+- **Manual mode** (`--project`): Fetches a specific project by ID, bypassing git detection
+- Creates a `.braingrid/project.json` file in the `.braingrid/` directory
+- Fails if already initialized unless `--force` is provided
+
 ### Project Commands
 
 ```bash
 braingrid project list [--format json] [--page 1] [--limit 20]
-braingrid project show <id>
-braingrid project create --name "Project Name" [--description "Description"]
+braingrid project show                                       # Auto-detects project from current repo
+braingrid project show [<id>] [--repository "owner/repo"]   # Show specific repo's project (--repo also works)
+braingrid project create --name "Project Name" [--description "Description"] [--repositories "owner/repo,owner/repo2"]
 braingrid project update <id> [--name "New Name"] [--description "New Description"]
 braingrid project delete <id> [--force]
 ```
 
+> **Note:** `project show` automatically detects the current git repository and shows its associated project when called without arguments. You can also specify `--repository "owner/repo"` (or the shorter `--repo`) to show a specific repository's project, or provide a project ID directly.
+
 ### Requirement Commands
 
 ```bash
-braingrid requirement list -p <project-id> [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--format json]
+# After running braingrid init (project auto-detected):
+braingrid requirement list [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--format json]
+braingrid requirement create --prompt "Requirement description" [--repositories "owner/repo"]
 braingrid requirement show <id>
-braingrid requirement create -p <project-id> --prompt "Requirement description" [--repositories "owner/repo,owner/repo2"]
 braingrid requirement update <id> [--status STATUS] [--name "New Name"]
 braingrid requirement delete <id> [--force]
+
+# Working with a different project:
+braingrid requirement list -p PROJ-456 [--status PLANNED]
+braingrid requirement create -p PROJ-456 --prompt "Description"
 ```
 
-> **Note:** Use `-p` (short) or `--project` (long) for the project parameter.
+> **Note:** The `-p`/`--project` parameter is optional when working in an initialized repository. Use it to work with a different project.
 
 ### Task Commands
 
 ```bash
-braingrid task list -r <req-id> [--format json]
+# After running braingrid init (project auto-detected):
+braingrid task list -r REQ-456 [--format json]
+braingrid task create -r REQ-456 --title "Task Title" [--content "Description"]
 braingrid task show <id>
-braingrid task create -r <req-id> --title "Task Title" [--content "Description"]
 braingrid task update <id> [--status STATUS] [--title "New Title"]
 braingrid task delete <id> [--force]
+
+# Working with a different project (full format):
+braingrid task list -r PROJ-123/REQ-456
+braingrid task create -r PROJ-123/REQ-456 --title "Task Title"
 ```
 
-> **Note:** Use `-r` (short) or `--requirement` (long) for the requirement parameter.
+> **Note:** The `-r`/`--requirement` parameter accepts either `REQ-456` (auto-detects project from `.braingrid/project.json`) or full format `PROJ-123/REQ-456` for working with other projects.
 
 ### Informational Commands
 
@@ -126,14 +157,8 @@ braingrid --help               # Show help information
 Update to the latest version:
 
 ```bash
-# npm
-npm install -g @braingrid/cli@latest
-
-# yarn
-yarn global add @braingrid/cli@latest
-
-# pnpm
-pnpm add -g @braingrid/cli@latest
+braingrid update                # Update to the latest version
+braingrid update --check        # Check for updates without installing
 ```
 
 ---
