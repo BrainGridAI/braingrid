@@ -35,45 +35,33 @@
 ## Installation
 
 ```bash
-# npm
 npm install -g @braingrid/cli
-
-# yarn
-yarn global add @braingrid/cli
-
-# pnpm
-pnpm add -g @braingrid/cli
 ```
 
 > Requires Node.js 18+
 
 ---
 
-## QuickStart
-
-### One-Minute Flow
+## QuickStart: One-Minute Flow
 
 ```bash
-# 1. Install globally
-npm install -g @braingrid/cli
-
-# 2. Authenticate
+# 1. Authenticate
 braingrid login
 
-# 3. Create a project
+# 2. Create a project
 braingrid project create --name "My Awesome Project"
 # Returns: PROJ-1
 
-# 4. Create a requirement for your project
+# 3. Create a requirement for your project
 braingrid requirement create -p PROJ-1 --prompt "Add user authentication"
 
-# 5. List requirements for the project
+# 4. List requirements for the project
 braingrid requirement list -p PROJ-1
 
-# 6. Create tasks for a requirement
+# 5. Create tasks for a requirement
 braingrid task create -r PROJ-1/REQ-1 --title "Implement login endpoint"
 
-# 7. View tasks for a requirement
+# 6. View tasks for a requirement
 braingrid task list -r PROJ-1/REQ-1
 ```
 ---
