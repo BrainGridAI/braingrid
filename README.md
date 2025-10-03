@@ -72,9 +72,9 @@ BrainGrid CLI uses a resource-oriented command structure: `braingrid <resource> 
 ### Authentication Commands
 
 ```bash
-braingrid login                # Authenticate with BrainGrid (OAuth2 PKCE flow)
-braingrid logout               # Sign out and clear credentials
-braingrid whoami               # Show current user information
+braingrid login       # Authenticate with BrainGrid (OAuth2 PKCE flow)
+braingrid logout      # Sign out and clear credentials
+braingrid whoami      # Show current user information
 ```
 
 ### Initialization
@@ -82,10 +82,10 @@ braingrid whoami               # Show current user information
 Initialize your repository with a BrainGrid project:
 
 ```bash
-braingrid init                       # Auto-detects project from git remote (owner/name)
-braingrid init --project PROJ-123    # Manually specify project by ID (short ID or UUID)
-braingrid init --wizard              # Run interactive wizard with confirmation prompt
-braingrid init --force               # Force reinitialization if already initialized
+braingrid init                              # Auto-detects project from git remote (owner/name)
+braingrid init --project PROJ-123           # Manually specify project by ID (short ID or UUID)
+braingrid init --wizard                     # Run interactive wizard with confirmation prompt
+braingrid init --force                      # Force reinitialization if already initialized
 braingrid init --project PROJ-123 --force  # Manually specify and force reinitialization
 ```
 
@@ -145,9 +145,9 @@ braingrid task create -r PROJ-123/REQ-456 --title "Task Title"
 ### Informational Commands
 
 ```bash
-braingrid status               # Show CLI status (authentication, git repo, configuration)
-braingrid --version            # Show CLI version
-braingrid --help               # Show help information
+braingrid status       # Show CLI status (authentication, git repo, configuration)
+braingrid --version    # Show CLI version
+braingrid --help       # Show help information
 ```
 
 ---
@@ -157,8 +157,8 @@ braingrid --help               # Show help information
 Update to the latest version:
 
 ```bash
-braingrid update                # Update to the latest version
-braingrid update --check        # Check for updates without installing
+braingrid update          # Update to the latest version
+braingrid update --check  # Check for updates without installing
 ```
 
 ---
