@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2025-10-02
+
+### Added
+- `/cut-release` slash command for streamlined release workflow
+- `pnpm docs:sync` command to sync CLI documentation to main BrainGrid repository
+- Repository-aware project commands with automatic git context detection
+- Collapsible installation and update command tabs in documentation
+
+### Changed
+- Enhanced project commands to automatically detect and include git repository context
+- Improved README with spec-driven development explanation
+
 ## [0.0.5] - 2025-10-02
 
 ### Added
