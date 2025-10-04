@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.9] - 2025-10-04
+
+### Added
+- `-v` shorthand flag for `--version` command
+
+### Fixed
+- API response handling for `project show --repo` and `project show --repo --limit` commands
+  - Now correctly handles `ListProjectsWithRepositoryResponse` (with `total_count`) vs `ListProjectsResponse` (with `pagination`)
+  - Fixed bug where optional `total_count` check could cause pagination info to not display
+  - Added `formatProjectListPagination()` helper function to eliminate code duplication
+  - Simplified `ProjectService.listProjects()` to use union type consistently
+
 ## [0.0.8] - 2025-10-03
 
 ### Fixed
