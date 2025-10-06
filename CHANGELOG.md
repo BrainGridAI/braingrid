@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.9] - 2025-10-04
 
 ### Added
+
 - `-v` shorthand flag for `--version` command
 
 ### Fixed
+
 - API response handling for `project show --repo` and `project show --repo --limit` commands
   - Now correctly handles `ListProjectsWithRepositoryResponse` (with `total_count`) vs `ListProjectsResponse` (with `pagination`)
   - Fixed bug where optional `total_count` check could cause pagination info to not display
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.8] - 2025-10-03
 
 ### Fixed
+
 - Claude Code detection in `braingrid status` command with 3-tier detection strategy
   - Priority 1: Check `~/.claude/local/claude` (after `claude migrate-installer`)
   - Priority 2: Try executing `claude --version` (shell alias detection)
@@ -28,11 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added comprehensive test coverage for all detection methods
 
 ### Changed
+
 - README comment alignment in usage sections for better readability
 
 ## [0.0.7] - 2025-10-03
 
 ### Added
+
 - `braingrid init` command to initialize repositories with BrainGrid projects
   - Auto-detects project from git remote (owner/name)
   - Manual mode with `--project <id>` to specify project by ID
@@ -54,30 +59,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 36 new tests for init, update, and auto-detection features
 
 ### Changed
+
 - Updated `--repository` as primary alias for `--repo` in project show command (both still work)
 - Project configuration now stores API repository data instead of git-derived data
 - Simplified QuickStart workflow with auto-detection examples
 - Enhanced error messages to guide users to run `braingrid init` when needed
 
 ### Fixed
+
 - Terminal crash issue in status command by removing interactive shell flag
 - Data consistency by using API repository values instead of mixing git-derived data
 
 ## [0.0.6] - 2025-10-02
 
 ### Added
+
 - `/cut-release` slash command for streamlined release workflow
 - `pnpm docs:sync` command to sync CLI documentation to main BrainGrid repository
 - Repository-aware project commands with automatic git context detection
 - Collapsible installation and update command tabs in documentation
 
 ### Changed
+
 - Enhanced project commands to automatically detect and include git repository context
 - Improved README with spec-driven development explanation
 
 ## [0.0.5] - 2025-10-02
 
 ### Added
+
 - IDEA and REVIEW requirement statuses for enhanced workflow management
 - Emoji mappings: 💡 for IDEA, 👀 for REVIEW
 - Natural language keyword parsing for new statuses
@@ -86,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated CLI help text to include new statuses
 
 ### Changed
+
 - RequirementStatus type now supports 6 statuses: IDEA, PLANNED, IN_PROGRESS, REVIEW, COMPLETED, CANCELLED
 - Status workflow: IDEA → PLANNED → IN_PROGRESS → REVIEW → COMPLETED/CANCELLED
 - Updated README badges to use @braingrid organization
@@ -94,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.4] - 2025-10-02
 
 ### Added
+
 - Comprehensive test coverage improvement from 26.15% to 64.9%
 - 529 passing tests covering utils, services, and handlers
 - Handler layer tests achieving 96.28% coverage (all core handlers 92-100%)
@@ -103,6 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI tools detection (Claude Code, Cursor, git)
 
 ### Changed
+
 - Renamed package from `@braingridai/cli` to `@braingrid/cli`
 - Updated repository URL to main braingrid repo
 - Refactored from React-based CLI to Commander.js pattern
@@ -110,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced status command with authentication, git, and tool information
 
 ### Fixed
+
 - Task handler number type (string for proper padding)
 - Repository URL format in package.json
 - Test coverage for all critical paths
@@ -117,14 +131,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.3] - 2024-01-XX
 
 ### Changed
+
 - Initial npm publication as `@braingrid/cli`
 
 ## [0.0.2] - 2024-01-XX
 
 ### Changed
+
 - Initial version as `@braingridai/cli`
 
 ## [0.0.1] - 2024-01-XX
 
 ### Added
+
 - Initial CLI implementation
