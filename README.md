@@ -5,9 +5,10 @@
   <p>Turn thoughts into AI-ready specs and ship 100 faster.</p>
   <h3>A CLI for spec-driven development.</h3>
 
-  [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
-  [![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
-  [![GitHub stars](https://img.shields.io/github/stars/BrainGridAI/braingrid?style=social)](https://github.com/BrainGridAI/braingrid)
+[![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
+[![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
+[![GitHub stars](https://img.shields.io/github/stars/BrainGridAI/braingrid?style=social)](https://github.com/BrainGridAI/braingrid)
+
 </div>
 
 ---
@@ -29,6 +30,7 @@
 - 📊 **Track Progress** - Manage and update task statuses
 - 💾 **Multiple Output Formats** - View data as formatted tables or JSON for scripting
 - 🔍 **Environment Detection** - Automatically detect git repository info and installed AI coding tools
+- 🔌 **JSON-RPC Mode** - Programmatic access via JSON-RPC 2.0 protocol for IDE integration
 
 ---
 
@@ -63,6 +65,7 @@ braingrid task create -r REQ-1 --title "Implement login endpoint"
 # 6. View tasks for a requirement
 braingrid task list -r REQ-1
 ```
+
 ---
 
 ## Usage
@@ -90,6 +93,7 @@ braingrid init --project PROJ-123 --force  # Manually specify and force reinitia
 ```
 
 The `init` command:
+
 - **Auto-detect mode** (default): Fetches the project linked to your current git repository
 - **Manual mode** (`--project`): Fetches a specific project by ID, bypassing git detection
 - Creates a `.braingrid/project.json` file in the `.braingrid/` directory
