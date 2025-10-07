@@ -75,9 +75,9 @@ BrainGrid CLI uses a resource-oriented command structure: `braingrid <resource> 
 ### Authentication Commands
 
 ```bash
-braingrid login       # Authenticate with BrainGrid (OAuth2 PKCE flow)
-braingrid logout      # Sign out and clear credentials
-braingrid whoami      # Show current user information
+braingrid login
+braingrid whoami
+braingrid logout
 ```
 
 ### Initialization
@@ -85,32 +85,36 @@ braingrid whoami      # Show current user information
 Initialize your repository with a BrainGrid project:
 
 ```bash
-braingrid init                              # Auto-detects project from git remote (owner/name)
-braingrid init --project PROJ-123           # Manually specify project by ID (short ID or UUID)
-braingrid init --wizard                     # Run interactive wizard with confirmation prompt
-braingrid init --force                      # Force reinitialization if already initialized
-braingrid init --project PROJ-123 --force  # Manually specify and force reinitialization
+# Run interactive wizard with confirmation prompt
+braingrid init --wizard
+
+# Auto-detects project from git remote (owner/name)
+braingrid init
+
+# Manually specify project by ID (short ID or UUID)
+braingrid init --project PROJ-123
+
+# Force reinitialization if already initialized
+braingrid init --force
+
+# Manually specify and force reinitialization
+braingrid init --project PROJ-123 --force
 ```
 
-The `init` command:
-
-- **Auto-detect mode** (default): Fetches the project linked to your current git repository
-- **Manual mode** (`--project`): Fetches a specific project by ID, bypassing git detection
-- Creates a `.braingrid/project.json` file in the `.braingrid/` directory
-- Fails if already initialized unless `--force` is provided
+The `init` command creates a `.braingrid/project.json` file in the `.braingrid/` directory. This tells the CLI what project it is working on so you don't have to pass it as a parameter.
 
 ### Project Commands
 
 ```bash
 braingrid project list [--format json] [--page 1] [--limit 20]
-braingrid project show                                       # Auto-detects project from current repo
-braingrid project show [<id>] [--repository "owner/repo"]   # Show specific repo's project (--repo also works)
+braingrid project show
+braingrid project show [<id>] [--repository "owner/repo"]
 braingrid project create --name "Project Name" [--description "Description"] [--repositories "owner/repo,owner/repo2"]
 braingrid project update <id> [--name "New Name"] [--description "New Description"]
 braingrid project delete <id> [--force]
 ```
 
-> **Note:** `project show` automatically detects the current git repository and shows its associated project when called without arguments. You can also specify `--repository "owner/repo"` (or the shorter `--repo`) to show a specific repository's project, or provide a project ID directly.
+> **Note:** `project show` displays the initialized project from your workspace when called without arguments. Use `--repository "owner/repo"` to list all projects for a specific repository, or provide a project ID directly to view a specific project.
 
 ### Requirement Commands
 
