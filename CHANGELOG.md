@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-10-07
+
+### Added
+
+- Consistent resource ID normalization across projects, requirements, and tasks
+  - Supports multiple input formats: `PROJ-123`, `proj-123`, `PROJ 123`, `123`, or UUID
+  - Generic `normalizeId()` utility eliminates code duplication
+- Git repository root detection for `.braingrid` folder placement
+  - `.braingrid/project.json` now created at git repository root instead of current directory
+  - Ensures consistent project configuration across entire repository
+- Workspace manager for centralized project resolution
+  - Simplifies project auto-detection from local configuration
+  - Reduces redundant workspace lookups in task commands
+- Configuration path display in `braingrid status` command
+  - Shows where user-level credentials are stored (`~/.config/BrainGrid/config.json`)
+- Internal API services pattern for GitHub and repository operations
+  - Prepares foundation for future repository integration features
+
+### Changed
+
+- Command structure improvements with consistent ID handling
+  - Project, requirement, and task commands now accept flexible ID formats
+  - `braingrid task list -r REQ-456` and `braingrid task list -r 456` both work
+- Improved error messages with better workspace context
+  - Task commands provide clearer guidance when project isn't initialized
+- Fixed credential storage directory from `BrainGrid-nodejs` to `BrainGrid`
+  - **Breaking change**: Users need to re-authenticate after upgrade
+
+### Fixed
+
+- Test script now properly tracks and reports API 500 errors
+  - Enhanced error tracking during integration tests
+  - No longer exits on first error, displays summary table
+- Authentication integration tests handle both logged-in and logged-out states
+  - More robust RPC integration test suite
+
 ## [0.0.9] - 2025-10-04
 
 ### Added
