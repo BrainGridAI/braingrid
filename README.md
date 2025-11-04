@@ -2,8 +2,8 @@
 <img src="https://www.braingrid.ai/logos/braingrid-symbol-800.png" width="100"/>
   <h1>BrainGrid</h1>
 
-  <p>Turn thoughts into AI-ready specs and ship 100 faster.</p>
-  <h3>A CLI for spec-driven development.</h3>
+  <p>Prompt AI Coding Tools like a rockstar developer</p>
+  <h3>A CLI to turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software.</h3>
 
 [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
 [![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
@@ -16,8 +16,6 @@
 ## Overview
 
 **BrainGrid** helps you turn half-baked thoughts into build-ready specs and perfectly-prompted tasks that AI coding agents like Cursor, or Claude Code, can build fast without breaking things.
-
-**Spec-driven development** means AI agents work from crystal-clear requirements and tasks—not vague ideas—so they build exactly what you need, faster and with fewer bugs.
 
 ## Features
 
@@ -40,17 +38,18 @@
 npm install -g @braingrid/cli
 ```
 
-> Requires Node.js 18+
+> **Requirements:** Node.js 20+ and Git
+>
+> **Note:** If Git is not installed, the CLI will offer to install it automatically when you run `braingrid init`.
+>
+> **Recommended:** GitHub CLI (`gh`) is highly recommended for seamless GitHub integration. The CLI will offer to install it during initialization.
 
 ---
 
 ## QuickStart: One-Minute Flow
 
 ```bash
-# 1. Authenticate
-braingrid login
-
-# 2. Initialize your project (auto-detects from git remote)
+# 1. Initialize your project
 braingrid init
 
 # 3. Create a requirement
@@ -82,26 +81,23 @@ braingrid logout
 
 ### Initialization
 
-Initialize your repository with a BrainGrid project:
+Initialize your repository with a BrainGrid project. The command will show you the detected project and ask for confirmation before proceeding:
 
 ```bash
-# Run interactive wizard with confirmation prompt
-braingrid init --wizard
-
-# Auto-detects project from git remote (owner/name)
+# Step-by-step wirzard to initialize your project
 braingrid init
 
 # Manually specify project by ID (short ID or UUID)
 braingrid init --project PROJ-123
 
-# Force reinitialization if already initialized
+# Skip wizard and force reinitialization (useful for scripts)
 braingrid init --force
-
-# Manually specify and force reinitialization
 braingrid init --project PROJ-123 --force
 ```
 
 The `init` command creates a `.braingrid/project.json` file in the `.braingrid/` directory. This tells the CLI what project it is working on so you don't have to pass it as a parameter.
+
+> **Note:** The init command always asks for confirmation before initializing unless you use the `--force` flag.
 
 ### Project Commands
 
@@ -109,7 +105,7 @@ The `init` command creates a `.braingrid/project.json` file in the `.braingrid/`
 braingrid project list [--format json] [--page 1] [--limit 20]
 braingrid project show
 braingrid project show [<id>] [--repository "owner/repo"]
-braingrid project create --name "Project Name" [--description "Description"] [--repositories "owner/repo,owner/repo2"]
+braingrid project create --name "Project Name" [--description "Description"] [--repository "owner/repo"]
 braingrid project update <id> [--name "New Name"] [--description "New Description"]
 braingrid project delete <id> [--force]
 ```
@@ -121,7 +117,7 @@ braingrid project delete <id> [--force]
 ```bash
 # After running braingrid init (project auto-detected):
 braingrid requirement list [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--format json]
-braingrid requirement create --prompt "Requirement description" [--repositories "owner/repo"]
+braingrid requirement create --prompt "Requirement description" [--repository "owner/repo"]
 braingrid requirement show <id>
 braingrid requirement update <id> [--status STATUS] [--name "New Name"]
 braingrid requirement delete <id> [--force]
