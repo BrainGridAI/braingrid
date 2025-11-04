@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-11-04
+
+### Added
+
+- Proprietary license (LICENSE.md) to protect BrainGrid intellectual property
+  - Synced to main BrainGrid repository for consistency
+
+### Changed
+
+- Migrated OpenAPI specification from YAML to JSON format
+  - Updated `docs:fetch-openapi` script to fetch from new location (`public/openapi.json`)
+  - Updated all documentation references from `openapi.yaml` to `openapi.json`
+  - Added complete BrainGrid v1 API OpenAPI 3.0 spec (4016 lines)
+  - Updated README tagline: "Prompt AI Coding Tools like a rockstar developer"
+
+### Fixed
+
+- npm publish workflow to publish CLI package from correct directory
+  - Ensures proper package deployment during releases
+
 ## [0.1.1] - 2025-10-07
 
 ### Added
