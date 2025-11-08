@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-01-07
+
+### Added
+
+- Repository linking support for `project create` command
+  - New `--repository-id <uuid>` option to link project by repository UUID
+  - New `--repository <owner/name>` option to link project by repository name (e.g., `microsoft/vscode`)
+  - Automatic repository UUID lookup when using owner/name format
+  - Repository ID takes precedence when both options provided
+- Requirement ID auto-detection from git branch names
+  - CLI automatically detects requirement ID from branch patterns like `feature/REQ-123-description` or `REQ-123-fix-bug`
+  - Eliminates need to manually specify `-r` parameter in most cases
+- Branch field in requirement list output
+  - Shows which git branch is assigned to each requirement
+
+### Changed
+
+- Enhanced requirement output with URL and consistent field display
+- Improved README documentation wording and fixed numbered list in quickstart section
+
+### Fixed
+
+- All error messages now consistently display with red color and single ❌ emoji
+- Task command documentation and parameter formats
+
+### Removed
+
+- Complexity and readiness fields from requirements and tasks
+  - Removed from TypeScript type definitions
+  - Removed from all test mock data
+  - CLI no longer displays or accepts these fields (API still returns them but they are ignored)
+
+## [0.2.0] - 2025-11-04
+
+### Changed
+
+- **BREAKING**: Converted from monorepo to single CLI package architecture
+  - Removed `@braingrid/protocol` package (JSON-RPC protocol schemas)
+  - Removed `@braingrid/vscode-extension` package
+  - Removed JSON-RPC server mode (`--rpc` flag)
+  - Removed agent conversation commands (`braingrid agent chat`)
+  - Removed conformance testing tools
+  - Eliminated monorepo infrastructure (Turbo, Changesets, pnpm workspaces)
+  - Restructured to standalone package at repository root
+  - All CLI functionality preserved (auth, project, requirement, task commands)
+  - Retained Zod dependency for future CLI input validation
+
+### Removed
+
+- JSON-RPC 2.0 server implementation and transport layer
+- Agent service and streaming conversation support
+- VSCode extension integration
+- Protocol package and auto-generated documentation
+- Monorepo build orchestration (Turborepo)
+- Automated versioning system (Changesets)
+
 ## [0.1.3] - 2025-11-04
 
 ### Added
