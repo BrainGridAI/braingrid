@@ -3,7 +3,7 @@
   <h1>BrainGrid</h1>
 
   <p>Prompt AI Coding Tools like a rockstar developer</p>
-  <h3>A CLI to turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software.</h3>
+  <h3>A CLI to turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software with AI.</h3>
 
 [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
 [![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
@@ -15,20 +15,17 @@
 
 ## Overview
 
-**BrainGrid** helps you turn half-baked thoughts into build-ready specs and perfectly-prompted tasks that AI coding agents like Cursor, or Claude Code, can build fast without breaking things.
+**BrainGrid** helps you turn half-baked thoughts into build-ready specs and perfectly-prompted tasks that AI coding agents like Cursor, or Claude Code, build fast without breaking things.
 
 ## Features
 
 **BrainGrid CLI** is the command-line interface for managing your requirements, and tasks on the BrainGrid platform.
 
-- 📋 **Add Requirements to Your Backlog** - Create requirements from prompts and link to repositories
-- ✨ **Refine Requirements** - Update and manage requirements to get them build-ready
+- ✨ **Specify Requirements** - Create build-ready requirement documents from messy ideas
 - 🎯 **Break Down into Tasks** - Create perfectly-prompted tasks from requirements
-- 🤖 **Fetch Tasks for AI Agents** - Get task prompts to feed to Cursor, Claude Code, and other AI coding tools
+- 🤖 **Build with AI Agents** - Get an implementation plan with prompts for each task to feed to Cursor, Claude Code, and other AI coding tools
 - 📊 **Track Progress** - Manage and update task statuses
-- 💾 **Multiple Output Formats** - View data as formatted tables or JSON for scripting
-- 🔍 **Environment Detection** - Automatically detect git repository info and installed AI coding tools
-- 🔌 **JSON-RPC Mode** - Programmatic access via JSON-RPC 2.0 protocol for IDE integration
+- 💾 **Multiple Output Formats** - View task prompts as formatted tables, JSON, Markdown, or XML for scripting
 
 ---
 
@@ -38,12 +35,6 @@
 npm install -g @braingrid/cli
 ```
 
-> **Requirements:** Node.js 20+ and Git
->
-> **Note:** If Git is not installed, the CLI will offer to install it automatically when you run `braingrid init`.
->
-> **Recommended:** GitHub CLI (`gh`) is highly recommended for seamless GitHub integration. The CLI will offer to install it during initialization.
-
 ---
 
 ## QuickStart: One-Minute Flow
@@ -52,17 +43,14 @@ npm install -g @braingrid/cli
 # 1. Initialize your project
 braingrid init
 
-# 3. Create a requirement
-braingrid requirement create --prompt "Add user authentication"
+# 2. Create a requirement with AI refinement
+braingrid specify --prompt "Add user authentication"
 
-# 4. List requirements
-braingrid requirement list
+# 3. Break down requirement into tasks with AI
+braingrid requirement breakdown REQ-1
 
-# 5. Create tasks for a requirement
-braingrid task create -r REQ-1 --title "Implement login endpoint"
-
-# 6. View tasks for a requirement
-braingrid task list -r REQ-1
+# 4. Build requirement with all tasks (markdown with full content)
+braingrid requirement build REQ-1
 ```
 
 ---
@@ -84,7 +72,7 @@ braingrid logout
 Initialize your repository with a BrainGrid project. The command will show you the detected project and ask for confirmation before proceeding:
 
 ```bash
-# Step-by-step wirzard to initialize your project
+# Step-by-step wizard to initialize your project
 braingrid init
 
 # Manually specify project by ID (short ID or UUID)
@@ -105,46 +93,73 @@ The `init` command creates a `.braingrid/project.json` file in the `.braingrid/`
 braingrid project list [--format json] [--page 1] [--limit 20]
 braingrid project show
 braingrid project show [<id>] [--repository "owner/repo"]
-braingrid project create --name "Project Name" [--description "Description"] [--repository "owner/repo"]
+braingrid project create --name "Project Name" [--description "Description"] [--repository-id <uuid>] [--repository "owner/name"]
 braingrid project update <id> [--name "New Name"] [--description "New Description"]
 braingrid project delete <id> [--force]
 ```
 
 > **Note:** `project show` displays the initialized project from your workspace when called without arguments. Use `--repository "owner/repo"` to list all projects for a specific repository, or provide a project ID directly to view a specific project.
+>
+> **Note:** When creating a project, you can optionally link it to a repository using `--repository-id <uuid>` to link by repository UUID, or `--repository "owner/name"` (e.g., `--repository "microsoft/vscode"`) to link by repository name. If `--repository-id` is provided, it takes precedence.
 
 ### Requirement Commands
 
 ```bash
-# After running braingrid init (project auto-detected):
-braingrid requirement list [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--format json]
-braingrid requirement create --prompt "Requirement description" [--repository "owner/repo"]
-braingrid requirement show <id>
-braingrid requirement update <id> [--status STATUS] [--name "New Name"]
-braingrid requirement delete <id> [--force]
+# Create requirement with AI refinement (specify command)
+# With auto-detected project from workspace:
+braingrid specify --prompt "Add user authentication with OAuth2"
+
+# Specify project explicitly:
+braingrid specify -p PROJ-123 --prompt "Implement real-time notifications"
+
+# Output in different formats:
+braingrid specify --prompt "Add dark mode support" --format json
+braingrid specify --prompt "Add export feature" --format markdown
+
+# Working with the initialized project
+braingrid requirement list [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--format json]
+braingrid requirement create --name "Name" [--content "Description"] [--assigned-to <uuid>]
+braingrid requirement show [id]
+braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"]
+braingrid requirement delete [id] [--force]
+braingrid requirement breakdown [id] [--verbose]
+braingrid requirement build [id] [--format markdown|json|xml]
 
 # Working with a different project:
 braingrid requirement list -p PROJ-456 [--status PLANNED]
-braingrid requirement create -p PROJ-456 --prompt "Description"
+braingrid requirement create -p PROJ-456 --name "Description"
 ```
 
 > **Note:** The `-p`/`--project` parameter is optional when working in an initialized repository. Use it to work with a different project.
+>
+> **Note:** For the `specify` command, the prompt must be between 10-5000 characters. The AI will refine your prompt into a detailed requirement document.
+>
+> **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
+>
+> **Note:** The `requirement list` command displays requirements with their status, name, branch (if assigned), and progress percentage.
 
 ### Task Commands
 
 ```bash
-# After running braingrid init (project auto-detected):
-braingrid task list -r REQ-456 [--format json]
+# Working with the initialized project
+braingrid task list -r REQ-456 [--format table|json|xml|markdown] [--verbose]
 braingrid task create -r REQ-456 --title "Task Title" [--content "Description"]
 braingrid task show <id>
-braingrid task update <id> [--status STATUS] [--title "New Title"]
+braingrid task update <id> [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--title "New Title"]
 braingrid task delete <id> [--force]
 
-# Working with a different project (full format):
-braingrid task list -r PROJ-123/REQ-456
-braingrid task create -r PROJ-123/REQ-456 --title "Task Title"
+# Working with a different project:
+braingrid task list -p PROJ-123 -r REQ-456
+braingrid task create -p PROJ-123 -r REQ-456 --title "Task Title"
 ```
 
-> **Note:** The `-r`/`--requirement` parameter accepts either `REQ-456` (auto-detects project from `.braingrid/project.json`) or full format `PROJ-123/REQ-456` for working with other projects.
+> **Note:** The `-p`/`--project` parameter is optional when working in an initialized repository. Use it to work with a different project.
+>
+> **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
+>
+> **Note:** Use `--verbose` with `task list` to show full task content in addition to task metadata.
+>
+> **Note:** Task status values are: `PLANNED`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED` (tasks do not have `IDEA` or `REVIEW` status).
 
 ### Informational Commands
 
