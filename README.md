@@ -2,7 +2,7 @@
 <img src="https://www.braingrid.ai/logos/braingrid-symbol-800.png" width="100"/>
   <h1>BrainGrid</h1>
 
-  <p>Prompt AI Coding Tools like a rockstar developer</p>
+  <p>Prompt AI Coding Tools Like a Rockstar Developer</p>
   <h3>A CLI to turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software with AI.</h3>
 
 [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
