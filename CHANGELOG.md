@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-11-10
+
+### Added
+
+- Concise BrainGrid documentation for project injection (`.claude/CLAUDE.md`)
+  - 42-line section explaining BrainGrid workflow for Claude Code
+  - Slash commands reference and typical workflow
+  - Key features (auto-detection, reactive errors, status flows, output formats)
+- BrainGrid CLI slash commands for Claude Code
+  - `/specify [prompt]` - Create AI-refined requirement from vague idea
+  - `/save-requirement [title]` - Save detailed plan as requirement
+  - `/breakdown [req-id]` - Break requirement into AI-prompted tasks
+  - `/build [req-id]` - Get complete implementation plan in markdown
+  - `/cut-release [patch|minor|major]` - Automate NPM release workflow
+- BrainGrid CLI skill for Claude Code with comprehensive workflow guidance
+- Installation instructions in braingrid-cli skill
+- BrainGrid project configuration files
+
+### Changed
+
+- Updated README tagline capitalization
+
+### Fixed
+
+- Removed unsupported `--status` field from `/save-requirement` slash command
+  - API does not accept status field during requirement creation
+  - Status is set automatically by the backend
+
 ## [0.2.1] - 2025-01-07
 
 ### Added
