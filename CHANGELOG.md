@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2025-01-10
+
+### Added
+
+- New `task summary` subcommand for quick table overview without content
+  - Use `braingrid task summary -r REQ-X` for compact task list
+  - Complements full detail view with lightweight summary option
+
+### Changed
+
+- Simplified CLI output format with markdown as default
+  - `requirement breakdown` now defaults to markdown format (was table)
+  - `task list` now defaults to markdown format with full content (was table)
+  - Removed `--verbose` flag - full content always shown by default for AI-ready output
+  - Use `--format table` or new `task summary` command for compact view
+- Updated `/breakdown` slash command documentation
+  - Removed all `--verbose` flag references
+  - Updated examples to use new default markdown format
+  - Added references to `task summary` for quick overviews
+
 ## [0.2.2] - 2025-11-10
 
 ### Added
