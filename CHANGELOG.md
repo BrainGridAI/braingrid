@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.7] - 2025-11-11
+
+### Fixed
+
+- **Claude Code status line token usage accuracy**
+  - Fixed token stats displaying "0k tokens" instead of actual context usage
+  - Now parses transcript JSONL file to extract real token counts from API responses
+  - Extracts token usage from last assistant message in conversation transcript
+  - Sums all Anthropic API token types: input_tokens, output_tokens, cache_creation_input_tokens, cache_read_input_tokens
+  - Uses 160K tokens (80% of 200K context limit) as auto-compact threshold for percentage calculation
+  - Color coding now accurately reflects context usage: cyan (0-80%), yellow (80-90%), red (90-100%)
+  - Provides real-time visibility into actual Claude Code context consumption
+
 ## [0.2.6] - 2025-11-11
 
 ### Added
@@ -40,6 +53,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Success message now uses console.log for better visibility
   - Return message simplified to show only next steps
   - Better spacing and formatting for IDE setup prompts
+
+- **Status line token usage display**
+  - Fixed token stats showing "0k tokens" instead of actual usage
+  - Now parses transcript JSONL file to extract real token counts from API responses
+  - Sums all token types: input, output, cache_creation, cache_read
+  - Uses 160K tokens (80% of 200K) as auto-compact threshold for percentage calculation
+  - Color coding now works correctly based on actual context usage
 
 ## [0.2.5] - 2025-11-11
 
