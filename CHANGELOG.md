@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2025-11-11
+
+### Fixed
+
+- **Status line installation in setup command** (#38)
+  - Fixed critical bug where `braingrid setup claude-code` failed to install status line
+  - Changed to fetch `statusline.sh` from GitHub repository instead of local package
+  - Fixed configuration format to use object with `type`, `command`, and `padding` fields
+  - Removed unused `fileURLToPath` import from setup handlers
+  - Status line now correctly installs and displays BrainGrid context in Claude Code
+
+### Changed
+
+- **CLAUDE.md injection source** (#38)
+  - Setup command now fetches `claude-code/CLAUDE.md` instead of `claude-code/README.md`
+  - Provides cleaner, more focused BrainGrid workflow instructions for injection
+  - Injected content matches the curated `.claude/CLAUDE.md` format
+
+- **AGENTS.md injection consistency** (#38)
+  - Created `.cursor/AGENTS.md` with same BrainGrid workflow content as `.claude/CLAUDE.md`
+  - Updated `cursor/AGENTS.md` in braingrid repo to match injection pattern (44 lines)
+  - Both Claude Code and Cursor now follow consistent injection pattern
+  - Provides unified BrainGrid workflow experience across both IDEs
+
 ## [0.2.4] - 2025-11-10
 
 ### Added
