@@ -21,8 +21,9 @@ Turn messy thoughts into detailed specs and perfectly-prompted tasks to build we
 
 This integration provides:
 
-- **BrainGrid CLI Skill** - Detailed guidance on using BrainGrid for spec-driven development
-- **Slash Commands** - Quick access to key BrainGrid workflows directly in Claude Code
+- **Slash Commands** - Quick access to key BrainGrid workflows (``/specify`, `/breakdown`, `/build`, `/save-requirement`)
+- **BrainGrid CLI Skill** - Comprehensive guidance on spec-driven development workflows
+- **Status Line** - Real-time display of your BrainGrid context (project, requirement, task progress)
 
 ### Core Workflow
 
@@ -67,6 +68,61 @@ braingrid init
 ```
 
 This creates `.braingrid/project.json` to track your active project. The CLI will auto-detect project context from this file.
+
+### 4. Install Claude Code Integration
+
+```bash
+braingrid setup claude-code
+```
+
+This command installs:
+
+- **Slash commands** in `.claude/commands/`:
+  - `specify.md` - Create AI-refined requirements
+  - `breakdown.md` - Break requirements into tasks
+  - `build.md` - Get complete implementation plan
+  - `save-requirement.md` - Save discussed plans
+- **BrainGrid skill** in `.claude/skills/braingrid-cli/`:
+  - Comprehensive workflow guidance
+  - Command reference with examples
+  - Best practices documentation
+- **Status line** in `.claude/statusline.sh`:
+  - Shows project context: `PROJ-3`
+  - Shows requirement context: `REQ-128`
+  - Shows task progress: `[2/5]` (2 of 5 tasks completed)
+  - Updates in real-time as you work
+- **Content injection** into `CLAUDE.md`:
+  - BrainGrid workflow overview
+  - Quick command reference
+  - Auto-detection features
+
+**File Conflicts:** If files already exist, you'll be prompted to overwrite, skip, or cancel. Use `--force` to overwrite all without prompting.
+
+---
+
+## Status Line
+
+The BrainGrid status line shows your current context at the top of Claude Code:
+
+```
+BrainGrid: PROJ-3 > REQ-128 [2/5]
+~/Dropbox/Projects/my-app • ctx: 42k tokens (26%) • Sonnet 4.5
+```
+
+**Line 1** (when BrainGrid context exists):
+- `PROJ-3` - Current project (from `.braingrid/project.json`)
+- `REQ-128` - Current requirement (auto-detected from git branch like `feature/REQ-128-auth`)
+- `[2/5]` - Task progress (2 of 5 tasks completed)
+
+**Line 2** (always shown):
+- Working directory
+- Context usage with color coding:
+  - Cyan (0-80%): Normal usage
+  - Yellow (80-90%): Getting full
+  - Red (90-100%): Near limit
+- Model name (e.g., Sonnet 4.5)
+
+The status line updates automatically as you switch branches, complete tasks, or change projects.
 
 ---
 
