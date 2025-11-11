@@ -37,77 +37,27 @@ npm install -g @braingrid/cli
 
 ---
 
-## AI Coding Tool Integration
+## IDE Integration
 
-BrainGrid integrates natively with AI coding tools like **Cursor IDE** and **Claude Code** through the [AGENTS.md standard](https://agents.md/), providing seamless access to spec-driven development workflows directly in your editor.
-
-### What is AGENTS.md?
-
-[AGENTS.md](https://agents.md/) is an open standard that allows AI coding assistants to automatically load project-specific guidance and commands. BrainGrid uses this standard to provide consistent CLI guidance across multiple tools:
-
-- ✅ **Cursor IDE** - Automatic loading via AGENTS.md + slash commands
-- ✅ **Claude Code** - Automatic loading via AGENTS.md or .claude/CLAUDE.md
-- ✅ **GitHub Copilot** - Context from AGENTS.md
-- ✅ **Growing ecosystem** of AGENTS.md-compatible tools
-
-### Setup for Cursor IDE
-
-**Prerequisites:**
-
-- Cursor IDE installed ([download here](https://cursor.sh/))
-- BrainGrid CLI installed and authenticated
-
-**How it works:**
-
-1. **AGENTS.md** at your repository root is automatically loaded by Cursor
-2. **.cursor/rules/braingrid.mdc** provides Cursor-specific enhancements (always-on rules)
-3. **Slash commands** available via `/` in Cursor's Agent input
-
-**Available Commands:**
-
-Type `/` in Cursor's Agent input to access:
-
-- `/specify` - Create AI-refined requirements from natural language
-- `/breakdown` - Break requirements into implementation tasks
-- `/save-requirement` - Save requirement content to BrainGrid
-- `/build` - Generate complete implementation plan
-
-**Quick Start Example:**
+### Claude Code
 
 ```bash
-# In Cursor IDE Agent input
-/specify "Add user authentication with OAuth2"
-# → Creates REQ-123
-
-/breakdown REQ-123
-# → Generates 5-10 implementation tasks
-
-/build REQ-123
-# → Shows complete requirement with all task prompts
+braingrid setup claude-code
 ```
 
-### Setup for Claude Code
+Installs slash commands (`/specify`, `/breakdown`, `/build`), BrainGrid skill, and status line showing your project/requirement/task context in real-time.
 
-BrainGrid's AGENTS.md file also works with Claude Code. You can either:
+[→ Full Claude Code setup guide](./.claude/README.md)
 
-1. **Use AGENTS.md directly** (Claude Code automatically reads it)
-2. **Symlink for compatibility**: `ln -s AGENTS.md .claude/CLAUDE.md`
+### Cursor
 
-Claude Code also provides its own slash commands in `.claude/commands/`.
+```bash
+braingrid setup cursor
+```
 
-### Cross-IDE Compatibility
+Installs slash commands, always-on rules, and AGENTS.md integration for seamless BrainGrid workflows in Agent mode.
 
-The AGENTS.md standard ensures your BrainGrid setup works across tools:
-
-- **AGENTS.md** provides CLI guidance for all compatible tools
-- **Tool-specific directories** (.cursor/, .claude/) add enhanced features
-- **Single source of truth** for BrainGrid workflows
-
-**Learn more:**
-
-- [AGENTS.md standard](https://agents.md/)
-- [BrainGrid documentation](https://www.braingrid.ai)
-- Full CLI command reference in [AGENTS.md](./AGENTS.md)
+[→ Full Cursor setup guide](./.cursor/README.md)
 
 ---
 
@@ -164,6 +114,8 @@ The `init` command creates a `.braingrid/project.json` file in the `.braingrid/`
 ### Setup Commands
 
 Install BrainGrid integration files for AI coding tools. These commands fetch integration files from the [BrainGrid repository](https://github.com/BrainGridAI/braingrid) and install them in your project.
+
+For detailed usage guides, see [Claude Code setup](./.claude/README.md) or [Cursor setup](./.cursor/README.md).
 
 **Prerequisites:**
 
