@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2025-11-10
+
+### Added
+
+- **BrainGrid context in Claude Code status line** (#36)
+  - Two-line status display showing project/requirement/task progress
+  - Auto-detects from `.braingrid/project.json` and git branch names
+  - Color-coded output: cyan for project, green for requirement, yellow for tasks
+  - Displays current task completion (e.g., `PROJ-130 > REQ-128 [2/5]`)
+  - Always shows workspace path, model name, and token usage
+  - Installed automatically with `braingrid setup claude-code`
+
+- **Setup commands for Claude Code and Cursor integrations** (#35)
+  - New `braingrid setup claude-code` command installs slash commands and skills
+  - New `braingrid setup cursor` command installs Cursor rules and commands
+  - Fetches integration files from BrainGridAI/braingrid repository
+  - Injects content into CLAUDE.md or AGENTS.md with markers
+  - Interactive prompts for file conflicts with overwrite/skip/all/quit options
+  - Dry-run mode with `--dry-run` flag
+  - Force mode with `--force` flag to skip all prompts
+
+- **Cursor IDE integration** (#34)
+  - Added AGENTS.md standard for Cursor AI agent configuration
+  - Supports auto-detection of project and requirement context
+  - Works with agent mode for autonomous task execution
+
+- **Claude Code sync automation** (#33)
+  - New `pnpm docs:sync-claude` command syncs skills and slash commands
+  - Automatically updates BrainGridAI/braingrid repository
+  - Keeps Claude Code integration files in sync across repos
+
+### Fixed
+
+- **Status line script path resolution** (code review fixes)
+  - Fixed critical bug using `import.meta.url` instead of `process.cwd()`
+  - Script now loads from package location, not user's directory
+  - Prevents "file not found" errors during setup
+
+- **Shell script error handling**
+  - Added `set -o pipefail` to status line script
+  - Properly detects braingrid command failures in pipelines
+  - More robust JSON parsing with better error detection
+
+- **Token display formatting**
+  - Fixed bug showing incorrect token counts (e.g., "24000k/200000k")
+  - Now correctly displays as "24k/200k tokens"
+
 ## [0.2.3] - 2025-01-10
 
 ### Added
