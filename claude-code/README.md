@@ -20,6 +20,7 @@ Turn messy thoughts into detailed specs and perfectly-prompted tasks to build we
 **BrainGrid** helps you turn half-baked thoughts into build-ready specs and perfectly-prompted tasks that AI coding agents like Claude Code build fast without breaking things.
 
 This integration provides:
+
 - **BrainGrid CLI Skill** - Detailed guidance on using BrainGrid for spec-driven development
 - **Slash Commands** - Quick access to key BrainGrid workflows directly in Claude Code
 
@@ -30,6 +31,7 @@ Vague Idea → AI-Refined Requirement → Breakdown into Tasks → Build with AI
 ```
 
 **Resources:**
+
 - **Projects** - Your software projects
 - **Requirements** - Detailed specifications (refined from vague ideas)
 - **Tasks** - Perfectly-prompted, AI-ready implementation steps
@@ -72,24 +74,26 @@ This creates `.braingrid/project.json` to track your active project. The CLI wil
 
 BrainGrid provides four powerful slash commands in Claude Code:
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `/specify` | Create AI-refined requirement from vague idea | `/specify Add user auth with OAuth2` |
-| `/save-requirement` | Save a detailed plan as a requirement | `/save-requirement User Authentication System` |
-| `/breakdown` | Break requirement into perfectly-prompted tasks | `/breakdown REQ-123` |
-| `/build` | Get complete implementation plan (markdown format) | `/build REQ-123` |
+| Command             | Description                                        | Example                                        |
+| ------------------- | -------------------------------------------------- | ---------------------------------------------- |
+| `/specify`          | Create AI-refined requirement from vague idea      | `/specify Add user auth with OAuth2`           |
+| `/save-requirement` | Save a detailed plan as a requirement              | `/save-requirement User Authentication System` |
+| `/breakdown`        | Break requirement into perfectly-prompted tasks    | `/breakdown REQ-123`                           |
+| `/build`            | Get complete implementation plan (markdown format) | `/build REQ-123`                               |
 
 ### Command Details
 
 #### `/specify [prompt]`
 
 Creates an AI-refined requirement from a brief idea (10-5000 characters). The AI expands your prompt into a detailed specification with:
+
 - Clear problem statement
 - Acceptance criteria
 - Implementation considerations
 - Edge cases and constraints
 
 **Usage:**
+
 ```bash
 /specify Add real-time collaboration to document editor with WebSockets
 ```
@@ -103,6 +107,7 @@ Creates an AI-refined requirement from a brief idea (10-5000 characters). The AI
 Saves a detailed plan that you've discussed with Claude Code as a structured requirement in BrainGrid.
 
 **Usage:**
+
 ```bash
 /save-requirement User Authentication System
 ```
@@ -116,12 +121,14 @@ Saves a detailed plan that you've discussed with Claude Code as a structured req
 Breaks down a requirement into 5-10 perfectly-prompted tasks ready for AI coding tools.
 
 **Usage:**
+
 ```bash
 /breakdown REQ-123
 /breakdown 123          # Short format
 ```
 
 **Auto-detection:** If you're on a git branch like `feature/REQ-123-auth`, you can omit the ID:
+
 ```bash
 /breakdown              # Auto-detects REQ-123 from branch name
 ```
@@ -133,6 +140,7 @@ Breaks down a requirement into 5-10 perfectly-prompted tasks ready for AI coding
 Fetches the complete implementation plan with all tasks and their prompts in markdown format (perfect for AI agents).
 
 **Usage:**
+
 ```bash
 /build REQ-123
 /build REQ-123 focus on security best practices
@@ -201,6 +209,7 @@ BrainGrid CLI automatically detects context:
 ### Flexible ID Formats
 
 Accept multiple formats for convenience:
+
 - `REQ-456` (canonical)
 - `req-456` (lowercase)
 - `456` (number only)
@@ -209,12 +218,14 @@ Accept multiple formats for convenience:
 ### Output Formats
 
 Choose formats based on use case:
+
 - **table** - Quick human-readable view (default for lists)
 - **json** - Machine-readable for scripts
 - **xml** - Alternative structured format
 - **markdown** - Full content with formatting (best for AI agents)
 
 Example:
+
 ```bash
 braingrid requirement list --format json
 braingrid task list -r REQ-1 --format markdown
@@ -223,12 +234,14 @@ braingrid task list -r REQ-1 --format markdown
 ### Status Flows
 
 **Requirements:**
+
 ```
 IDEA → PLANNED → IN_PROGRESS → REVIEW → COMPLETED
                                       ↘ CANCELLED
 ```
 
 **Tasks:**
+
 ```
 PLANNED → IN_PROGRESS → COMPLETED
                       ↘ CANCELLED
@@ -314,6 +327,7 @@ braingrid requirement update --status IN_PROGRESS
 ## Command Reference
 
 ### Authentication
+
 ```bash
 braingrid login              # OAuth2 login
 braingrid whoami            # Show current user
@@ -321,6 +335,7 @@ braingrid logout            # Sign out
 ```
 
 ### Projects
+
 ```bash
 braingrid project list
 braingrid project show
@@ -328,6 +343,7 @@ braingrid project create --name "Project Name"
 ```
 
 ### Requirements
+
 ```bash
 braingrid specify --prompt "Your idea"
 braingrid requirement list [--status PLANNED|IN_PROGRESS|...]
@@ -338,6 +354,7 @@ braingrid requirement build REQ-ID [--format markdown]
 ```
 
 ### Tasks
+
 ```bash
 braingrid task list -r REQ-ID [--format markdown] [--verbose]
 braingrid task show TASK-ID
@@ -346,6 +363,7 @@ braingrid task create -r REQ-ID --title "Task Title"
 ```
 
 ### Utility
+
 ```bash
 braingrid status             # Show CLI status
 braingrid update            # Update to latest version
@@ -360,6 +378,7 @@ braingrid --help            # Show help
 ### Writing Good Prompts for `/specify`
 
 Include:
+
 - **Problem statement**: What needs solving?
 - **Context**: Why is this needed?
 - **Constraints**: Technical limitations
@@ -367,6 +386,7 @@ Include:
 - **Success criteria**: What does "done" look like?
 
 **Example:**
+
 ```bash
 /specify Add real-time collaboration to our document editor. Users should see
 others' cursors and edits instantly. We use WebSockets already for chat. Must
