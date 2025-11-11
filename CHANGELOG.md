@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6] - 2025-11-11
+
+### Added
+
+- **Cursor IDE detection and setup prompts**
+  - Cross-platform Cursor IDE detection (macOS, Windows, Linux)
+  - Checks platform-specific app paths and config directories
+  - Version detection via cursor CLI when available
+  - Auto-prompts to install BrainGrid integration after `braingrid init`
+  - Shows Claude Code and Cursor setup prompts when IDEs are detected
+  - Skips prompt if integration files already exist
+  - Graceful error handling with manual setup instructions
+
+### Changed
+
+- **Status command improvements**
+  - Now shows only installed IDEs (cleaner output)
+  - Removed "not installed" messages for undetected tools
+  - Displays Claude Code and Cursor versions when detected
+  - Focus on what's actually available in the environment
+
+- **Claude Code status line enhancements**
+  - Added "BrainGrid:" prefix to context line for clarity
+  - Display model name at end of status line (e.g., "Sonnet 4.5")
+  - Updated token format: "ctx: Xk tokens" instead of "Xk/XXXk tokens"
+  - Improved JSON field extraction to match Claude Code's actual structure
+  - Added RED color code for future high token usage warnings
+  - Synced statusline.sh to distribution via sync script
+
+### Fixed
+
+- **Init flow message display**
+  - Success message now uses console.log for better visibility
+  - Return message simplified to show only next steps
+  - Better spacing and formatting for IDE setup prompts
+
 ## [0.2.5] - 2025-11-11
 
 ### Fixed
