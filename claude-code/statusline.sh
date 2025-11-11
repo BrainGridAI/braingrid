@@ -1,6 +1,6 @@
 #!/bin/bash
 # BrainGrid Status Line for Claude Code
-# Displays two-line status with BrainGrid project/requirement context and workspace info
+# Displays single-line status with BrainGrid project/requirement context and workspace info
 
 # Exit on pipeline failures (ensures we catch braingrid command errors)
 set -o pipefail
@@ -9,14 +9,15 @@ set -o pipefail
 CYAN='\033[36m'
 GREEN='\033[32m'
 YELLOW='\033[33m'
+RED='\033[31m'
 RESET='\033[0m'
 
 # Read stdin JSON from Claude Code
 INPUT=$(cat)
 
 # Extract workspace info from JSON
-CURRENT_DIR=$(echo "$INPUT" | jq -r '.workspace.current_dir // empty')
-MODEL_NAME=$(echo "$INPUT" | jq -r '.model.name // empty')
+CURRENT_DIR=$(echo "$INPUT" | jq -r '.workspace.current_dir // .cwd // empty')
+MODEL_NAME=$(echo "$INPUT" | jq -r '.model.display_name // .model.name // .model.id // empty')
 CURRENT_TOKENS=$(echo "$INPUT" | jq -r '.token_budget.current // 0')
 BUDGET_TOKENS=$(echo "$INPUT" | jq -r '.token_budget.budget // 0')
 
@@ -59,15 +60,17 @@ if [ -n "$REQ_ID" ]; then
 	fi
 fi
 
-# Build Line 1: BrainGrid context (or empty if no context)
+# Build BrainGrid context line (only if context exists)
 LINE1=""
 if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$TASK_COUNTS" ]; then
+	LINE1="BrainGrid: "
+
 	if [ -n "$PROJECT_ID" ]; then
-		LINE1="${CYAN}${PROJECT_ID}${RESET}"
+		LINE1="${LINE1}${CYAN}${PROJECT_ID}${RESET}"
 	fi
 
 	if [ -n "$REQ_ID" ]; then
-		if [ -n "$LINE1" ]; then
+		if [ -n "$PROJECT_ID" ]; then
 			LINE1="${LINE1} > "
 		fi
 		LINE1="${LINE1}${GREEN}${REQ_ID}${RESET}"
@@ -81,18 +84,37 @@ fi
 # Format current directory (replace home with ~)
 DISPLAY_DIR=$(echo "$CURRENT_DIR" | sed "s|^$HOME|~|")
 
-# Format token usage
+# Calculate token usage percentage and color
 CURRENT_K=$((CURRENT_TOKENS / 1000))
 if [ "$BUDGET_TOKENS" != "0" ]; then
-	BUDGET_K=$((BUDGET_TOKENS / 1000))
-	TOKEN_DISPLAY="${CURRENT_K}k/${BUDGET_K}k tokens"
+	PERCENTAGE=$((CURRENT_TOKENS * 100 / BUDGET_TOKENS))
+
+	# Choose color based on percentage (cyan: 0-80%, yellow: 80-90%, red: 90-100%)
+	if [ "$PERCENTAGE" -ge 90 ]; then
+		TOKEN_COLOR="$RED"
+	elif [ "$PERCENTAGE" -ge 80 ]; then
+		TOKEN_COLOR="$YELLOW"
+	else
+		TOKEN_COLOR="$CYAN"
+	fi
+
+	TOKEN_DISPLAY="${TOKEN_COLOR}${CURRENT_K}k tokens (${PERCENTAGE}%)${RESET}"
 else
-	TOKEN_DISPLAY="${CURRENT_K}k tokens"
+	TOKEN_DISPLAY="${CYAN}${CURRENT_K}k tokens${RESET}"
 fi
 
-# Build Line 2: Always shown (workspace info)
-LINE2="${DISPLAY_DIR} • ${MODEL_NAME} • ${TOKEN_DISPLAY}"
+# Add model name if available
+if [ -n "$MODEL_NAME" ]; then
+	MODEL_SECTION=" • ${MODEL_NAME}"
+else
+	MODEL_SECTION=""
+fi
 
-# Output both lines
-echo -e "$LINE1"
+# Build Line 2: Always shown (path, token info, and model)
+LINE2="${DISPLAY_DIR} • ctx: ${TOKEN_DISPLAY}${MODEL_SECTION}"
+
+# Output lines (Line 1 only if BrainGrid context exists)
+if [ -n "$LINE1" ]; then
+	echo -e "$LINE1"
+fi
 echo -e "$LINE2"
