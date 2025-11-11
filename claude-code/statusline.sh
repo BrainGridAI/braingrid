@@ -18,8 +18,23 @@ INPUT=$(cat)
 # Extract workspace info from JSON
 CURRENT_DIR=$(echo "$INPUT" | jq -r '.workspace.current_dir // .cwd // empty')
 MODEL_NAME=$(echo "$INPUT" | jq -r '.model.display_name // .model.name // .model.id // empty')
-CURRENT_TOKENS=$(echo "$INPUT" | jq -r '.token_budget.current // 0')
-BUDGET_TOKENS=$(echo "$INPUT" | jq -r '.token_budget.budget // 0')
+TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
+
+# Parse transcript JSONL file for actual token usage
+# Claude Code's JSON doesn't include token_budget fields, so we need to parse the transcript
+CURRENT_TOKENS=0
+if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ]; then
+	# Read last 100 lines of transcript and extract token usage from last assistant message
+	# Sum: input_tokens + output_tokens + cache_creation_input_tokens + cache_read_input_tokens
+	CURRENT_TOKENS=$(tail -n 100 "$TRANSCRIPT_PATH" 2>/dev/null | \
+		jq -s 'map(select(.type == "assistant" and .message.usage and (.isSidechain // false) == false)) |
+		       last | .message.usage |
+		       (.input_tokens // 0) + (.output_tokens // 0) +
+		       (.cache_creation_input_tokens // 0) + (.cache_read_input_tokens // 0)' 2>/dev/null || echo "0")
+fi
+
+# Use 160K tokens as threshold (80% of 200K context limit, auto-compact trigger point)
+BUDGET_TOKENS=160000
 
 # Get git root directory
 GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
