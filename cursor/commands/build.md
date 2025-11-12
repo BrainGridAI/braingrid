@@ -15,6 +15,7 @@ Fetch a requirement's complete implementation plan and start building it with ad
    - If no additional instructions provided, just show the build plan
 
 3. **Execute the BrainGrid CLI command:**
+
    ```bash
    braingrid requirement build REQ-{id} --format markdown
    ```
@@ -70,6 +71,7 @@ Command: `/build REQ-123 focus on security best practices and add extensive erro
 Execute: `braingrid requirement build REQ-123 --format markdown`
 
 Then:
+
 - Acknowledge: "I'll focus on security best practices and add extensive error handling"
 - Review tasks and highlight security-related ones
 - Suggest starting with auth/security tasks first
@@ -86,6 +88,7 @@ CLI auto-detects REQ-456 from branch name
 ## Output Format
 
 After successful build:
+
 - ✅ Build plan fetched: REQ-{id}
 - 📋 Name: {requirement name}
 - 🔄 Status: {current status}
@@ -94,6 +97,7 @@ After successful build:
 - 🔗 View tasks: https://app.braingrid.ai/requirements/overview?id={uuid}&tab=tasks
 
 If additional instructions provided:
+
 - 📝 Context: {additional instructions}
 - Highlight relevant tasks
 - Offer to start implementing
