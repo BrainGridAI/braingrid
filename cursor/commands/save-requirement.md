@@ -18,11 +18,13 @@ Save a requirement plan or specification to BrainGrid.
 2. **Execute the BrainGrid CLI command:**
 
    For new requirements:
+
    ```bash
    braingrid requirement create --name "<title>" --description "<content>"
    ```
 
    For updating existing requirements:
+
    ```bash
    braingrid requirement update REQ-{id} --description "<content>"
    ```
@@ -48,6 +50,7 @@ Save a requirement plan or specification to BrainGrid.
 User provides title: "User Authentication System"
 
 Prompt for content, then execute:
+
 ```bash
 braingrid requirement create --name "User Authentication System" --description "Add OAuth2 authentication with password reset and email verification. Include JWT token management and session handling."
 ```
@@ -55,5 +58,6 @@ braingrid requirement create --name "User Authentication System" --description "
 Output: "✅ Created requirement REQ-123: User Authentication System"
 
 Next steps:
+
 - `braingrid requirement breakdown REQ-123`
 - `git checkout -b feature/REQ-123-user-auth`
