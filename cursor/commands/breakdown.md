@@ -15,7 +15,7 @@ Break down a requirement into perfectly-prompted, AI-ready implementation tasks 
 
    For detailed progress output:
    ```bash
-   braingrid requirement breakdown REQ-{id} --verbose
+   braingrid requirement breakdown REQ-{id}
    ```
 
 3. **Handle errors reactively:**
@@ -29,7 +29,7 @@ Break down a requirement into perfectly-prompted, AI-ready implementation tasks 
    - Show task IDs and titles
    - Provide URL to view tasks in BrainGrid web app
    - Suggest next steps:
-     - `braingrid task list -r REQ-{id} --verbose` to view full task details
+     - `braingrid task list -r REQ-{id}` to view full task details
      - `braingrid requirement build REQ-{id}` to get complete implementation plan
      - `braingrid requirement update REQ-{id} --status IN_PROGRESS` to mark as in progress
 
@@ -37,10 +37,10 @@ Break down a requirement into perfectly-prompted, AI-ready implementation tasks 
 
 Command: `/breakdown REQ-234`
 
-Execute: `braingrid requirement breakdown REQ-234 --verbose`
+Execute: `braingrid requirement breakdown REQ-234`
 
 Output: "✅ Created 6 tasks for REQ-234"
 
 Next steps:
-- `braingrid task list -r REQ-234 --verbose`
+- `braingrid task list -r REQ-234`
 - `braingrid requirement build REQ-234`
