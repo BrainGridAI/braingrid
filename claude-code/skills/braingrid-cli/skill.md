@@ -106,7 +106,6 @@ Convert requirements into perfectly-prompted tasks:
 braingrid requirement breakdown REQ-1
 ```
 
-
 - Specific and actionable
 - Properly sequenced
 - Ready to feed to AI coding tools
@@ -228,7 +227,6 @@ braingrid task delete TASK-789 [--force]
 `PLANNED` → `IN_PROGRESS` → `COMPLETED` or `CANCELLED`
 
 **Note:** Tasks do not have `IDEA` or `REVIEW` status (only requirements do).
-
 
 ### Informational Commands
 
@@ -408,8 +406,8 @@ When helping users with BrainGrid:
 5. **Format Selection**: Use `--format markdown` for AI-ready output
 6. **Status Updates**: Remind users to update statuses as work progresses
 7. **Git Integration**: Encourage branch naming that matches requirement IDs
-9. **Build Plans**: Generate complete plans before starting implementation
-10. **Multiple Projects**: Be aware of project context when working across repos
+8. **Build Plans**: Generate complete plans before starting implementation
+9. **Multiple Projects**: Be aware of project context when working across repos
 
 ## Example Interactions
 
