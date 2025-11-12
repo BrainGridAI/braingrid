@@ -96,11 +96,10 @@ After successfully creating the requirement, guide the user through the workflow
 1. **Break Down into Tasks** (AI-powered):
 
    ```bash
-   braingrid requirement breakdown REQ-{id} --verbose
+   braingrid requirement breakdown REQ-{id}
    ```
 
    - This uses AI to convert the plan into specific, actionable tasks
-   - Use `--verbose` to see detailed task generation progress
 
 2. **Create Git Branch**:
 
@@ -130,7 +129,7 @@ After successfully creating the requirement, guide the user through the workflow
 The typical workflow after saving a plan:
 
 1. **➡️ Save plan**: `/save-requirement "Plan Title"` (this command)
-2. Break into tasks: `braingrid requirement breakdown REQ-X --verbose`
+2. Break into tasks: `braingrid requirement breakdown REQ-X`
 3. Create git branch: `git checkout -b feature/REQ-X-description`
 4. Build implementation plan: `braingrid requirement build REQ-X`
 5. Start implementation, updating task status as you go
@@ -147,7 +146,7 @@ Claude:
    --content "{plan-content}"
 3. Shows created requirement (REQ-123)
 4. Suggests next steps:
-   - braingrid requirement breakdown REQ-123 --verbose
+   - braingrid requirement breakdown REQ-123
    - git checkout -b feature/REQ-123-user-auth
    - braingrid requirement build REQ-123
 ```
@@ -198,7 +197,7 @@ Note: Extract the requirement UUID from the command output to construct the URL.
 
 **Next Steps:**
 
-1. Break down into tasks: `braingrid requirement breakdown REQ-{id} --verbose`
+1. Break down into tasks: `braingrid requirement breakdown REQ-{id}`
 2. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
 3. Build implementation plan: `braingrid requirement build REQ-{id}`
 
