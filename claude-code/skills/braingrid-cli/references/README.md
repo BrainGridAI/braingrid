@@ -157,7 +157,6 @@ braingrid task create -p PROJ-123 -r REQ-456 --title "Task Title"
 >
 > **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
 >
->
 > **Note:** Task status values are: `PLANNED`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED` (tasks do not have `IDEA` or `REVIEW` status).
 
 ### Informational Commands
