@@ -12,6 +12,7 @@ BrainGrid turns vague ideas into structured specifications and AI-ready tasks.
 - `/build [req-id]` - Get complete implementation plan (markdown format)
 
 **Need help with planning or requirements?** Invoke the `braingrid-cli` skill for:
+
 - Guided workflows for turning vague ideas into specs
 - Best practices for effective requirement prompts
 - Proactive suggestions on when to use BrainGrid
