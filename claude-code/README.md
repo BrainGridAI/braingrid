@@ -110,11 +110,13 @@ BrainGrid: PROJ-3 > REQ-128 [2/5]
 ```
 
 **Line 1** (when BrainGrid context exists):
+
 - `PROJ-3` - Current project (from `.braingrid/project.json`)
 - `REQ-128` - Current requirement (auto-detected from git branch like `feature/REQ-128-auth`)
 - `[2/5]` - Task progress (2 of 5 tasks completed)
 
 **Line 2** (always shown):
+
 - Working directory
 - Context usage with color coding:
   - Cyan (0-80%): Normal usage
