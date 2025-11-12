@@ -9,11 +9,13 @@ Break down a requirement into perfectly-prompted, AI-ready implementation tasks 
    - Accept flexible formats: `REQ-123`, `req-123`, or `123`
 
 2. **Execute the BrainGrid CLI command:**
+
    ```bash
    braingrid requirement breakdown REQ-{id}
    ```
 
    For detailed progress output:
+
    ```bash
    braingrid requirement breakdown REQ-{id}
    ```
@@ -42,5 +44,6 @@ Execute: `braingrid requirement breakdown REQ-234`
 Output: "✅ Created 6 tasks for REQ-234"
 
 Next steps:
+
 - `braingrid task list -r REQ-234`
 - `braingrid requirement build REQ-234`
