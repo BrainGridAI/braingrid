@@ -7,6 +7,7 @@ Create a detailed, AI-refined requirement specification using the BrainGrid CLI.
    - Should include problem statement, context, constraints, users, and success criteria
 
 2. **Execute the BrainGrid CLI command:**
+
    ```bash
    braingrid requirement specify --prompt "<user's prompt>"
    ```
@@ -35,5 +36,6 @@ Execute: `braingrid requirement specify --prompt "Add user authentication with O
 Output: "✅ Created requirement REQ-234: User Authentication System"
 
 Next steps:
+
 - `braingrid requirement breakdown REQ-234`
 - `git checkout -b feature/REQ-234-user-auth`
