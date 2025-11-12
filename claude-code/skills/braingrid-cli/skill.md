@@ -106,7 +106,6 @@ Convert requirements into perfectly-prompted tasks:
 braingrid requirement breakdown REQ-1
 ```
 
-Use `--verbose` to see detailed task generation progress. The AI creates tasks that are:
 
 - Specific and actionable
 - Properly sequenced
@@ -190,7 +189,7 @@ braingrid requirement update REQ-1 --name "Updated Name"
 braingrid requirement delete REQ-1 [--force]
 
 # Break into tasks (AI-powered)
-braingrid requirement breakdown REQ-1 [--verbose]
+braingrid requirement breakdown REQ-1
 
 # Build complete plan
 braingrid requirement build REQ-1 [--format markdown|json|xml]
@@ -209,7 +208,7 @@ braingrid requirement build REQ-1 [--format markdown|json|xml]
 
 ```bash
 # List tasks for requirement
-braingrid task list -r REQ-456 [--format table|json|xml|markdown] [--verbose]
+braingrid task list -r REQ-456 [--format table|json|xml|markdown]
 
 # Create task
 braingrid task create -r REQ-456 --title "Task Title" [--content "Description"]
@@ -230,7 +229,6 @@ braingrid task delete TASK-789 [--force]
 
 **Note:** Tasks do not have `IDEA` or `REVIEW` status (only requirements do).
 
-Use `--verbose` with `task list` to display full task content, not just metadata.
 
 ### Informational Commands
 
@@ -310,7 +308,7 @@ see each others cursors and feel real time."
 
 After breaking down requirements:
 
-1. Review tasks with `braingrid task list -r REQ-1 --verbose`
+1. Review tasks with `braingrid task list -r REQ-1`
 2. Export build plan with `braingrid requirement build REQ-1`
 3. Feed individual task prompts to AI coding tools
 4. Update task status as work progresses
@@ -338,7 +336,7 @@ braingrid init
 braingrid specify --prompt "Implement dark mode toggle in settings"
 
 # Break into tasks
-braingrid requirement breakdown REQ-1 --verbose
+braingrid requirement breakdown REQ-1
 
 # Create git branch
 git checkout -b feature/REQ-1-dark-mode
@@ -365,7 +363,7 @@ braingrid requirement list --status IN_PROGRESS
 braingrid requirement show REQ-1
 
 # List tasks with details
-braingrid task list -r REQ-1 --verbose
+braingrid task list -r REQ-1
 
 # Update requirement status
 braingrid requirement update REQ-1 --status REVIEW
@@ -410,7 +408,6 @@ When helping users with BrainGrid:
 5. **Format Selection**: Use `--format markdown` for AI-ready output
 6. **Status Updates**: Remind users to update statuses as work progresses
 7. **Git Integration**: Encourage branch naming that matches requirement IDs
-8. **Verbose Mode**: Use `--verbose` when users need full context
 9. **Build Plans**: Generate complete plans before starting implementation
 10. **Multiple Projects**: Be aware of project context when working across repos
 
@@ -444,7 +441,7 @@ Would you like me to help implement the tasks once we have the breakdown?
 ```
 Since you're on a git branch, let me check for tasks:
 
-braingrid task list --verbose
+braingrid task list
 
 This will auto-detect the requirement ID from your branch name and show all \
 tasks with their full content. The verbose flag includes task prompts you can \
