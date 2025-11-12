@@ -89,12 +89,11 @@ After successfully creating the requirement, guide the user through the typical 
 1. **Break Down into Tasks** (AI-powered):
 
    ```bash
-   braingrid requirement breakdown REQ-{id} --verbose
+   braingrid requirement breakdown REQ-{id}
    ```
 
    - This uses AI to convert the requirement into specific, actionable tasks
    - Tasks are properly sequenced and ready to feed to AI coding tools
-   - Use `--verbose` to see detailed task generation progress
 
 2. **Create Git Branch** (enables auto-detection):
 
@@ -147,7 +146,7 @@ Claude:
 1. Runs: braingrid specify --prompt "Add real-time notifications"
 2. Shows created requirement (REQ-123: "Real-time Notification System")
 3. Suggests next steps:
-   - braingrid requirement breakdown REQ-123 --verbose
+   - braingrid requirement breakdown REQ-123
    - git checkout -b feature/REQ-123-realtime-notifications
    - braingrid requirement build REQ-123
 ```
@@ -182,7 +181,7 @@ Note: Extract the requirement UUID from the command output to construct the URL.
 
 **Next Steps:**
 
-1. Break down into tasks: `braingrid requirement breakdown REQ-{id} --verbose`
+1. Break down into tasks: `braingrid requirement breakdown REQ-{id}`
 2. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
 3. Build implementation plan: `braingrid requirement build REQ-{id}`
 
