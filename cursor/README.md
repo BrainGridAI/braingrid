@@ -232,7 +232,7 @@ braingrid requirement show REQ-123
 /build REQ-123
 
 # List tasks (in terminal)
-braingrid task list -r REQ-123 --verbose
+braingrid task list -r REQ-123
 
 # Update requirement status (in terminal)
 braingrid requirement update REQ-123 --status IN_PROGRESS
@@ -349,7 +349,7 @@ git branch
 /build
 # Or in terminal
 braingrid requirement show
-braingrid task list --verbose
+braingrid task list
 
 # Update status without specifying ID (in terminal)
 braingrid requirement update --status IN_PROGRESS
@@ -382,14 +382,14 @@ braingrid specify --prompt "Your idea"
 braingrid requirement list [--status PLANNED|IN_PROGRESS|...]
 braingrid requirement show [REQ-ID]
 braingrid requirement update REQ-ID --status IN_PROGRESS
-braingrid requirement breakdown REQ-ID [--verbose]
+braingrid requirement breakdown REQ-ID
 braingrid requirement build REQ-ID [--format markdown]
 ```
 
 ### Tasks
 
 ```bash
-braingrid task list -r REQ-ID [--format markdown] [--verbose]
+braingrid task list -r REQ-ID [--format markdown]
 braingrid task show TASK-ID
 braingrid task update TASK-ID -r REQ-ID --status IN_PROGRESS
 braingrid task create -r REQ-ID --title "Task Title"
