@@ -1,4 +1,4 @@
-# BrainGrid for Claude Code
+<h1>BrainGrid for Claude Code</h1>
 
 <div align="center">
 <img src="https://www.braingrid.ai/logos/braingrid-symbol-800.png" width="80"/>
@@ -242,7 +242,7 @@ braingrid requirement list
 braingrid requirement show REQ-123
 
 # List tasks
-braingrid task list -r REQ-123 --verbose
+braingrid task list -r REQ-123
 
 # Update requirement status
 braingrid requirement update REQ-123 --status IN_PROGRESS
@@ -372,7 +372,7 @@ git branch
 # Commands auto-detect REQ-456
 /build
 braingrid requirement show
-braingrid task list --verbose
+braingrid task list
 
 # Update status without specifying ID
 braingrid requirement update --status IN_PROGRESS
@@ -405,14 +405,14 @@ braingrid specify --prompt "Your idea"
 braingrid requirement list [--status PLANNED|IN_PROGRESS|...]
 braingrid requirement show [REQ-ID]
 braingrid requirement update REQ-ID --status IN_PROGRESS
-braingrid requirement breakdown REQ-ID [--verbose]
+braingrid requirement breakdown REQ-ID
 braingrid requirement build REQ-ID [--format markdown]
 ```
 
 ### Tasks
 
 ```bash
-braingrid task list -r REQ-ID [--format markdown] [--verbose]
+braingrid task list -r REQ-ID [--format markdown]
 braingrid task show TASK-ID
 braingrid task update TASK-ID -r REQ-ID --status IN_PROGRESS
 braingrid task create -r REQ-ID --title "Task Title"
