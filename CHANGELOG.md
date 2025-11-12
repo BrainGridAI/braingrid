@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.8] - 2025-11-12
+
+### Fixed
+
+- **Recursive directory processing for setup commands**
+  - Fixed critical bug where nested directories weren't installed during `braingrid setup claude-code`
+  - Skills directory (`.claude/skills/braingrid-cli/`) now properly installed with all files
+  - Added recursive `processDirectory()` helper to traverse subdirectory structures
+  - Setup commands now correctly handle both files and nested directories from GitHub
+
+### Changed
+
+- **Enhanced skill reference in CLAUDE.md**
+  - Expanded skill reference from 7 words to comprehensive 8-line section
+  - Added engaging question format: "Need help with planning or requirements?"
+  - Listed 5 specific benefits: guided workflows, best practices, proactive suggestions, examples, installation help
+  - Added CLAUDE.md to sync script for distribution to users
+  - Improves skill discoverability in Claude Code
+
+- **Documentation improvements**
+  - Removed deprecated `--verbose` flag references from all documentation
+  - Added full CLI command reference to skill documentation
+  - Updated project configuration with organization UUID
+
 ## [0.2.7] - 2025-11-11
 
 ### Fixed
