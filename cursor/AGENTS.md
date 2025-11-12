@@ -78,113 +78,94 @@ PLANNED → IN_PROGRESS → COMPLETED
                       ↘ CANCELLED
 ```
 
-## Common Commands
+## Complete CLI Command Reference
 
 ### Authentication
 
 ```bash
-braingrid login              # OAuth2 login
+braingrid login              # OAuth2 login flow
 braingrid whoami            # Show current user
 braingrid logout            # Sign out
 ```
 
-### Project Management
+### Initialization
 
 ```bash
-# List all projects
-braingrid project list
-
-# Show current project (from .braingrid/project.json)
-braingrid project show
-
-# Show specific project
-braingrid project show PROJ-123
-
-# Create project
-braingrid project create --name "Project Name"
+braingrid init                           # Step-by-step wizard
+braingrid init --project PROJ-123        # Specify project
+braingrid init --force                   # Skip confirmation
 ```
 
-### Requirement Management
-
-#### Create Requirements
+### Project Commands
 
 ```bash
-# Create AI-refined requirement from prompt (specify command)
-braingrid requirement specify --prompt "Add user authentication with OAuth2"
-
-# Create manual requirement
-braingrid requirement create --name "Feature Name" --content "Description"
+braingrid project list [--format json] [--page 1] [--limit 20]
+braingrid project show                   # Show initialized project
+braingrid project show PROJ-123          # Show specific project
+braingrid project show --repository "owner/repo"
+braingrid project create --name "Name" [--description "Desc"] [--repository "owner/name"]
+braingrid project update PROJ-123 --name "New Name"
+braingrid project delete PROJ-123 [--force]
 ```
 
-#### List and View Requirements
+### Requirement Commands
 
 ```bash
-# List all requirements
-braingrid requirement list
+# Create with AI refinement (specify command)
+braingrid specify --prompt "Your idea here"
+braingrid specify -p PROJ-123 --prompt "Different project"
+braingrid specify --prompt "..." --format json
 
-# List by status
-braingrid requirement list --status PLANNED
-braingrid requirement list --status IN_PROGRESS
-
-# Show specific requirement
+# List and show
+braingrid requirement list [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED]
+braingrid requirement show              # Auto-detect from git branch
 braingrid requirement show REQ-123
 
-# Show with auto-detection from git branch
-braingrid requirement show
-```
+# Create manual requirement
+braingrid requirement create --name "Name" [--content "Details"]
 
-#### Update Requirements
-
-```bash
-# Update status
+# Update
 braingrid requirement update REQ-123 --status IN_PROGRESS
-braingrid requirement update REQ-123 --status COMPLETED
+braingrid requirement update REQ-123 --name "Updated Name"
 
-# Update name or content
-braingrid requirement update REQ-123 --name "New Name"
-```
+# Delete
+braingrid requirement delete REQ-123 [--force]
 
-#### Break Down and Build
-
-```bash
-# Break requirement into AI-generated tasks
+# Break into tasks (AI-powered)
 braingrid requirement breakdown REQ-123
 
-# Use verbose mode to see task generation progress
-braingrid requirement breakdown REQ-123 --verbose
-
-# Build complete implementation plan
-braingrid requirement build REQ-123
-braingrid requirement build REQ-123 --format markdown
-braingrid requirement build REQ-123 --format json
+# Build complete plan
+braingrid requirement build REQ-123 [--format markdown|json|xml]
 ```
 
-### Task Management
+### Task Commands
 
 ```bash
-# List tasks for requirement
-braingrid task list -r REQ-123
-braingrid task list -r REQ-123 --format markdown
-braingrid task list -r REQ-123 --verbose
+# List tasks
+braingrid task list -r REQ-123 [--format table|json|xml|markdown]
 
-# Show specific task
-braingrid task show TASK-789 -r REQ-123
+# Create task
+braingrid task create -r REQ-123 --title "Task Title" [--content "Description"]
 
-# Update task status
-braingrid task update TASK-789 -r REQ-123 --status IN_PROGRESS
-braingrid task update TASK-789 -r REQ-123 --status COMPLETED
+# Show task
+braingrid task show TASK-456
 
-# Create manual task
-braingrid task create -r REQ-123 --title "Task Title" --content "Description"
+# Update task
+braingrid task update TASK-456 --status IN_PROGRESS
+braingrid task update TASK-456 --title "New Title"
+
+# Delete task
+braingrid task delete TASK-456 [--force]
 ```
 
 ### Utility Commands
 
 ```bash
-braingrid status         # Show CLI status (auth, git, config)
-braingrid update         # Update to latest version
-braingrid --version      # Show current version
-braingrid --help         # Show help
+braingrid status             # Show CLI status
+braingrid update            # Update to latest version
+braingrid update --check    # Check for updates
+braingrid --version         # Show version
+braingrid --help            # Show help
 ```
 
 ## End-to-End Workflow Examples
@@ -201,7 +182,7 @@ braingrid requirement specify --prompt "Implement dark mode toggle in settings w
 # Output: ✅ Created requirement REQ-234
 
 # 3. Break down into tasks (AI-powered)
-braingrid requirement breakdown REQ-234 --verbose
+braingrid requirement breakdown REQ-234
 
 # Output: ✅ Created 6 tasks for REQ-234
 
@@ -233,7 +214,7 @@ braingrid requirement list --status IN_PROGRESS
 braingrid requirement show REQ-456
 
 # List tasks with full details
-braingrid task list -r REQ-456 --verbose
+braingrid task list -r REQ-456
 
 # Update requirement status
 braingrid requirement update REQ-456 --status REVIEW
@@ -247,7 +228,7 @@ git checkout -b feature/REQ-789-api-integration
 
 # Commands auto-detect REQ-789 from branch name
 braingrid requirement show          # Shows REQ-789
-braingrid task list --verbose        # Lists tasks for REQ-789
+braingrid task list        # Lists tasks for REQ-789
 braingrid requirement build          # Builds REQ-789
 ```
 
@@ -311,7 +292,6 @@ Suggest BrainGrid when users:
 - Use `--format markdown` for AI agents and detailed content
 - Use `--format json` for scripting and automation
 - Use `--format table` (default) for quick human-readable views
-- Use `--verbose` with task lists to see full task content
 
 ## Links and Resources
 
@@ -333,7 +313,7 @@ Suggest BrainGrid when users:
 | List requirements  | `braingrid requirement list`                               |
 | Show requirement   | `braingrid requirement show REQ-X`                         |
 | Update requirement | `braingrid requirement update REQ-X --status IN_PROGRESS`  |
-| List tasks         | `braingrid task list -r REQ-X --verbose`                   |
+| List tasks         | `braingrid task list -r REQ-X`                   |
 | Update task        | `braingrid task update TASK-X -r REQ-X --status COMPLETED` |
 | Check status       | `braingrid status`                                         |
 | Get help           | `braingrid --help`                                         |
