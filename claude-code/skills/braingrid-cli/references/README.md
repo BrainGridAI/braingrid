@@ -122,7 +122,7 @@ braingrid requirement create --name "Name" [--content "Description"] [--assigned
 braingrid requirement show [id]
 braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"]
 braingrid requirement delete [id] [--force]
-braingrid requirement breakdown [id] [--verbose]
+braingrid requirement breakdown [id]
 braingrid requirement build [id] [--format markdown|json|xml]
 
 # Working with a different project:
@@ -142,7 +142,7 @@ braingrid requirement create -p PROJ-456 --name "Description"
 
 ```bash
 # Working with the initialized project
-braingrid task list -r REQ-456 [--format table|json|xml|markdown] [--verbose]
+braingrid task list -r REQ-456 [--format table|json|xml|markdown]
 braingrid task create -r REQ-456 --title "Task Title" [--content "Description"]
 braingrid task show <id>
 braingrid task update <id> [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--title "New Title"]
@@ -157,7 +157,6 @@ braingrid task create -p PROJ-123 -r REQ-456 --title "Task Title"
 >
 > **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
 >
-> **Note:** Use `--verbose` with `task list` to show full task content in addition to task metadata.
 >
 > **Note:** Task status values are: `PLANNED`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED` (tasks do not have `IDEA` or `REVIEW` status).
 
