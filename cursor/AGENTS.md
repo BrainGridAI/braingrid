@@ -313,12 +313,13 @@ Suggest BrainGrid when users:
 | List requirements  | `braingrid requirement list`                               |
 | Show requirement   | `braingrid requirement show REQ-X`                         |
 | Update requirement | `braingrid requirement update REQ-X --status IN_PROGRESS`  |
-| List tasks         | `braingrid task list -r REQ-X`                   |
+| List tasks         | `braingrid task list -r REQ-X`                             |
 | Update task        | `braingrid task update TASK-X -r REQ-X --status COMPLETED` |
 | Check status       | `braingrid status`                                         |
 | Get help           | `braingrid --help`                                         |
 
 <!-- BEGIN BRAINGRID INTEGRATION -->
+
 ## Working with Specs, Requirements, and Tasks in BrainGrid
 
 BrainGrid turns vague ideas into structured specifications and AI-ready tasks.
