@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.9] - 2025-11-12
+
+### Fixed
+
+- **Documentation URLs updated to docs subdomain**
+  - Updated Claude Code documentation URL from `https://braingrid.ai/docs/claude-code` to `https://docs.braingrid.ai/claude-code`
+  - Updated Cursor documentation URL from `https://braingrid.ai/docs/cursor` to `https://docs.braingrid.ai/cursor`
+  - URLs displayed in setup command success messages now point to correct documentation location
+  - Affects `braingrid setup claude-code` and `braingrid setup cursor` output
+
 ## [0.2.8] - 2025-11-12
 
 ### Fixed
