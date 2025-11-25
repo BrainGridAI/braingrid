@@ -45,6 +45,12 @@ The `breakdown` command uses AI to convert a requirement into specific, actionab
 
 1. **Execute Breakdown Command**:
 
+   ⏱️ **IMPORTANT - Be Patient:**
+   The breakdown process uses AI to analyze the requirement and generate detailed task prompts.
+   This typically takes 1-3 minutes to complete. **Always wait for the command to finish** - do not
+   timeout or abort the operation. The CLI will show progress and eventually return the complete
+   task breakdown.
+
    ```bash
    braingrid requirement breakdown [REQ-ID]
    ```
