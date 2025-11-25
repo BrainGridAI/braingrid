@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.10] - 2025-11-25
+
+### Fixed
+
+- **Organization ID handling in project initialization**
+  - Fixed issue where `organization_id` was set to "default" in `.braingrid/project.json`
+  - Login flow now automatically fetches organization ID from validation endpoint when missing from JWT token
+  - Init command validates and fixes any existing sessions with "default" organization_id
+  - Added clear user feedback with warnings and success messages during organization ID updates
+  - Prevents invalid "default" organization IDs from being stored in project configuration
+
+### Changed
+
+- **Enhanced breakdown command documentation**
+  - Added patience messages to both Claude Code and Cursor breakdown slash commands
+  - Commands now explicitly instruct AI agents to wait 1-3 minutes for AI task generation
+  - Prevents AI agents from prematurely aborting breakdown operations before completion
+  - Improves reliability of AI-powered task breakdown workflow
+
 ## [0.2.9] - 2025-11-12
 
 ### Fixed
