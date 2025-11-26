@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.11] - 2025-11-25
+
+### Fixed
+
+- **Claude Code skill installation path**
+  - Fixed issue where skill files were installed to nested directory (`.claude/skills/braingrid-cli/braingrid-cli`)
+  - Skills now correctly install to flat directory structure (`.claude/skills/braingrid-cli/`)
+  - Updated sourceDirs configuration to start recursive walk from skill directory itself
+  - Ensures proper skill detection and loading in Claude Code
+
 ## [0.2.10] - 2025-11-25
 
 ### Fixed
