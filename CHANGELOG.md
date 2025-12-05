@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.12] - 2025-12-05
+
+### Changed
+
+- **Production authentication domain updated**
+  - Updated production WorkOS auth URL from `sensitive-harvest-60.authkit.app` to `auth.braingrid.ai`
+  - Custom domain provides better branding and user trust during OAuth login flow
+  - Development auth domain remains unchanged
+
+### Improved
+
+- **Test maintainability for config tests**
+  - Extracted mock configuration objects into reusable constants (`MOCK_PROD_CONFIG`, `MOCK_DEV_CONFIG`)
+  - Reduced code duplication in `config.test.ts`
+  - Test assertions now reference constants instead of hardcoded strings
+
 ## [0.2.11] - 2025-11-25
 
 ### Fixed
