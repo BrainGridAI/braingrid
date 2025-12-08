@@ -258,6 +258,67 @@ braingrid --help       # Show help information
 
 ---
 
+## Shell Completion
+
+BrainGrid CLI supports tab completion for bash and zsh shells, making it faster to type commands and discover available options.
+
+### Quick Setup (Recommended)
+
+Automatically install completion for your current shell:
+
+```bash
+braingrid completion --setup
+```
+
+Then restart your terminal or source your shell config:
+
+```bash
+# For bash
+source ~/.bashrc
+
+# For zsh
+source ~/.zshrc
+```
+
+### Manual Installation
+
+#### Bash
+
+Add to your `~/.bashrc`:
+
+```bash
+# Option 1: Add to shell config
+braingrid completion bash >> ~/.bashrc
+
+# Option 2: Eval in current session (temporary)
+eval "$(braingrid completion bash)"
+```
+
+#### Zsh
+
+Add to your `~/.zshrc`:
+
+```bash
+# Option 1: Add to shell config
+braingrid completion zsh >> ~/.zshrc
+
+# Option 2: Eval in current session (temporary)
+eval "$(braingrid completion zsh)"
+```
+
+### What Gets Completed
+
+- **Commands**: `login`, `logout`, `project`, `requirement`, `task`, etc.
+- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`
+- **Options**: `--help`, `--format`, `--status`, `--project`, `--requirement`
+- **Values**: Status values (`IDEA`, `PLANNED`, `IN_PROGRESS`, etc.), format options (`table`, `json`, `xml`, `markdown`)
+
+### Fish Shell
+
+Fish shell support is planned for a future release.
+
+---
+
 ## Updating
 
 Update to the latest version:
