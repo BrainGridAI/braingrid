@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.2.13] - 2025-12-08
+
+### Added
+
+- **Shell tab completion support**
+  - Added `braingrid completion` command to generate shell completion scripts
+  - Support for bash and zsh shells (fish support planned for future release)
+  - Automated setup with `braingrid completion --setup` flag
+  - Auto-detects shell from `$SHELL` environment variable
+  - Completes commands, subcommands, options, and values
+  - Includes status values (IDEA, PLANNED, IN_PROGRESS, REVIEW, COMPLETED, CANCELLED)
+  - Includes format options (table, json, xml, markdown)
+  - Comprehensive documentation in README.md with installation instructions
+  - Uses omelette library for cross-shell compatibility
+
 ## [0.2.12] - 2025-12-05
 
 ### Changed
