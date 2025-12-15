@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.15] - 2025-12-15
+
+### Changed
+
+- **CI/CD: Switch to OIDC-based npm publishing**
+  - GitHub Actions workflow now uses OpenID Connect (Trusted Publishing) for npm authentication
+  - No longer requires NPM_TOKEN secret - authentication is handled via OIDC
+  - More secure and eliminates token expiration issues
+
+## [0.2.14] - 2025-12-15
+
+### Added
+
+- **Requirement auto-detection for task commands**
+  - Task commands now auto-detect the requirement ID from git branch names (e.g., `feature/REQ-123-something` → `REQ-123`)
+  - Matches the existing behavior of requirement commands
+  - Applies to all task commands: `list`, `summary`, `show`, `create`, `update`, `delete`
+  - Explicit `-r/--requirement` flag still works and takes precedence over auto-detection
+
 ## [0.2.13] - 2025-12-08
 
 ### Added
