@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.17] - 2025-12-17
+
+### Added
+
+- **Update notifications and interactive prompts**
+  - CLI now shows update warning after every command when a newer version is available on npm
+  - New interactive update prompt at the start of `braingrid init` offers to update before proceeding
+  - Version check results are cached for 12 hours to minimize network requests
+  - Silent failure on network errors ensures CLI functionality is never impacted
+  - Extracted reusable version utilities for consistent version handling across the CLI
+
+## [0.2.16] - 2025-12-17
+
+### Added
+
+- **--format option for show commands**
+  - Added `--format` option to `requirement show` command
+  - Added `--format` option to `task show` command
+  - Supports all standard formats: table (default), json, xml, markdown
+  - Consistent with other commands that already support `--format`
+
 ## [0.2.15] - 2025-12-15
 
 ### Changed
