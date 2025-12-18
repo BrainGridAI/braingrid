@@ -71,17 +71,18 @@ if [ -n "$REQ_ID" ]; then
 		COMPLETED_TASKS=$(echo "$TASKS_JSON" | jq '[.[] | select(.status == "COMPLETED")] | length' 2>/dev/null || echo "0")
 
 		# Find current task: first IN_PROGRESS, or first PLANNED if none in progress
-		# Extract both number and status
+		# Extract number, status, and title
 		# Note: select(. != null) is needed because first returns null on empty arrays,
-		# and string interpolation on null produces "null|null" which is a valid string
+		# and string interpolation on null produces "null|null|null" which is a valid string
 		CURRENT_TASK_INFO=$(echo "$TASKS_JSON" | jq -r '
-			(map(select(.status == "IN_PROGRESS")) | first | select(. != null) | "\(.number)|\(.status)") //
-			(map(select(.status == "PLANNED")) | first | select(. != null) | "\(.number)|\(.status)") //
+			(map(select(.status == "IN_PROGRESS")) | first | select(. != null) | "\(.number)|\(.status)|\(.title)") //
+			(map(select(.status == "PLANNED")) | first | select(. != null) | "\(.number)|\(.status)|\(.title)") //
 			empty
 		' 2>/dev/null)
 
 		CURRENT_TASK=$(echo "$CURRENT_TASK_INFO" | cut -d'|' -f1)
 		CURRENT_TASK_STATUS=$(echo "$CURRENT_TASK_INFO" | cut -d'|' -f2)
+		CURRENT_TASK_TITLE=$(echo "$CURRENT_TASK_INFO" | cut -d'|' -f3)
 
 		if [ "$TOTAL_TASKS" != "0" ]; then
 			TASK_COUNTS="[$COMPLETED_TASKS/$TOTAL_TASKS]"
@@ -116,14 +117,21 @@ if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$CURRENT_TASK" ] || [ -n "$
 		if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ]; then
 			LINE1="${LINE1} > "
 		fi
-		LINE1="${LINE1}${YELLOW}TASK ${CURRENT_TASK}${RESET}"
-		if [ -n "$STATUS_DISPLAY" ]; then
-			LINE1="${LINE1} (${STATUS_DISPLAY})"
+
+		# Build task display: TASK 19: Task name (Status)
+		TASK_DISPLAY="TASK ${CURRENT_TASK}"
+		if [ -n "$CURRENT_TASK_TITLE" ]; then
+			TASK_DISPLAY="${TASK_DISPLAY}: ${CURRENT_TASK_TITLE}"
 		fi
+		if [ -n "$STATUS_DISPLAY" ]; then
+			TASK_DISPLAY="${TASK_DISPLAY} (${STATUS_DISPLAY})"
+		fi
+
+		LINE1="${LINE1}${YELLOW}${TASK_DISPLAY}${RESET}"
 	fi
 
 	if [ -n "$TASK_COUNTS" ]; then
-		LINE1="${LINE1} ${YELLOW}${TASK_COUNTS}${RESET}"
+		LINE1="${LINE1} ${GREEN}${TASK_COUNTS}${RESET}"
 	fi
 fi
 
