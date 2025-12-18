@@ -71,11 +71,15 @@ if [ -n "$REQ_ID" ]; then
 		COMPLETED_TASKS=$(echo "$TASKS_JSON" | jq '[.[] | select(.status == "COMPLETED")] | length' 2>/dev/null || echo "0")
 
 		# Find current task: first IN_PROGRESS, or first PLANNED if none in progress
-		CURRENT_TASK=$(echo "$TASKS_JSON" | jq -r '
-			(map(select(.status == "IN_PROGRESS")) | first | .number) //
-			(map(select(.status == "PLANNED")) | first | .number) //
+		# Extract both number and status
+		CURRENT_TASK_INFO=$(echo "$TASKS_JSON" | jq -r '
+			(map(select(.status == "IN_PROGRESS")) | first | "\(.number)|\(.status)") //
+			(map(select(.status == "PLANNED")) | first | "\(.number)|\(.status)") //
 			empty
 		' 2>/dev/null)
+
+		CURRENT_TASK=$(echo "$CURRENT_TASK_INFO" | cut -d'|' -f1)
+		CURRENT_TASK_STATUS=$(echo "$CURRENT_TASK_INFO" | cut -d'|' -f2)
 
 		if [ "$TOTAL_TASKS" != "0" ]; then
 			TASK_COUNTS="[$COMPLETED_TASKS/$TOTAL_TASKS]"
@@ -100,10 +104,20 @@ if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$CURRENT_TASK" ] || [ -n "$
 	fi
 
 	if [ -n "$CURRENT_TASK" ]; then
+		# Format status: IN_PROGRESS -> In-Progress, PLANNED -> Planned
+		case "$CURRENT_TASK_STATUS" in
+			IN_PROGRESS) STATUS_DISPLAY="In-Progress" ;;
+			PLANNED) STATUS_DISPLAY="Planned" ;;
+			*) STATUS_DISPLAY="" ;;
+		esac
+
 		if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ]; then
 			LINE1="${LINE1} > "
 		fi
-		LINE1="${LINE1}${YELLOW}${CURRENT_TASK}${RESET}"
+		LINE1="${LINE1}${YELLOW}TASK ${CURRENT_TASK}${RESET}"
+		if [ -n "$STATUS_DISPLAY" ]; then
+			LINE1="${LINE1} (${STATUS_DISPLAY})"
+		fi
 	fi
 
 	if [ -n "$TASK_COUNTS" ]; then
@@ -143,8 +157,17 @@ fi
 # Build Line 2: Always shown (path, token info, and model)
 LINE2="${DISPLAY_DIR} • ctx: ${TOKEN_DISPLAY}${MODEL_SECTION}"
 
+# Build Line 3: Branch name (only if in git repo)
+LINE3=""
+if [ -n "$BRANCH" ]; then
+	LINE3="Branch: ${CYAN}${BRANCH}${RESET}"
+fi
+
 # Output lines (Line 1 only if BrainGrid context exists)
 if [ -n "$LINE1" ]; then
 	echo -e "$LINE1"
 fi
 echo -e "$LINE2"
+if [ -n "$LINE3" ]; then
+	echo -e "$LINE3"
+fi
