@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.24] - 2025-12-18
+
+### Added
+
+- **Status line task name display**
+  - Shows task title in status line: `TASK 19: Implement feature (Planned)`
+  - Task info (number, name, status) displayed in yellow
+  - Task counts `[x/y]` displayed in green (matches REQ color)
+
+### Changed
+
+- **OAuth callback server binding**
+  - Binds to `0.0.0.0` instead of `127.0.0.1` for broader accessibility
+
 ## [0.2.23] - 2025-12-18
 
 ### Added
