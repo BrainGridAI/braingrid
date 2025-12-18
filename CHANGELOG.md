@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.22] - 2025-12-18
+
+### Added
+
+- **Task commands documentation**
+  - Added `braingrid task` command examples to CLAUDE.md and AGENTS.md
+  - Documents `task list`, `task show`, and `task update` usage
+
+### Changed
+
+- **IDE integration update prompts**
+  - Now prompts for IDE integration updates even when CLI is already up to date
+  - Ensures users can update BrainGrid integration files independently of CLI version
+
+- **Token efficiency optimizations**
+  - Optimized AGENTS.md and CLAUDE.md for reduced token usage
+  - Moved README.md from `.claude/` to `.braingrid/` for better organization
+
+### Fixed
+
+- **Duplicate BRAINGRID INTEGRATION markers**
+  - Fixed issue where setup could add duplicate integration markers to CLAUDE.md
+  - Content injection now properly checks for existing markers before adding
+
+- **Flaky test in cli-tools**
+  - Fixed parallel timing assertion test that was too strict (50ms → 100ms threshold)
+  - Prevents intermittent test failures in CI environments
+
 ## [0.2.21] - 2025-12-18
 
 ### Fixed
