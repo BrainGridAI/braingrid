@@ -42,6 +42,7 @@ GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 # Initialize BrainGrid context variables
 PROJECT_ID=""
 REQ_ID=""
+CURRENT_TASK=""
 TASK_COUNTS=""
 
 # Check if .braingrid/project.json exists
@@ -59,7 +60,7 @@ if [ -n "$GIT_ROOT" ]; then
 	fi
 fi
 
-# If requirement ID exists, get task counts
+# If requirement ID exists, get task counts and current task
 if [ -n "$REQ_ID" ]; then
 	# Make API call to get tasks (filter out spinner and loading messages)
 	TASKS_JSON=$(braingrid task list -r "$REQ_ID" --format json 2>/dev/null | tr '\r' '\n' | grep -v 'Loading tasks' | grep -v '⠋\|⠙\|⠹\|⠸\|⠼\|⠴\|⠦\|⠧\|⠇\|⠏' | sed '/^\s*$/d')
@@ -69,6 +70,13 @@ if [ -n "$REQ_ID" ]; then
 		TOTAL_TASKS=$(echo "$TASKS_JSON" | jq 'length' 2>/dev/null || echo "0")
 		COMPLETED_TASKS=$(echo "$TASKS_JSON" | jq '[.[] | select(.status == "COMPLETED")] | length' 2>/dev/null || echo "0")
 
+		# Find current task: first IN_PROGRESS, or first PLANNED if none in progress
+		CURRENT_TASK=$(echo "$TASKS_JSON" | jq -r '
+			(map(select(.status == "IN_PROGRESS")) | first | .number) //
+			(map(select(.status == "PLANNED")) | first | .number) //
+			empty
+		' 2>/dev/null)
+
 		if [ "$TOTAL_TASKS" != "0" ]; then
 			TASK_COUNTS="[$COMPLETED_TASKS/$TOTAL_TASKS]"
 		fi
@@ -77,7 +85,7 @@ fi
 
 # Build BrainGrid context line (only if context exists)
 LINE1=""
-if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$TASK_COUNTS" ]; then
+if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$CURRENT_TASK" ] || [ -n "$TASK_COUNTS" ]; then
 	LINE1="BrainGrid: "
 
 	if [ -n "$PROJECT_ID" ]; then
@@ -89,6 +97,13 @@ if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ] || [ -n "$TASK_COUNTS" ]; then
 			LINE1="${LINE1} > "
 		fi
 		LINE1="${LINE1}${GREEN}${REQ_ID}${RESET}"
+	fi
+
+	if [ -n "$CURRENT_TASK" ]; then
+		if [ -n "$PROJECT_ID" ] || [ -n "$REQ_ID" ]; then
+			LINE1="${LINE1} > "
+		fi
+		LINE1="${LINE1}${YELLOW}${CURRENT_TASK}${RESET}"
 	fi
 
 	if [ -n "$TASK_COUNTS" ]; then
