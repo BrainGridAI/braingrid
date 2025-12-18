@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.20] - 2025-12-18
+
+### Added
+
+- **IDE setup prompts after update**
+  - After running `braingrid update`, CLI detects installed Claude Code and Cursor
+  - Prompts user to update BrainGrid integration for each detected IDE
+  - Uses force mode to streamline the setup process
+
+### Changed
+
+- **Enhanced status line display**
+  - Task display now shows status: `TASK 19 (In-Progress)` or `(Planned)`
+  - Added third line showing current git branch: `Branch: feature/REQ-12-something`
+
 ## [0.2.19] - 2025-12-17
 
 ### Added
