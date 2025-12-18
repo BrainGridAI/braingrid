@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.23] - 2025-12-18
+
+### Added
+
+- **Automatic README.md installation**
+  - Copies `.braingrid/README.md` documentation during `init`, `update`, and `setup` commands
+  - Ensures users always have the latest BrainGrid integration documentation
+  - Fails silently if GitHub is unreachable (non-blocking operation)
+
 ## [0.2.22] - 2025-12-18
 
 ### Added
