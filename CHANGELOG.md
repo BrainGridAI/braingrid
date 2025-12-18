@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.19] - 2025-12-17
+
+### Added
+
+- **Pagination options for task commands**
+  - Added `--page` and `--limit` options to `task list` and `task summary` commands
+  - Consistent with existing pagination options on `requirement list`
+
+### Changed
+
+- **has_more pagination warnings**
+  - Task and requirement list commands now show a warning when more items exist beyond current page
+  - Warning message: "⚠️ More tasks/requirements exist. Use --limit to see more."
+  - `getCurrentTask` auto-detection warns if results may be incomplete due to pagination
+
+- **Status line uses higher limit**
+  - Claude Code status line script now fetches up to 100 tasks for accurate counts
+  - Ensures task progress display `[completed/total]` is accurate for larger requirements
+
 ## [0.2.18] - 2025-12-17
 
 ### Added
