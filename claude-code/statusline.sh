@@ -72,9 +72,11 @@ if [ -n "$REQ_ID" ]; then
 
 		# Find current task: first IN_PROGRESS, or first PLANNED if none in progress
 		# Extract both number and status
+		# Note: select(. != null) is needed because first returns null on empty arrays,
+		# and string interpolation on null produces "null|null" which is a valid string
 		CURRENT_TASK_INFO=$(echo "$TASKS_JSON" | jq -r '
-			(map(select(.status == "IN_PROGRESS")) | first | "\(.number)|\(.status)") //
-			(map(select(.status == "PLANNED")) | first | "\(.number)|\(.status)") //
+			(map(select(.status == "IN_PROGRESS")) | first | select(. != null) | "\(.number)|\(.status)") //
+			(map(select(.status == "PLANNED")) | first | select(. != null) | "\(.number)|\(.status)") //
 			empty
 		' 2>/dev/null)
 
