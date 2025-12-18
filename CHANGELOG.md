@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.21] - 2025-12-18
+
+### Fixed
+
+- **Status line TASK null bug**
+  - Fixed jq query returning `TASK null` when no IN_PROGRESS tasks exist
+  - Added `select(. != null)` after `first` to properly trigger fallback to PLANNED tasks
+
+### Changed
+
+- **Setup prompt default option**
+  - "Overwrite all" is now the first/default option in file conflict prompts
+  - Makes it easier to update all BrainGrid integration files at once
+
 ## [0.2.20] - 2025-12-18
 
 ### Added
