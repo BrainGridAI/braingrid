@@ -47,7 +47,7 @@ braingrid setup claude-code
 
 Installs slash commands (`/specify`, `/breakdown`, `/build`), BrainGrid skill, and status line showing your project/requirement/task context in real-time.
 
-[→ Full Claude Code setup guide](./.claude/README.md)
+[→ Full Claude Code setup guide](./.braingrid/README.md)
 
 ### Cursor
 
@@ -115,7 +115,7 @@ The `init` command creates a `.braingrid/project.json` file in the `.braingrid/`
 
 Install BrainGrid integration files for AI coding tools. These commands fetch integration files from the [BrainGrid repository](https://github.com/BrainGridAI/braingrid) and install them in your project.
 
-For detailed usage guides, see [Claude Code setup](./.claude/README.md) or [Cursor setup](./.cursor/README.md).
+For detailed usage guides, see [Claude Code setup](./.braingrid/README.md) or [Cursor setup](./.cursor/README.md).
 
 **Prerequisites:**
 
