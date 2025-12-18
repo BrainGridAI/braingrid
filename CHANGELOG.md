@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.18] - 2025-12-17
+
+### Added
+
+- **Current task auto-detection**
+  - `task show` now works without a task ID - automatically detects the current task
+  - `task update` now works without a task ID - updates the current task
+  - Current task is determined by: first IN_PROGRESS task, or first PLANNED task if none in progress
+  - `task delete` still requires explicit task ID for safety
+
+- **Status line shows current task**
+  - Claude Code status line now displays: `BrainGrid: PROJ-X > REQ-Y > TASK-Z [completed/total]`
+  - Shows the current task being worked on alongside progress count
+  - Automatically updates as tasks are completed
+
 ## [0.2.17] - 2025-12-17
 
 ### Added
