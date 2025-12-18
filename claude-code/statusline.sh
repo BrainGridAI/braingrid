@@ -63,7 +63,7 @@ fi
 # If requirement ID exists, get task counts and current task
 if [ -n "$REQ_ID" ]; then
 	# Make API call to get tasks (filter out spinner and loading messages)
-	TASKS_JSON=$(braingrid task list -r "$REQ_ID" --format json 2>/dev/null | tr '\r' '\n' | grep -v 'Loading tasks' | grep -v '⠋\|⠙\|⠹\|⠸\|⠼\|⠴\|⠦\|⠧\|⠇\|⠏' | sed '/^\s*$/d')
+	TASKS_JSON=$(braingrid task list -r "$REQ_ID" --format json --limit 100 2>/dev/null | tr '\r' '\n' | grep -v 'Loading tasks' | grep -v '⠋\|⠙\|⠹\|⠸\|⠼\|⠴\|⠦\|⠧\|⠇\|⠏' | sed '/^\s*$/d')
 
 	if [ $? -eq 0 ] && [ -n "$TASKS_JSON" ]; then
 		# Count total and completed tasks (JSON is an array directly)
