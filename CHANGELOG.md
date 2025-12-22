@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.25] - 2025-12-22
+
+### Added
+
+- **New CLI commands for AI workflow integration**
+  - `task specify` - Create new tasks from natural language prompts using AI
+  - `requirement create-branch` - Create git branches for requirements via GitHub API
+  - `requirement review` - Stream AI-powered acceptance review for pull requests
+
+- **Branch name generation enhancements**
+  - Auto-generates branch names: `{username}/REQ-123-slugified-name`
+  - Slugifies username from email prefix to handle special characters (e.g., `john+test@` → `john-test`)
+
+- **PR auto-detection for review command**
+  - Automatically detects PR number from current branch using `gh pr view`
+  - Falls back to interactive prompt if no PR is found
+
+### Fixed
+
+- **Empty PR number handling**
+  - Fixed edge case where `gh pr view` returns empty string (branch has no associated PR)
+  - Now properly triggers fallback to interactive PR number input
+
 ## [0.2.24] - 2025-12-18
 
 ### Added
