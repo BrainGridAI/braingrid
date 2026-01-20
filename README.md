@@ -213,6 +213,8 @@ braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMP
 braingrid requirement delete [id] [--force]
 braingrid requirement breakdown [id]
 braingrid requirement build [id] [--format markdown|json|xml]
+braingrid requirement create-branch [id] [--name <branch-name>] [--base <branch>]
+braingrid requirement review [id] [--pr <number>]
 
 # Working with a different project:
 braingrid requirement list -p PROJ-456 [--status PLANNED]
@@ -226,6 +228,10 @@ braingrid requirement create -p PROJ-456 --name "Description"
 > **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
 >
 > **Note:** The `requirement list` command displays requirements with their status, name, branch (if assigned), and progress percentage.
+>
+> **Note:** The `create-branch` command creates a GitHub branch for a requirement. It auto-generates a branch name in the format `{username}/REQ-123-slug` if not provided.
+>
+> **Note:** The `review` command runs an AI-powered acceptance review on a pull request, validating it against the requirement's acceptance criteria. It auto-detects the PR number from the current branch if not provided.
 
 ### Task Commands
 
@@ -309,7 +315,7 @@ eval "$(braingrid completion zsh)"
 ### What Gets Completed
 
 - **Commands**: `login`, `logout`, `project`, `requirement`, `task`, etc.
-- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`
+- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`, `create-branch`, `review`
 - **Options**: `--help`, `--format`, `--status`, `--project`, `--requirement`
 - **Values**: Status values (`IDEA`, `PLANNED`, `IN_PROGRESS`, etc.), format options (`table`, `json`, `xml`, `markdown`)
 
