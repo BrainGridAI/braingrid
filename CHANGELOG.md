@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.26] - 2025-01-20
+
+### Added
+
+- **BRAINGRID_API_TOKEN environment variable support**
+  - Enables authentication via JWT token for sandbox/CI environments
+  - Allows CLI usage without interactive OAuth login flow
+  - Useful for automated pipelines and testing scenarios
+
+### Changed
+
+- **README documentation updates**
+  - Added `requirement create-branch` and `requirement review` commands to docs
+  - Updated shell completion subcommands list
+
 ## [0.2.25] - 2025-12-22
 
 ### Added
