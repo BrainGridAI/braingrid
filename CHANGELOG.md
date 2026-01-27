@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.27] - 2025-01-27
+
+### Added
+
+- **Requirement tagging support**
+  - New `--tags` option for `requirement create` and `specify` commands
+  - Accepts comma-separated tags (max 5 per requirement)
+  - Tags are validated, trimmed, and empty values filtered
+  - Tags displayed in all output formats (table, markdown, XML, JSON)
+
 ## [0.2.26] - 2025-01-20
 
 ### Added
