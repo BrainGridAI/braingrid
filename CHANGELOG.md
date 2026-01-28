@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.28] - 2025-01-28
+
+### Added
+
+- **Tag management CLI commands for requirements**
+  - `requirement tag list [id]` - List all tags for a requirement
+  - `requirement tag add [id] --name <name> --color <hex>` - Add a tag with name and hex color
+  - `requirement tag remove [id] --name <name>` - Remove a tag by name
+  - All commands support auto-detection of requirement ID from git branch
+  - Multiple output formats supported (table, json, xml, markdown)
+  - Hex color validation for #RGB and #RRGGBB formats
+
 ## [0.2.27] - 2025-01-27
 
 ### Added
