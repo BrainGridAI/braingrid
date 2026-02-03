@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.33] - 2026-02-03
+
+### Changed
+
+- **README documentation update**
+  - Updated "What gets installed" section to document all Claude Code setup files
+  - Added status line script (`.claude/statusline.sh`)
+  - Added hook script (`.claude/hooks/sync-braingrid-task.sh`)
+  - Added settings configuration (`.claude/settings.json`)
+
 ## [0.2.32] - 2026-02-03
 
 ### Added
