@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.30] - 2025-02-02
+
+### Fixed
+
+- **Validation error handling crash**
+  - Fixed `TypeError: errors is not iterable` when API returns single string errors
+  - Error handler now handles both array and string formats for validation errors
+
 ## [0.2.29] - 2025-02-02
 
 ### Added
