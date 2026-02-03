@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(braingrid:*), Bash(git:*), Bash(npm:*), Read, Grep, Glob, Skill(braingrid-cli)
+allowed-tools: Bash(braingrid:*), Bash(git:*), Bash(npm:*), Read, Grep, Glob, Skill(braingrid-cli), TaskCreate, TaskUpdate, TaskList
 argument-hint: [requirement-id] [additional-instructions]
 description: Build a requirement with full task details and optional instructions
 ---
@@ -83,6 +83,167 @@ Use this command to fetch a requirement's complete implementation plan using `br
      - **No git branch/ID**: Ask user to provide requirement ID or create git branch
      - **Network/API errors**: Show full error message and suggest retry
 
+**Git Branch Setup (Before Task Creation):**
+
+After successfully fetching the build plan, ensure you're on a feature branch for status sync:
+
+1. **Check current branch**:
+
+   ```bash
+   git rev-parse --abbrev-ref HEAD
+   ```
+
+2. **Extract requirement ID from branch name**:
+   - Pattern match for `REQ-{number}` in the branch name (case-insensitive)
+   - Examples: `feature/REQ-12-foo` → `REQ-12`, `tyler/REQ-5-bar` → `REQ-5`
+
+3. **Compare with target requirement**:
+   - If branch contains the **correct** REQ-{id} → Skip branch creation, already on correct branch
+   - If branch contains a **different** REQ-X → Need to create new branch for target requirement
+   - If branch has **no REQ-X** pattern (e.g., `main`, `develop`) → Need to create new branch
+
+4. **Create branch** (if needed):
+
+   a. **Try BrainGrid CLI first** (associates branch with requirement in BrainGrid):
+
+   ```bash
+   braingrid requirement create-branch REQ-{id}
+   ```
+
+   b. **If successful**, the command outputs the branch name. Fetch and checkout:
+
+   ```bash
+   git fetch origin && git checkout {branch-name-from-output}
+   ```
+
+   - Confirm: "✅ Created and checked out branch: `{branch-name}`"
+   - Note: Branch format will be `{username}/REQ-{id}-{slug}`
+
+   c. **Fallback** - If `create-branch` fails (GitHub not configured, network error, API error, etc.):
+   - Create a slugified branch name from the requirement name:
+     - Take the requirement name (e.g., "Handle the Breakdown already have tasks case")
+     - Convert to lowercase, replace spaces with hyphens, remove special chars
+     - Truncate to reasonable length (50 chars max for slug)
+     - Format: `feature/REQ-{id}-{slug}`
+     - Example: `feature/REQ-12-handle-breakdown-already-have-tasks`
+   - Create local branch:
+     ```bash
+     git checkout -b feature/REQ-{id}-{slug}
+     ```
+   - Warn user: "⚠️ Branch created locally. GitHub integration not available - branch won't be tracked in BrainGrid."
+
+5. **If ALREADY on matching branch** (contains correct `REQ-{id}`):
+   - No action needed, continue with task creation
+   - Example: Already on `feature/REQ-12-my-feature` when building REQ-12
+
+**Why this matters:**
+
+- The status sync hook extracts the requirement ID from the branch name (works with both `feature/REQ-X-*` and `{username}/REQ-X-*` formats)
+- Using `create-branch` associates the branch with the requirement in BrainGrid for better tracking
+- Without a properly named branch, task status updates won't sync to BrainGrid
+
+---
+
+**Task Creation Flow (After Branch Setup):**
+
+After ensuring you're on the correct branch, create local Claude Code tasks for progress tracking:
+
+1. **Fetch requirement with JSON format** (to check for tasks):
+
+   ```bash
+   braingrid requirement build [REQ-ID] --format json
+   ```
+
+   Parse the JSON response to check if `tasks` array exists and has items.
+
+2. **If tasks EXIST in BrainGrid**:
+
+   For each task in the BrainGrid response:
+
+   a. **Create local Claude Code task** with TaskCreate:
+
+   ```
+   TaskCreate:
+     subject: [Task title from BrainGrid]
+     description: [Task content/prompt from BrainGrid]
+     activeForm: "Working on [task title]"
+   ```
+
+   b. **Capture the Claude Code task ID** from TaskCreate response (e.g., "1", "2", etc.)
+
+   c. **Update the BrainGrid task with external_id** to link it to the Claude Code task:
+
+   ```bash
+   braingrid task update TASK-X -r REQ-Y --external-id "[Claude task ID]"
+   ```
+
+   This links the BrainGrid task to the local Claude Code task via `external_id`.
+   The status sync hook will use this to automatically sync status updates.
+
+3. **If NO tasks exist in BrainGrid** (Claude creates them):
+
+   Analyze the requirement content:
+   - Read the requirement description carefully
+   - Review each acceptance criterion
+   - Determine logical tasks needed to satisfy ALL criteria
+
+   For EACH task identified:
+
+   a. **Create local Claude Code task FIRST** with TaskCreate:
+
+   ```
+   TaskCreate:
+     subject: [Task title]
+     description: [Detailed implementation instructions]
+     activeForm: "Working on [task title]"
+   ```
+
+   b. **Capture the task ID** from TaskCreate response (e.g., "1", "2", etc.)
+
+   c. **Create in BrainGrid with external_id**:
+
+   ```bash
+   braingrid task create -r [REQ-ID] --title "Task Title" --content "Detailed implementation instructions..." --external-id "[Claude task ID]"
+   ```
+
+   This links the BrainGrid task to the local Claude Code task via `external_id`.
+   The status sync hook will use this to automatically sync status updates.
+
+4. **Show task list**:
+
+   After creating tasks, call `TaskList` to show the user their work queue.
+
+**Task Creation Guidelines** (when no tasks exist):
+
+- Create one task per acceptance criterion (or logical grouping)
+- Each task should be independently completable
+- Task content should include clear implementation instructions
+- Consider dependencies between tasks (use TaskUpdate with blockedBy if needed)
+- Aim for 3-7 tasks per requirement (not too granular, not too broad)
+- Task titles should be imperative (e.g., "Implement user login endpoint")
+
+**Status Mapping (for synchronization):**
+
+| Claude Code Status | BrainGrid Status |
+| ------------------ | ---------------- |
+| `pending`          | `PLANNED`        |
+| `in_progress`      | `IN_PROGRESS`    |
+| `completed`        | `COMPLETED`      |
+
+**How status sync works:**
+When you update a local task status using `TaskUpdate`, a PostToolUse hook automatically:
+
+1. Reads the task ID from the update
+2. Extracts the requirement ID from the git branch (e.g., `feature/REQ-4-description`)
+3. Queries BrainGrid for a task with matching `external_id` (the Claude task ID)
+4. Syncs the status to BrainGrid via CLI
+
+**Important:**
+
+- Tasks must be created with `--external-id` for status sync to work
+- You must be on a feature branch with `REQ-X` in the name (e.g., `feature/REQ-4-auth`)
+- Status sync won't run on `main` or branches without a requirement ID
+
 **Use Additional Instructions:**
 
 If additional instructions were provided in $ARGUMENTS:
@@ -102,30 +263,21 @@ If additional instructions were provided in $ARGUMENTS:
 
 **Suggest Next Steps:**
 
-After successfully fetching the build plan:
+After successfully fetching the build plan (branch is auto-created if needed):
 
-1. **Create/Checkout Git Branch** (if not already on one):
-
-   ```bash
-   git checkout -b feature/REQ-{id}-{description}
-   ```
-
-   - Include the requirement ID in the branch name
-   - Enables auto-detection for future commands
-
-2. **Review Tasks**:
+1. **Review Tasks**:
    - The build output shows all tasks with full prompts
    - Review which tasks to tackle first
    - Tasks are sequenced in logical order
 
-3. **Start Implementation**:
+2. **Start Implementation**:
    - Begin working on the first task (or task suggested by additional instructions)
    - Update task status as you work:
      ```bash
      braingrid task update TASK-{id} --status IN_PROGRESS
      ```
 
-4. **Update Requirement Status**:
+3. **Update Requirement Status**:
 
    ```bash
    braingrid requirement update REQ-{id} --status IN_PROGRESS
@@ -133,7 +285,7 @@ After successfully fetching the build plan:
 
    - Mark requirement as in progress when starting work
 
-5. **View in BrainGrid App**:
+4. **View in BrainGrid App**:
    - Click the URL to see the requirement in the web app
    - Track progress and view task details
 
@@ -153,15 +305,19 @@ The typical workflow with `/build`:
 
 ```
 User runs: /build REQ-123
+(User is on main branch)
 
 Claude:
 1. Runs: braingrid requirement build REQ-123 --format markdown
 2. Shows complete requirement and all task prompts
-3. Reports: "REQ-123: User Authentication System (5 tasks)"
-4. Suggests:
-   - Review the tasks and decide where to start
-   - Create git branch if not on one
-   - Start with first task
+3. Creates branch via BrainGrid CLI:
+   - Runs: braingrid requirement create-branch REQ-123
+   - On success: git fetch origin && git checkout tyler/REQ-123-user-authentication-system
+   - On failure: Falls back to git checkout -b feature/REQ-123-user-authentication-system
+4. Creates local Claude Code tasks using TaskCreate
+5. Creates BrainGrid tasks with --external-id linking to Claude task IDs
+6. Reports: "REQ-123: User Authentication System (5 tasks)"
+7. Ready to start implementing
 ```
 
 **With additional instructions**
@@ -221,9 +377,12 @@ If the command fails, handle reactively based on the error:
 **Success Criteria:**
 ✅ BrainGrid CLI is installed and authenticated
 ✅ Requirement exists and build plan fetched successfully
+✅ On feature branch with REQ-{id} pattern (auto-created if needed)
+✅ Local Claude Code tasks created
+✅ BrainGrid tasks created with external_id linking to Claude tasks
 ✅ All tasks shown with full prompts
 ✅ Additional instructions acknowledged and applied (if provided)
-✅ User understands next steps and is ready to implement
+✅ Ready to start implementing
 
 **Final Output:**
 
@@ -232,6 +391,7 @@ After successful build fetch, show:
 - ✅ Build plan fetched: REQ-{id}
 - 📋 Name: {requirement name}
 - 🔄 Status: {current status}
+- 🌿 Branch: {branch name} (created or existing)
 - 📋 Tasks: {count} tasks ready for implementation
 - 🔗 View requirement: https://app.braingrid.ai/requirements/overview?id={requirement-uuid}&tab=requirements
 - 🔗 View tasks: https://app.braingrid.ai/requirements/overview?id={requirement-uuid}&tab=tasks
@@ -246,13 +406,11 @@ Note: Extract the requirement UUID from the command output to construct the URLs
 
 **Next Steps:**
 
-1. Create git branch: `git checkout -b feature/REQ-{id}-{description}` (if needed)
-2. Review task prompts in the output
-3. Start implementing tasks
-4. Update task status: `braingrid task update TASK-{id} --status IN_PROGRESS`
-5. Update requirement status: `braingrid requirement update REQ-{id} --status IN_PROGRESS`
+1. Review task prompts in the output
+2. Start implementing tasks (status syncs automatically via hook when tasks have external_id)
+3. Update requirement status: `braingrid requirement update REQ-{id} --status IN_PROGRESS`
 
-**Ask**: "Would you like me to help implement {specific task based on context}?"
+**Ask**: "Would you like me to start implementing the first task?"
 
 **Available Output Formats:**
 
