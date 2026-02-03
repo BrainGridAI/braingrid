@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.29] - 2025-02-02
+
+### Added
+
+- **Tree view for requirements listing**
+  - `requirement list --tree` displays requirements with nested tasks
+  - Shows task status indicators and completion counts
+  - Hierarchical view improves requirement-to-task visibility
+
+- **Automatic context detection for specify command**
+  - Detects project context from `.braingrid/project.json`
+  - Auto-enhances prompts with relevant codebase context
+  - Improves AI-generated requirement quality
+
+- **Auto-generated tab completions**
+  - Tab completions now generated from CLI command definitions
+  - Ensures completions stay in sync with available commands
+  - Run `pnpm generate:completions` to regenerate
+
+### Changed
+
+- **Task status synchronization**
+  - Requirement status now auto-syncs when all tasks are completed
+  - Status sync hook triggers on task status updates
+
+- **Breakdown command validation**
+  - Prevents breakdown of requirements that already have tasks
+  - Avoids duplicate task generation
+
+### Fixed
+
+- **Build configuration**
+  - Removed stale mapping file reference from build
+
+### Tests
+
+- **Comprehensive tests for review acceptance handler**
+  - Added full test coverage for `handleReviewAcceptance`
+
 ## [0.2.28] - 2025-01-28
 
 ### Added
