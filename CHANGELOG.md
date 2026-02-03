@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.32] - 2026-02-03
+
+### Added
+
+- **Hooks configuration in settings.json**
+  - `braingrid setup claude-code` now configures PostToolUse hooks in `.claude/settings.json`
+  - Hooks trigger sync-braingrid-task.sh on TaskUpdate events with 10s timeout
+  - Enables automatic task status synchronization between Claude Code and BrainGrid
+
 ## [0.2.31] - 2026-02-03
 
 ### Added
