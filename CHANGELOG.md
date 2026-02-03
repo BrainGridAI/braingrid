@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.31] - 2026-02-03
+
+### Added
+
+- **Hook script installation during setup**
+  - `braingrid setup claude-code` now installs sync-braingrid-task.sh hook
+  - Hook automatically syncs task status between Claude Code and BrainGrid
+  - Installed to `.claude/hooks/` with executable permissions
+
 ## [0.2.30] - 2025-02-02
 
 ### Fixed
