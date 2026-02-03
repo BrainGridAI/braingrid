@@ -146,6 +146,9 @@ braingrid setup cursor --dry-run
 - **Claude Code integration:**
   - Commands in `.claude/commands/` (specify, breakdown, build, save-requirement)
   - Skills in `.claude/skills/braingrid-cli/`
+  - Status line script at `.claude/statusline.sh`
+  - Hook script at `.claude/hooks/sync-braingrid-task.sh` for task status sync
+  - Settings in `.claude/settings.json` (configures status line and hooks)
   - Content injected into `CLAUDE.md` (or creates it if it doesn't exist)
 
 - **Cursor integration:**
