@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.34] - 2026-02-05
+
+### Fixed
+
+- **Deep merge `.claude/settings.json` during setup**
+  - `updateClaudeSettings()` now deep-merges statusLine and hooks instead of overwriting
+  - Preserves user customizations (extra pipes, additional hooks, other event types)
+  - Updates TaskUpdate hook in-place without duplicating entries
+  - Gracefully handles malformed hooks (non-object) and PostToolUse (non-array)
+  - Removed stale `| bunx cc-safety-net --statusline` pipe from default settings
+
 ## [0.2.33] - 2026-02-03
 
 ### Changed
