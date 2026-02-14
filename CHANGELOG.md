@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.35] - 2026-02-14
+
+### Added
+
+- **Acceptance criteria extraction in `/build` skill**
+  - `/build` now parses the `## Acceptance Criteria` section from requirement content
+  - Extracts all criteria into a flat `[]` checklist at `.braingrid/temp/REQ-{id}-acceptance-criteria.md`
+  - Handles both flat and sub-sectioned (`###` headings) criteria formats
+  - Strips markdown bold formatting and collapses multi-line criteria
+  - Added `Write` to allowed tools in build command
+
+### Fixed
+
+- **Add `create-braingrid-task.sh` to Claude Code sync script**
+  - The setup handler was fetching this hook from GitHub but the sync script never pushed it
+  - Without this fix, `braingrid setup claude-code` would fail to install the TaskCreate hook
+
 ## [0.2.34] - 2026-02-05
 
 ### Fixed
