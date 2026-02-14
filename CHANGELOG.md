@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.36] - 2026-02-14
+
+### Added
+
+- **Add `.braingrid/temp/` to `.gitignore` during init**
+  - `braingrid init` now automatically appends `.braingrid/temp/` to the project's `.gitignore`
+  - Prevents session-specific temp files (e.g., acceptance criteria checklists) from being committed
+  - Skips if the entry already exists; creates `.gitignore` if none exists
+
+### Fixed
+
+- **Always offer Claude Code setup updates during init**
+  - `braingrid init` now prompts to update Claude Code integration even when it's already installed
+  - Ensures users get the latest slash commands, skills, and status line configuration
+
 ## [0.2.35] - 2026-02-14
 
 ### Added
