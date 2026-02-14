@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.37] - 2026-02-14
+
+### Added
+
+- **Add `.braingrid/temp/` to `.gitignore` during update**
+  - `braingrid update` now ensures `.braingrid/temp/` is in `.gitignore` (previously only `init` did this)
+  - Runs in both the "already up-to-date" and "after successful update" code paths
+
+### Changed
+
+- **Per-directory install counts in setup success message**
+  - Setup success message now shows "Commands: 4" and "Skills: 1" instead of "Commands: 6 files"
+  - Each skill directory counts as 1 skill regardless of supporting files inside it
+  - Cursor setup shows separate "Commands" and "Rules" counts
+
+### Refactored
+
+- **Extract `addBraingridTempToGitignore` to shared utility**
+  - Moved from `init.handlers.ts` to `src/utils/gitignore.ts` for reuse across handlers
+
 ## [0.2.36] - 2026-02-14
 
 ### Added
