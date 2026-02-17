@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.43] - 2026-02-17
+
+### Fixed
+
+- **grep -c newline bug in verify-acceptance-criteria.sh** — `grep -c` exits non-zero on 0 matches, causing `|| echo "0"` to produce `"0\n0"` artifacts that break arithmetic expansion; replaced with `|| true` and `${VAR:-0}` default
+
 ## [0.2.42] - 2026-02-17
 
 ### Added
