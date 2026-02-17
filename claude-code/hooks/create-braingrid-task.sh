@@ -7,6 +7,10 @@
 # The task is created as PLANNED (default). The sync-braingrid-task.sh hook
 # handles subsequent status transitions (IN_PROGRESS, COMPLETED) on TaskUpdate.
 
+# Only active during /build sessions (sentinel file present)
+BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
+[ ! -f "$BUILD_SENTINEL" ] && exit 0
+
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
 input=$(cat)
