@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.42] - 2026-02-17
+
+### Added
+
+- **SessionStart and TaskCompleted hook installation** — `braingrid setup claude-code` now installs two additional hook scripts: `check-stale-build-sentinel.sh` (SessionStart) for cleaning up stale build sentinels, and `task-completed-validate.sh` (TaskCompleted) for commit validation before marking tasks complete
+- **Sync script updated** — `sync-claude-code-to-braingrid.sh` now syncs 16 files (up from 14), including the two new hook scripts
+
 ## [0.2.41] - 2026-02-17
 
 ### Fixed
