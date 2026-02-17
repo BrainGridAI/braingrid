@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.39] - 2026-02-17
+
+### Fixed
+
+- **Restored lost prompt guidance in command hooks**
+  - `pre-task-create-naming.sh` now outputs `additionalContext` on valid path with sequential numbering instructions, concrete examples, and blocked-by suffix guidance
+  - `pre-task-update-instructions.sh` completed-path guidance enriched with project config detection examples and blocked-by stripping example
+  - Converting prompt-type hooks to command-type hooks had lost behavioral guidance that Claude relied on; this restores it via `additionalContext`
+
+## [0.2.38] - 2026-02-17
+
+### Added
+
+- **`--content` option for `requirement update` command**
+  - Allows updating a requirement's content directly from the CLI with `--content`
+- **Parallel mode with agent teams for `/build` command**
+  - `/build` now supports a parallel execution mode that spawns agent teams for concurrent task implementation
+- **Verify acceptance criteria hook in Claude Code setup**
+  - `braingrid setup claude-code` now installs a hook that verifies acceptance criteria during builds
+- **PostToolUse TaskUpdate prompt hook in Claude Code setup**
+  - Setup installs a prompt hook that updates task status on PostToolUse events
+
+### Changed
+
+- **Synced README and Claude Code guide with CLI implementation**
+  - Documentation updated to reflect latest CLI features and usage
+
 ## [0.2.37] - 2026-02-14
 
 ### Added
