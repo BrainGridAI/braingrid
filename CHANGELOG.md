@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.41] - 2026-02-17
+
+### Fixed
+
+- **Tasks invisible to teammates in parallel build mode** — reordered `/build` command to discover tasks and select mode before calling `TaskCreate`; in parallel mode, `TeamCreate` now runs first so tasks land in the team's task list instead of the default session list
+- **Acceptance criteria format** — checklist files now use `## Acceptance Criteria` heading with `- []` list items; updated `verify-acceptance-criteria.sh` grep patterns to match new format
+- **Renamed teammate agents** — parallel build teammates renamed from `builder-{n}` to `braingrid-builder-{n}` for clarity
+
+### Changed
+
+- **Update handler uses subprocess for IDE setup** — `braingrid update` now runs IDE setup via a spawned subprocess so the newly installed binary is used instead of the old code still loaded in memory
+
 ## [0.2.40] - 2026-02-17
 
 ### Fixed
