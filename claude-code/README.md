@@ -1,11 +1,12 @@
 <h1>BrainGrid for Claude Code</h1>
 
 <div align="center">
-<img src="https://www.braingrid.ai/logos/braingrid-symbol-800.png" width="80"/>
+<img src="https://www.braingrid.ai/brand/symbol-lime-on-jungle.svg" width="80" height="80"/>
 
-**Prompt AI Coding Tools Like a Rockstar Developer**
+**The AI Product Planner**
 
-Turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software with AI.
+BrainGrid is the AI Product Planner that helps you shape ideas, plan features,
+and scope tasks that Claude Code can build right the first time.
 
 [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
 [![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
@@ -17,18 +18,18 @@ Turn messy thoughts into detailed specs and perfectly-prompted tasks to build we
 
 ## Overview
 
-**BrainGrid** helps you turn half-baked thoughts into build-ready specs and perfectly-prompted tasks that AI coding agents like Claude Code build fast without breaking things.
+**BrainGrid** helps you turn half-baked thoughts into AI-buildable product plans that Claude Code build reliably without breaking things.
 
 This integration provides:
 
-- **Slash Commands** - Quick access to key BrainGrid workflows (``/specify`, `/breakdown`, `/build`, `/save-requirement`)
+- **Slash Commands** - Quick access to key BrainGrid workflows (`/specify`, `/build`, `/save-requirement`)
 - **BrainGrid CLI Skill** - Comprehensive guidance on spec-driven development workflows
 - **Status Line** - Real-time display of your BrainGrid context (project, requirement, task progress)
 
 ### Core Workflow
 
 ```
-Vague Idea → AI-Refined Requirement → Breakdown into Tasks → Build with AI
+Vague Idea → AI-Refined Requirement → Build with AI
 ```
 
 **Resources:**
@@ -79,7 +80,6 @@ This command installs:
 
 - **Slash commands** in `.claude/commands/`:
   - `specify.md` - Create AI-refined requirements
-  - `breakdown.md` - Break requirements into tasks
   - `build.md` - Get complete implementation plan
   - `save-requirement.md` - Save discussed plans
 - **BrainGrid skill** in `.claude/skills/braingrid-cli/`:
@@ -130,13 +130,12 @@ The status line updates automatically as you switch branches, complete tasks, or
 
 ## Available Commands
 
-BrainGrid provides four powerful slash commands in Claude Code:
+BrainGrid provides three powerful slash commands in Claude Code:
 
 | Command             | Description                                        | Example                                        |
 | ------------------- | -------------------------------------------------- | ---------------------------------------------- |
 | `/specify`          | Create AI-refined requirement from vague idea      | `/specify Add user auth with OAuth2`           |
 | `/save-requirement` | Save a detailed plan as a requirement              | `/save-requirement User Authentication System` |
-| `/breakdown`        | Break requirement into perfectly-prompted tasks    | `/breakdown REQ-123`                           |
 | `/build`            | Get complete implementation plan (markdown format) | `/build REQ-123`                               |
 
 ### Command Details
@@ -170,26 +169,7 @@ Saves a detailed plan that you've discussed with Claude Code as a structured req
 /save-requirement User Authentication System
 ```
 
-**When to use:** After discussing a feature in detail with Claude Code and you want to save the plan for tracking and breakdown.
-
----
-
-#### `/breakdown [req-id]`
-
-Breaks down a requirement into 5-10 perfectly-prompted tasks ready for AI coding tools.
-
-**Usage:**
-
-```bash
-/breakdown REQ-123
-/breakdown 123          # Short format
-```
-
-**Auto-detection:** If you're on a git branch like `feature/REQ-123-auth`, you can omit the ID:
-
-```bash
-/breakdown              # Auto-detects REQ-123 from branch name
-```
+**When to use:** After discussing a feature in detail with Claude Code and you want to save the plan for tracking.
 
 ---
 
@@ -217,19 +197,16 @@ Fetches the complete implementation plan with all tasks and their prompts in mar
 # 1. Create specification from idea
 /specify Add dark mode toggle in settings with theme persistence
 
-# 2. Review and break down into tasks
-/breakdown REQ-1
-
-# 3. Create git branch (enables auto-detection)
+# 2. Create git branch (enables auto-detection)
 git checkout -b feature/REQ-1-dark-mode
 
-# 4. Get complete build plan
+# 3. Get complete build plan (creates tasks and implementation plan)
 /build
 
-# 5. Start implementing tasks
+# 4. Start implementing tasks
 # Claude Code will help implement each task
 
-# 6. Update task status as you progress
+# 5. Update task status as you progress
 braingrid task update TASK-1 -r REQ-1 --status IN_PROGRESS
 braingrid task update TASK-1 -r REQ-1 --status COMPLETED
 ```
@@ -331,16 +308,11 @@ For detailed guidance on using BrainGrid, invoke the `braingrid-cli` skill in Cl
 
 # Output: ✅ Created requirement REQ-234: User Profile Management
 
-# Break down into tasks
-/breakdown REQ-234
-
-# Output: ✅ Created 6 tasks for REQ-234
-
 # Create git branch
 git checkout -b feature/REQ-234-user-profile
 
 # Get build plan with security focus
-/build focus on input validation and XSS prevention
+/build REQ-234 focus on input validation and XSS prevention
 
 # Start implementing with Claude Code
 # ... implement tasks ...
@@ -360,7 +332,6 @@ User: /save-requirement API Caching Layer
 
 # Output: ✅ Saved requirement REQ-345: API Caching Layer
 
-/breakdown REQ-345
 /build REQ-345
 ```
 
@@ -403,21 +374,28 @@ braingrid project create --name "Project Name"
 ### Requirements
 
 ```bash
-braingrid specify --prompt "Your idea"
-braingrid requirement list [--status PLANNED|IN_PROGRESS|...]
+braingrid specify --prompt "Your idea" [--tags "tag1,tag2"]
+braingrid requirement list [--status PLANNED|IN_PROGRESS|...] [--tree]
 braingrid requirement show [REQ-ID]
+braingrid requirement create --name "Name" [--tags "tag1,tag2"]
 braingrid requirement update REQ-ID --status IN_PROGRESS
-braingrid requirement breakdown REQ-ID
+braingrid requirement update REQ-ID --content "markdown content"
+braingrid requirement breakdown REQ-ID [--format markdown]
 braingrid requirement build REQ-ID [--format markdown]
+braingrid requirement tag list [REQ-ID]
+braingrid requirement tag add [REQ-ID] --name "Tag" --color "#FF0000"
+braingrid requirement tag remove [REQ-ID] --name "Tag"
 ```
 
 ### Tasks
 
 ```bash
 braingrid task list -r REQ-ID [--format markdown]
-braingrid task show TASK-ID
-braingrid task update TASK-ID -r REQ-ID --status IN_PROGRESS
-braingrid task create -r REQ-ID --title "Task Title"
+braingrid task summary -r REQ-ID
+braingrid task show [TASK-ID] [--format markdown]
+braingrid task create -r REQ-ID --title "Task Title" [--external-id <id>]
+braingrid task update [TASK-ID] -r REQ-ID --status IN_PROGRESS [--external-id <id>]
+braingrid task specify -r REQ-ID --prompt "Task description"
 ```
 
 ### Utility
@@ -465,11 +443,10 @@ Provide context to guide implementation:
 ### Git Branch Workflow
 
 1. Create requirement: `/specify "..."`
-2. Break down: `/breakdown REQ-123`
-3. Create branch: `git checkout -b feature/REQ-123-description`
-4. Build: `/build` (auto-detects from branch)
-5. Implement with Claude Code
-6. Update statuses as you progress
+2. Create branch: `git checkout -b feature/REQ-123-description`
+3. Build: `/build` (auto-detects from branch, creates tasks)
+4. Implement with Claude Code
+5. Update statuses as you progress
 
 ---
 
