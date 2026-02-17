@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(braingrid:*), Bash(git:*), Bash(npm:*), Read, Write, Grep, Glob, Skill(braingrid-cli), TaskCreate, TaskUpdate, TaskList
+allowed-tools: Bash(braingrid:*), Bash(git:*), Bash(npm:*), Read, Write, Grep, Glob, Skill(braingrid-cli), TaskCreate, TaskUpdate, TaskList, TeamCreate, TeamDelete, SendMessage, Task
 argument-hint: [requirement-id] [additional-instructions]
 description: Build a requirement with full task details and optional instructions
 ---
@@ -38,6 +38,22 @@ Use this command to fetch a requirement's complete implementation plan using `br
    - Example: `/build REQ-123 focus on security and add comprehensive tests`
    - These instructions provide context for implementation
    - If no additional instructions, just show the build plan
+
+**Activate Build Sentinel:**
+
+Before running any build commands or creating tasks, create the sentinel file that activates build-specific hooks:
+
+```bash
+mkdir -p .braingrid/temp
+```
+
+Then write the requirement ID to the sentinel file:
+
+```bash
+echo "REQ-{id}" > .braingrid/temp/build-active.local
+```
+
+If the requirement ID is not yet known (auto-detection), create the sentinel after the build command resolves the ID. The sentinel MUST exist before any `TaskCreate` calls so hooks are active.
 
 **Run Build Command:**
 
@@ -162,6 +178,39 @@ After fetching the build plan, extract the acceptance criteria into a checklist 
 
 3. **Confirm**: "📋 Extracted {count} acceptance criteria to `.braingrid/temp/REQ-{id}-acceptance-criteria.md`"
 
+**Create Verification State File:**
+
+After extracting acceptance criteria (only if criteria count > 0), create the verification state file that enables the Stop hook to enforce acceptance criteria verification after all tasks complete.
+
+Write `.braingrid/temp/build-verification.local.md` using the Write tool:
+
+```markdown
+---
+active: true
+iteration: 0
+max_iterations: 15
+requirement_id: REQ-{id}
+criteria_file: .braingrid/temp/REQ-{id}-acceptance-criteria.md
+started_at: "{ISO timestamp}"
+---
+
+Continue verifying acceptance criteria for REQ-{id}.
+
+Read the acceptance criteria at `.braingrid/temp/REQ-{id}-acceptance-criteria.md`.
+
+For each unchecked criterion (line starting with `[]`):
+1. Examine the implementation code to verify the criterion is satisfied
+2. Run relevant tests or check behavior if applicable
+3. Change `[]` to `[x]`
+4. Add a `Proof:` line immediately below explaining HOW it's satisfied
+
+Keep going until ALL criteria show `[x]` with proof.
+```
+
+Replace `{id}` with the actual requirement ID and `{ISO timestamp}` with the current ISO 8601 timestamp.
+
+**Important**: Only create this file if acceptance criteria were extracted. If no `## Acceptance Criteria` section was found (step was skipped), do NOT create the verification state file.
+
 ---
 
 **Task Creation Flow (After Branch Setup):**
@@ -276,38 +325,80 @@ When you update a local task status using `TaskUpdate`, a PostToolUse hook autom
 
 If additional instructions were provided in $ARGUMENTS:
 
-1. **Acknowledge Instructions**:
-   - Show what additional context was provided
-   - Example: "I'll focus on security and add comprehensive tests as requested"
+- **Acknowledge Instructions**: Show what additional context was provided
+  - Example: "I'll focus on security and add comprehensive tests as requested"
+  - This acknowledgment applies to both sequential and parallel modes
 
-2. **Apply to Implementation**:
+---
+
+**Choose Implementation Mode:**
+
+After creating all tasks and displaying TaskList, determine the implementation mode:
+
+1. **Check for agent teams**: Run `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` in Bash.
+   - If output is `1` (or any non-empty value) AND there are 3+ tasks: use **Parallel Mode**.
+   - Otherwise: use **Sequential Mode**.
+
+---
+
+**Parallel Mode (Agent Teams):**
+
+Use this mode when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is set and there are 3+ tasks.
+
+1. **Create team**: Use `TeamCreate` with name `build-REQ-{id}` (e.g., `build-REQ-123`).
+
+2. **Determine teammate count**: `min(independent_task_count, 3)` — cap at 3 teammates to avoid merge conflicts and resource exhaustion.
+
+3. **Spawn teammates**: Use the `Task` tool with `team_name` and `name` params (`builder-1`, `builder-2`, `builder-3`). Each teammate's spawn prompt MUST include:
+   - Requirement ID, name, and branch name
+   - Self-claim workflow: call `TaskList` → claim an unowned/unblocked task with `TaskUpdate` (set owner to your name) → implement → mark `completed` → call `TaskList` again → repeat until no tasks remain
+   - Reminder that PreToolUse hooks enforce commit-before-complete and naming conventions
+   - `git pull --rebase` before starting each new task (to pick up other teammates' commits)
+   - Additional instructions from `$ARGUMENTS` if provided
+
+4. **Lead coordinates (do NOT implement)**: The lead monitors `TaskList`, resolves blockers, and nudges idle teammates. The lead MUST NOT implement tasks itself — this avoids merge conflicts with teammates working in the same repo.
+
+5. **Verify completion**: When all tasks show `completed` in TaskList, run the test suite once more to catch integration issues from parallel work.
+
+6. **Shutdown & cleanup**: Send `shutdown_request` via `SendMessage` to each teammate, then call `TeamDelete` to clean up the team.
+
+7. **Acceptance criteria verification**: The lead proceeds to the existing "Acceptance Criteria Verification Phase" below. The Stop hook continues to work as-is since it only fires for the lead's session.
+
+---
+
+**Sequential Mode (Default):**
+
+Use this mode when agent teams are NOT enabled, or when there are fewer than 3 tasks.
+
+If additional instructions were provided in $ARGUMENTS:
+
+1. **Apply to Implementation**:
    - Review the tasks with the additional context in mind
    - Highlight relevant tasks or add notes
    - Example: If user said "focus on security", emphasize security-related tasks
 
-3. **Offer to Start**:
-   - Ask if user wants to start implementing with that context
-   - Example: "Would you like me to start with the first task, keeping security best practices in mind?"
+2. **Start Immediately**:
+   - Begin implementing the first task right away with that context applied
+   - Do NOT ask the user if they want to start — just start
 
-**Suggest Next Steps:**
+**Begin Implementation Immediately:**
 
-After successfully fetching the build plan (branch is auto-created if needed):
+After successfully fetching the build plan and creating tasks, start implementing immediately. Do NOT wait for user confirmation.
 
-1. **Review Tasks**:
-   - The build output shows all tasks with full prompts
-   - Review which tasks to tackle first
-   - Tasks are sequenced in logical order
+1. **Start First Task**:
+   - Mark TASK 1 as `in_progress` using TaskUpdate
+   - Read the task description and begin implementation
 
-2. **Start Implementation**:
-   - Begin working on the first task (or task suggested by additional instructions)
-   - Update task status as you work:
-     ```bash
-     braingrid task update TASK-{id} --status IN_PROGRESS
-     ```
+2. **Iterate Through ALL Tasks Sequentially**:
+   - After completing a task, immediately move to the next one
+   - Mark each task `in_progress` before starting, then `completed` when done
+   - Do NOT stop between tasks to ask the user
+   - Continue until ALL tasks are completed
 
-3. **View in BrainGrid App**:
-   - Click the URL to see the requirement in the web app
-   - Track progress and view task details
+3. **Only Pause for Genuine Blockers**:
+   - Stop ONLY if there is a genuine ambiguity that cannot be resolved from the requirement, task descriptions, or codebase
+   - Valid: missing credentials, conflicting requirements, unclear acceptance criteria
+   - Invalid: "should I continue?", "ready for the next task?", "shall I proceed?"
 
 **Workflow Context:**
 
@@ -350,8 +441,8 @@ Claude:
 2. Shows complete build plan
 3. Acknowledges: "I'll focus on security best practices and add extensive error handling"
 4. Reviews tasks and highlights security-related ones
-5. Suggests starting with auth/security tasks first
-6. Offers: "Would you like me to start implementing with security as the priority?"
+5. Immediately starts implementing TASK 1 with security context applied
+6. Iterates through all tasks without stopping
 ```
 
 **Auto-detect from branch**
@@ -364,7 +455,7 @@ Claude:
 1. Runs: braingrid requirement build --format markdown
 2. CLI auto-detects REQ-123 from branch name
 3. Shows build plan for REQ-123
-4. Suggests next steps
+4. Immediately starts implementing tasks sequentially
 ```
 
 **With instructions, auto-detect ID**
@@ -379,8 +470,26 @@ Claude:
 3. CLI auto-detects REQ-456 from branch
 4. Shows build plan
 5. Acknowledges: "I'll add comprehensive logging and monitoring"
-6. Reviews tasks with logging/monitoring focus
-7. Offers to start implementation
+6. Immediately starts implementing TASK 1 with logging/monitoring focus
+7. Continues through all tasks without stopping
+```
+
+**Parallel mode (agent teams enabled)**
+
+```
+User runs: /build REQ-789
+(CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, requirement has 6 tasks)
+
+Claude:
+1. Fetches build plan, creates branch, extracts acceptance criteria
+2. Creates 6 tasks (3 independent, 3 with dependencies)
+3. Detects teams enabled + 6 tasks → Parallel Mode
+4. Creates team "build-REQ-789", spawns 3 teammates
+5. Teammates self-claim wave-1 tasks, implement in parallel
+6. As blockers complete, wave-2 tasks unlock and get claimed
+7. Lead monitors progress, resolves any blockers
+8. All tasks completed → lead shuts down teammates, deletes team
+9. Acceptance criteria verification phase runs
 ```
 
 **Error Handling:**
@@ -403,7 +512,15 @@ If the command fails, handle reactively based on the error:
 ✅ Requirement status updated to IN_PROGRESS
 ✅ All tasks shown with full prompts
 ✅ Additional instructions acknowledged and applied (if provided)
-✅ Ready to start implementing
+✅ Implementation started on first task immediately
+✅ All acceptance criteria verified with proof in temp file
+
+**If parallel mode used:**
+✅ Team created and teammates spawned successfully
+✅ All teammates claimed and completed their tasks independently
+✅ No merge conflicts from parallel file edits
+✅ Final test suite passes after all parallel commits
+✅ Teammates shut down cleanly, team deleted
 
 **Final Output:**
 
@@ -416,21 +533,73 @@ After successful build fetch, show:
 - 📋 Tasks: {count} tasks ready for implementation
 - 🔗 View requirement: https://app.braingrid.ai/requirements/overview?id={requirement-uuid}&tab=requirements
 - 🔗 View tasks: https://app.braingrid.ai/requirements/overview?id={requirement-uuid}&tab=tasks
+- 🔍 Verification: Acceptance criteria will be verified after all tasks complete
 
 Note: Extract the requirement UUID from the command output to construct the URLs.
 
 **If additional instructions provided:**
 
 - 📝 Context: {additional instructions}
-- Highlight relevant tasks based on instructions
-- Offer to start implementing
+- Apply instructions as context to all task implementations
 
-**Next Steps:**
+**Automatic Implementation:**
 
-1. Review task prompts in the output
-2. Start implementing tasks (status syncs automatically via hook when tasks have external_id)
+After displaying the final output summary, immediately begin implementing tasks:
 
-**Ask**: "Would you like me to start implementing the first task?"
+1. Mark TASK 1 as `in_progress` and start working on it
+2. Validate, commit, and complete each task (the PreToolUse hook handles commit enforcement)
+3. Move to the next task immediately after completing each one
+4. Continue until ALL tasks are completed
+5. Only pause for genuine clarifying questions that block progress
+
+Do NOT ask "Would you like me to start implementing the first task?" — just start.
+
+**Acceptance Criteria Verification Phase:**
+
+After ALL tasks are marked completed, the Stop hook will prevent you from stopping until every acceptance criterion is verified. This ensures nothing slips through.
+
+1. **Read the criteria file**: `.braingrid/temp/REQ-{id}-acceptance-criteria.md`
+2. **For each criterion starting with `[]`**:
+   - Verify the implementation satisfies it (examine code, run tests, check behavior)
+   - Update the file: change `[]` to `[x]`
+   - Add `Proof: [explanation]` on the next line immediately below the criterion
+3. **Continue until all criteria show `[x]` with proof**
+4. The Stop hook will block exit and re-inject the verification prompt until all criteria are verified
+
+If the verification loop needs to be cancelled, the user can run `/cancel-build-verification`.
+
+**Post-Verification: Update Requirement in BrainGrid:**
+
+After ALL acceptance criteria show `[x]` with proof (verification loop complete):
+
+1. **Read the verified criteria file**:
+   Read `.braingrid/temp/REQ-{id}-acceptance-criteria.md`
+
+2. **Fetch current requirement content**:
+   ```bash
+   braingrid requirement show REQ-{id} --format json
+   ```
+   Parse the JSON to get the current `content` field.
+
+3. **Replace the acceptance criteria section**:
+   - Find `## Acceptance Criteria` in the current content
+   - Replace everything from that heading to the next `## ` heading (or end of content) with the verified criteria file contents
+   - If no `## Acceptance Criteria` heading exists, append it at the end
+   - Write the merged content to `.braingrid/temp/REQ-{id}-updated-content.md`
+
+4. **Update the requirement via CLI**:
+   ```bash
+   braingrid requirement update REQ-{id} --content "$(cat .braingrid/temp/REQ-{id}-updated-content.md)"
+   ```
+
+5. **Update requirement status to REVIEW**:
+   ```bash
+   braingrid requirement update REQ-{id} --status REVIEW
+   ```
+
+6. **Confirm**: "✅ Requirement REQ-{id} updated with verified acceptance criteria and moved to REVIEW"
+
+---
 
 **Available Output Formats:**
 
