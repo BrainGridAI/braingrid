@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.40] - 2026-02-17
+
+### Fixed
+
+- **Converted prompt-type hooks to command-type in setup service**
+  - `braingrid setup claude-code` now generates command-type hooks pointing to shell scripts instead of inline prompt-type hooks, matching the local `.claude/settings.json` configuration
+  - Affected hooks: PostToolUse TaskUpdate prompt, PreToolUse TaskCreate, PreToolUse TaskUpdate
+  - Setup now fetches and installs 3 additional hook scripts: `pre-task-create-naming.sh`, `pre-task-update-instructions.sh`, `post-task-update-prompt.sh`
+- **Added missing hook scripts to docs sync**
+  - `verify-acceptance-criteria.sh`, `pre-task-create-naming.sh`, `pre-task-update-instructions.sh`, and `post-task-update-prompt.sh` are now synced to the remote repository
+
 ## [0.2.39] - 2026-02-17
 
 ### Fixed
