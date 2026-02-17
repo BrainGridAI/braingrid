@@ -1,9 +1,10 @@
 <div align="center">
-<img src="https://www.braingrid.ai/logos/braingrid-symbol-800.png" width="100"/>
+<img src="https://www.braingrid.ai/brand/symbol-lime-on-jungle.svg" width="80" height="80"/>
   <h1>BrainGrid</h1>
 
-  <p>Prompt AI Coding Tools Like a Rockstar Developer</p>
-  <h3>A CLI to turn messy thoughts into detailed specs and perfectly-prompted tasks to build well-structured, maintainable software with AI.</h3>
+  <p>The AI Product Planner</p>
+  <h3>BrainGrid is the AI Product Planner that helps you shape ideas, plan features,
+and scope tasks that your AI coding tools can build right the first time.</h3>
 
 [![npm version](https://img.shields.io/npm/v/@braingrid/cli.svg?color=blue&logo=npm)](https://www.npmjs.com/package/@braingrid/cli)
 [![Downloads](https://img.shields.io/npm/dm/@braingrid/cli.svg?color=green)](https://www.npmjs.com/package/@braingrid/cli)
@@ -207,17 +208,23 @@ braingrid specify -p PROJ-123 --prompt "Implement real-time notifications"
 # Output in different formats:
 braingrid specify --prompt "Add dark mode support" --format json
 braingrid specify --prompt "Add export feature" --format markdown
+braingrid specify --prompt "Add search" --tags "search,backend"
 
 # Working with the initialized project
-braingrid requirement list [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--format json]
-braingrid requirement create --name "Name" [--content "Description"] [--assigned-to <uuid>]
+braingrid requirement list [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--tree] [--format json]
+braingrid requirement create --name "Name" [--content "Description"] [--assigned-to <uuid>] [--tags "tag1,tag2"]
 braingrid requirement show [id]
-braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"]
+braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"] [--content "markdown"]
 braingrid requirement delete [id] [--force]
-braingrid requirement breakdown [id]
+braingrid requirement breakdown [id] [--format markdown|json|xml]
 braingrid requirement build [id] [--format markdown|json|xml]
 braingrid requirement create-branch [id] [--name <branch-name>] [--base <branch>]
 braingrid requirement review [id] [--pr <number>]
+
+# Tag management
+braingrid requirement tag list [id]
+braingrid requirement tag add [id] --name "Tag" --color "#FF0000"
+braingrid requirement tag remove [id] --name "Tag"
 
 # Working with a different project:
 braingrid requirement list -p PROJ-456 [--status PLANNED]
@@ -241,9 +248,11 @@ braingrid requirement create -p PROJ-456 --name "Description"
 ```bash
 # Working with the initialized project
 braingrid task list -r REQ-456 [--format table|json|xml|markdown]
-braingrid task create -r REQ-456 --title "Task Title" [--content "Description"]
-braingrid task show <id>
-braingrid task update <id> [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--title "New Title"]
+braingrid task create -r REQ-456 --title "Task Title" [--content "Description"] [--external-id <id>]
+braingrid task show [id]
+braingrid task update [id] [--status PLANNED|IN_PROGRESS|COMPLETED|CANCELLED] [--title "New Title"] [--external-id <id>]
+braingrid task summary -r REQ-456
+braingrid task specify -r REQ-456 --prompt "Task description"
 braingrid task delete <id> [--force]
 
 # Working with a different project:
@@ -256,6 +265,14 @@ braingrid task create -p PROJ-123 -r REQ-456 --title "Task Title"
 > **Note:** The `-r`/`--requirement` parameter is optional and accepts formats like `REQ-456`, `req-456`, or `456`. The CLI will automatically detect the requirement ID from your git branch name (e.g., `feature/REQ-123-description` or `REQ-123-fix-bug`) if it is not provided.
 >
 > **Note:** Task status values are: `PLANNED`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED` (tasks do not have `IDEA` or `REVIEW` status).
+>
+> **Note:** `task summary` shows a compact overview table (number, status, title) without full content — useful for quick progress checks.
+>
+> **Note:** `task specify` creates a single AI-generated task from a prompt (10-5000 characters), similar to how `specify` creates requirements.
+>
+> **Note:** The `requirement tag` commands manage tags on requirements. Each requirement can have up to 5 tags. Tags require a name and hex color code (e.g., `#FF0000`).
+>
+> **Note:** `--external-id` links tasks to external systems (e.g., Claude Code task IDs) for status synchronization.
 
 ### Informational Commands
 
@@ -318,7 +335,7 @@ eval "$(braingrid completion zsh)"
 ### What Gets Completed
 
 - **Commands**: `login`, `logout`, `project`, `requirement`, `task`, etc.
-- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`, `create-branch`, `review`
+- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`, `create-branch`, `review`, `summary`, `specify`, `tag`
 - **Options**: `--help`, `--format`, `--status`, `--project`, `--requirement`
 - **Values**: Status values (`IDEA`, `PLANNED`, `IN_PROGRESS`, etc.), format options (`table`, `json`, `xml`, `markdown`)
 
