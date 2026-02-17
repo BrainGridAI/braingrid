@@ -5,6 +5,10 @@
 # It uses the git branch to determine the requirement context (e.g., feature/REQ-4-description)
 # and queries BrainGrid for a task with matching external_id (Claude task ID).
 
+# Only active during /build sessions (sentinel file present)
+BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
+[ ! -f "$BUILD_SENTINEL" ] && exit 0
+
 # Get the project directory (where .claude folder lives)
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
