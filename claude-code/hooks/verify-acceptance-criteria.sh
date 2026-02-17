@@ -53,10 +53,10 @@ if [[ -z "$CRITERIA_FILE" ]] || [[ ! -f "$CRITERIA_FILE" ]]; then
 fi
 
 # Count unchecked and total criteria
-# Unchecked: lines starting with [] (with optional leading whitespace)
-UNCHECKED=$(grep -cE '^\s*\[\]' "$CRITERIA_FILE" 2>/dev/null || echo "0")
-# Checked: lines starting with [x] or [X]
-CHECKED=$(grep -cE '^\s*\[[xX]\]' "$CRITERIA_FILE" 2>/dev/null || echo "0")
+# Unchecked: lines starting with "- []" (with optional leading whitespace)
+UNCHECKED=$(grep -cE '^\s*-\s*\[\]' "$CRITERIA_FILE" 2>/dev/null || echo "0")
+# Checked: lines starting with "- [x]" or "- [X]"
+CHECKED=$(grep -cE '^\s*-\s*\[[xX]\]' "$CRITERIA_FILE" 2>/dev/null || echo "0")
 TOTAL=$((CHECKED + UNCHECKED))
 
 # If no criteria found at all, clean up and allow exit
