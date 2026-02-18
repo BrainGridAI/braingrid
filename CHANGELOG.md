@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.44] - 2026-02-17
+
+### Fixed
+
+- **Hardened verify-acceptance-criteria.sh** — added `cleanup()` function replacing 7 inline `rm -f` calls; moved ERR/SIGINT/SIGTERM trap before first file check to prevent orphan sentinel files; sanitized `grep -c` output with `${VAR//[^0-9]/}` to prevent arithmetic errors
+- **POSIX portability** — replaced non-standard `\s` with `[[:space:]]` in grep patterns
+- **CRLF safety** — strip `\r` from YAML frontmatter parsing for Dropbox sync compatibility
+- **Build task naming** — aligned task subject templates with `TASK N` naming convention
+
+### Added
+
+- **E2E test script for setup** — added test-setup skill and E2E test script for `braingrid setup claude-code`
+- **Stale sentinel cleanup** — delete build sentinel when no state file exists
+
 ## [0.2.43] - 2026-02-17
 
 ### Fixed
