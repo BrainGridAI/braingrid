@@ -9,18 +9,24 @@ set -euo pipefail
 
 # Only active during /build sessions (sentinel file present)
 BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
-[ ! -f "$BUILD_SENTINEL" ] && exit 0
-
-# State file location
 STATE_FILE=".braingrid/temp/build-verification.local.md"
+
+cleanup() {
+	rm -f "$STATE_FILE" "$BUILD_SENTINEL" "${STATE_FILE}.tmp.$$" 2>/dev/null
+}
+
+trap 'cleanup; exit 0' ERR SIGINT SIGTERM
+
+[ ! -f "$BUILD_SENTINEL" ] && exit 0
 
 # If no active verification loop, allow exit
 if [[ ! -f "$STATE_FILE" ]]; then
+	rm -f "$BUILD_SENTINEL"
 	exit 0
 fi
 
-# Parse YAML frontmatter
-FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
+# Parse YAML frontmatter (strip \r for CRLF safety from Dropbox sync)
+FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE" | tr -d '\r')
 ITERATION=$(echo "$FRONTMATTER" | grep '^iteration:' | sed 's/iteration: *//')
 MAX_ITERATIONS=$(echo "$FRONTMATTER" | grep '^max_iterations:' | sed 's/max_iterations: *//')
 CRITERIA_FILE=$(echo "$FRONTMATTER" | grep '^criteria_file:' | sed 's/criteria_file: *//')
@@ -28,50 +34,52 @@ CRITERIA_FILE=$(echo "$FRONTMATTER" | grep '^criteria_file:' | sed 's/criteria_f
 # Validate numeric fields
 if [[ ! "$ITERATION" =~ ^[0-9]+$ ]]; then
 	echo "Warning: Build verification state file corrupted (invalid iteration: '$ITERATION'). Cleaning up." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
 if [[ ! "$MAX_ITERATIONS" =~ ^[0-9]+$ ]]; then
 	echo "Warning: Build verification state file corrupted (invalid max_iterations: '$MAX_ITERATIONS'). Cleaning up." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
 # Check max iterations safety limit
 if [[ $MAX_ITERATIONS -gt 0 ]] && [[ $ITERATION -ge $MAX_ITERATIONS ]]; then
 	echo "Build verification: Max iterations ($MAX_ITERATIONS) reached. Stopping verification loop." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
 # Check if criteria file exists
 if [[ -z "$CRITERIA_FILE" ]] || [[ ! -f "$CRITERIA_FILE" ]]; then
 	echo "Build verification: Criteria file not found ('$CRITERIA_FILE'). Cleaning up." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
 # Count unchecked and total criteria
 # Unchecked: lines starting with "- []" (with optional leading whitespace)
-UNCHECKED=$(grep -cE '^\s*-\s*\[\]' "$CRITERIA_FILE" 2>/dev/null || true)
+UNCHECKED=$(grep -cE '^[[:space:]]*-[[:space:]]*\[\]' "$CRITERIA_FILE" 2>/dev/null || true)
+UNCHECKED="${UNCHECKED//[^0-9]/}"
 UNCHECKED=${UNCHECKED:-0}
 # Checked: lines starting with "- [x]" or "- [X]"
-CHECKED=$(grep -cE '^\s*-\s*\[[xX]\]' "$CRITERIA_FILE" 2>/dev/null || true)
+CHECKED=$(grep -cE '^[[:space:]]*-[[:space:]]*\[[xX]\]' "$CRITERIA_FILE" 2>/dev/null || true)
+CHECKED="${CHECKED//[^0-9]/}"
 CHECKED=${CHECKED:-0}
 TOTAL=$((CHECKED + UNCHECKED))
 
 # If no criteria found at all, clean up and allow exit
 if [[ $TOTAL -eq 0 ]]; then
 	echo "Build verification: No criteria found in file. Cleaning up." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
 # All criteria verified - allow exit
 if [[ $UNCHECKED -eq 0 ]] && [[ $TOTAL -gt 0 ]]; then
 	echo "All $TOTAL acceptance criteria verified with proof." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
@@ -83,7 +91,7 @@ PROMPT_TEXT=$(awk '/^---$/{i++; next} i>=2' "$STATE_FILE")
 
 if [[ -z "$PROMPT_TEXT" ]]; then
 	echo "Build verification: State file missing prompt text. Cleaning up." >&2
-	rm -f "$STATE_FILE" "$BUILD_SENTINEL"
+	cleanup
 	exit 0
 fi
 
