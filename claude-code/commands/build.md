@@ -266,10 +266,15 @@ Then create the tasks:
 
    ```
    TaskCreate:
-     subject: [Task title from BrainGrid]
+     subject: "TASK {N}: {type}: {description}"
      description: [Task content/prompt from BrainGrid]
-     activeForm: "Working on [task title]"
+     activeForm: "{type}: {description}"
    ```
+
+   Where:
+   - `{N}` = sequential number (1, 2, 3...)
+   - `{type}` = conventional commit type inferred from the task (feat/fix/test/refactor/docs/chore/style/perf)
+   - `{description}` = lowercase imperative derived from the BrainGrid task title
 
    b. **Capture the Claude Code task ID** from TaskCreate response (e.g., "1", "2", etc.)
 
@@ -290,10 +295,12 @@ Then create the tasks:
 
    ```
    TaskCreate:
-     subject: [Task title]
+     subject: "TASK {N}: {type}: {description}"
      description: [Detailed implementation instructions]
-     activeForm: "Working on [task title]"
+     activeForm: "{type}: {description}"
    ```
+
+   Where `{N}`, `{type}`, `{description}` follow the same convention as above.
 
    b. **Capture the task ID** from TaskCreate response (e.g., "1", "2", etc.)
 
@@ -325,7 +332,12 @@ Then create the tasks:
 - Task content should include clear implementation instructions
 - Consider dependencies between tasks (use TaskUpdate with blockedBy if needed)
 - Aim for 3-7 tasks per requirement (not too granular, not too broad)
-- Task titles should be imperative (e.g., "Implement user login endpoint")
+- Subject format: `TASK N: type: description` (lowercase imperative description)
+- Valid types: feat, fix, docs, style, refactor, perf, test, chore
+- Optional scope: `TASK N: type(scope): description`
+- If task has blockedBy deps, append `(blocked by N,N,...)` to subject
+- activeForm = the `type: description` portion (shown as spinner text)
+- Commit hash added later on completion: `TASK N (hash): type: description`
 
 **Status Mapping (for synchronization):**
 
@@ -433,7 +445,12 @@ Claude:
    - Runs: braingrid requirement create-branch REQ-123
    - On success: git fetch origin && git checkout tyler/REQ-123-user-authentication-system
    - On error: Last resort fallback to local git checkout -b (warns about missing BrainGrid tracking)
-4. Creates local Claude Code tasks using TaskCreate
+4. Creates local Claude Code tasks using TaskCreate with naming convention:
+   - TASK 1: feat: implement user login endpoint
+   - TASK 2: feat: add session management
+   - TASK 3: test: add authentication tests
+   - TASK 4: feat(auth): add OAuth support (blocked by 1,2)
+   - TASK 5: docs: add authentication API docs
 5. Creates BrainGrid tasks with --external-id linking to Claude task IDs
 6. Reports: "REQ-123: User Authentication System (5 tasks)"
 7. Ready to start implementing
@@ -449,7 +466,7 @@ Claude:
 2. Shows complete build plan
 3. Acknowledges: "I'll focus on security best practices and add extensive error handling"
 4. Reviews tasks and highlights security-related ones
-5. Immediately starts implementing TASK 1 with security context applied
+5. Immediately starts implementing TASK 1 (e.g., "TASK 1: feat: implement login endpoint") with security context applied
 6. Iterates through all tasks without stopping
 ```
 
@@ -492,7 +509,11 @@ Claude:
 1. Fetches build plan, creates branch, extracts acceptance criteria
 2. Discovers 6 tasks (3 independent, 3 with dependencies)
 3. Detects teams enabled + 6 tasks → Parallel Mode
-4. Creates team "build-REQ-789" FIRST, then creates 6 tasks (land in team list)
+4. Creates team "build-REQ-789" FIRST, then creates 6 tasks with naming convention:
+   - TASK 1: feat: implement endpoint handler
+   - TASK 2: feat: add data models
+   - TASK 3: test: add unit tests (blocked by 1,2)
+   - etc.
 5. Spawns 3 braingrid-builder teammates
 6. Teammates self-claim wave-1 tasks, implement in parallel
 7. As blockers complete, wave-2 tasks unlock and get claimed
