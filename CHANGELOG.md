@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.45] - 2026-02-20
+
+### Fixed
+
+- **Slash command plan reading** — read plan from `~/.claude/plans/` instead of conversation transcript
+- **Build task creation** — enforce sequential task creation to avoid hook runner errors
+
+### Changed
+
+- **Settings formatting** — reformat settings.json to use tabs for consistency
+
 ## [0.2.44] - 2026-02-17
 
 ### Fixed
