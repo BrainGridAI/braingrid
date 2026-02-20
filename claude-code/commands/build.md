@@ -256,6 +256,8 @@ Now create the Claude Code tasks. If parallel mode was selected, create the team
 
 **If Sequential Mode**: Skip team creation; tasks go into the default session list.
 
+**IMPORTANT — Create tasks ONE AT A TIME (sequentially, not in parallel).** Hook scripts run on each TaskCreate and TaskUpdate call. Issuing multiple task tool calls in a single parallel batch causes hook runner errors. Create each task, wait for the response, then create the next. Same for TaskUpdate calls (e.g., setting blockedBy) — issue them one at a time after all tasks exist.
+
 Then create the tasks:
 
 1. **If tasks EXIST in BrainGrid**:
