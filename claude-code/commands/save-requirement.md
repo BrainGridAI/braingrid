@@ -37,19 +37,17 @@ Use this command to save well-thought-out plans (like those from Claude Code pla
 
 **Get Plan Content:**
 
-1. **From Recent Conversation**:
-   - Look for the most recent plan in the conversation
-   - This could be from Claude Code plan mode or any detailed specification
-   - Extract the full plan content (markdown formatted)
-   - Include all sections, steps, and details
+1. **From Session Plan File** (primary):
+   - Find the plan file path from the current session's plan mode context (`~/.claude/plans/{name}.md`)
+   - Read it with the Read tool
+   - Use the **entire file content exactly as-is** as the requirement content — do not summarize, extract, filter, or modify it in any way
 
-2. **From User Input**:
-   - If no recent plan found, ask user to provide the plan content
-   - User can paste the plan or describe it
+2. **Fallback — Most Recent Plan File**:
+   - If the plan file path isn't known from context, run `ls -t ~/.claude/plans/*.md | head -1` to get the most recently modified plan file
+   - Read and use its entire content verbatim
 
-3. **From File**:
-   - User can also provide a file path to read plan from
-   - Use Read tool to load the content
+3. **Fallback — Ask User**:
+   - If no plan files exist, ask user to provide the content or a file path
 
 **Create Requirement:**
 
