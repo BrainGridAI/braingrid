@@ -15,6 +15,10 @@ cleanup() {
 	rm -f "$STATE_FILE" "$BUILD_SENTINEL" "${STATE_FILE}.tmp.$$" 2>/dev/null
 }
 
+full_cleanup() {
+	rm -f "${CLAUDE_PROJECT_DIR:-.}"/.braingrid/temp/* 2>/dev/null
+}
+
 trap 'cleanup; exit 0' ERR SIGINT SIGTERM
 
 [ ! -f "$BUILD_SENTINEL" ] && exit 0
@@ -79,7 +83,7 @@ fi
 # All criteria verified - allow exit
 if [[ $UNCHECKED -eq 0 ]] && [[ $TOTAL -gt 0 ]]; then
 	echo "All $TOTAL acceptance criteria verified with proof." >&2
-	cleanup
+	full_cleanup
 	exit 0
 fi
 
