@@ -19,7 +19,7 @@ Use this command to save well-thought-out plans (like those from Claude Code pla
 3. Capture plan content from conversation or ask user
 4. Use title from $ARGUMENTS or ask user
 5. Create requirement (ready for implementation)
-6. Suggest breakdown as next step
+6. Suggest next steps (create branch, build)
 
 **Get Plan Title:**
 
@@ -91,15 +91,7 @@ Use this command to save well-thought-out plans (like those from Claude Code pla
 
 After successfully creating the requirement, guide the user through the workflow:
 
-1. **Break Down into Tasks** (AI-powered):
-
-   ```bash
-   braingrid requirement breakdown REQ-{id}
-   ```
-
-   - This uses AI to convert the plan into specific, actionable tasks
-
-2. **Create Git Branch**:
+1. **Create Git Branch**:
 
    ```bash
    git checkout -b feature/REQ-{id}-{description}
@@ -109,7 +101,7 @@ After successfully creating the requirement, guide the user through the workflow
    - Enables auto-detection for future commands
    - Example: `feature/REQ-123-user-authentication`
 
-3. **Build Implementation Plan**:
+2. **Build Implementation Plan**:
 
    ```bash
    braingrid requirement build REQ-{id} --format markdown
@@ -118,7 +110,7 @@ After successfully creating the requirement, guide the user through the workflow
    - Exports the complete requirement with all task prompts
    - Markdown format is best for AI coding agents
 
-4. **View in BrainGrid App**:
+3. **View in BrainGrid App**:
    - Click the URL to see the requirement in the web app
    - Review and refine as needed
 
@@ -127,10 +119,9 @@ After successfully creating the requirement, guide the user through the workflow
 The typical workflow after saving a plan:
 
 1. **➡️ Save plan**: `/save-requirement "Plan Title"` (this command)
-2. Break into tasks: `braingrid requirement breakdown REQ-X`
-3. Create git branch: `git checkout -b feature/REQ-X-description`
-4. Build implementation plan: `braingrid requirement build REQ-X`
-5. Start implementation, updating task status as you go
+2. Create git branch: `git checkout -b feature/REQ-X-description`
+3. Build implementation plan: `braingrid requirement build REQ-X`
+4. Start implementation, updating task status as you go
 
 **Example Interaction:**
 
@@ -144,7 +135,6 @@ Claude:
    --content "{plan-content}"
 3. Shows created requirement (REQ-123)
 4. Suggests next steps:
-   - braingrid requirement breakdown REQ-123
    - git checkout -b feature/REQ-123-user-auth
    - braingrid requirement build REQ-123
 ```
@@ -161,7 +151,7 @@ Claude:
 3. Asks: "Please provide the plan content or describe what needs to be built"
 4. User provides content
 5. Creates requirement
-6. Suggests breakdown and next steps
+6. Suggests next steps (create branch, build)
 ```
 
 **Error Handling:**
@@ -179,7 +169,7 @@ If the command fails, handle reactively based on the error:
 ✅ Requirement created successfully with valid ID (REQ-XXX)
 ✅ Requirement is ready for implementation
 ✅ User understands the next steps in the workflow
-✅ Offered to help with breakdown into tasks
+✅ Offered to create branch and build implementation plan
 
 **Final Output:**
 
@@ -195,11 +185,10 @@ Note: Extract the requirement UUID from the command output to construct the URL.
 
 **Next Steps:**
 
-1. Break down into tasks: `braingrid requirement breakdown REQ-{id}`
-2. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
-3. Build implementation plan: `braingrid requirement build REQ-{id}`
+1. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
+2. Build implementation plan: `braingrid requirement build REQ-{id}`
 
-**Ask**: "Would you like me to help break this down into tasks?"
+**Ask**: "Would you like me to create a branch and build the implementation plan?"
 
 **Difference from `/specify`:**
 
