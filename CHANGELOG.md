@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.47] - 2026-02-20
+
+### Fixed
+
+- **Build hooks** — enforce git push before build session exit, source shared log-helper instead of duplicating logging setup
+
 ## [0.2.46] - 2026-02-20
 
 ### Fixed
