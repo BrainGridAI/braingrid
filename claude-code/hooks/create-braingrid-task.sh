@@ -13,12 +13,12 @@ BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
-input=$(cat)
+# Structured logging
+source "$(dirname "$0")/log-helper.sh"
+HOOK="create-braingrid-task"
 
-# Debug logging
-LOG_FILE="/tmp/braingrid-hook-debug.log"
-echo "=== CREATE $(date) ===" >> "$LOG_FILE"
-echo "$input" | jq . >> "$LOG_FILE" 2>/dev/null
+input=$(cat)
+log_event "$HOOK" "start" "info" ""
 
 # Extract task details from tool_input
 subject=$(echo "$input" | jq -r '.tool_input.subject // empty')
@@ -38,7 +38,15 @@ req_id=$(echo "$branch" | grep -oE "REQ-[0-9]+" | head -1)
 # Create BrainGrid task (defaults to PLANNED status) with external_id linking to Claude task
 create_args=(task create -r "$req_id" --title "$subject" --external-id "$claude_task_id")
 [ -n "$description" ] && create_args+=(--content "$description")
-braingrid "${create_args[@]}" >/dev/null 2>&1
+log_time_start
+if braingrid "${create_args[@]}" >> "$LOG_FILE" 2>&1; then
+	dur=$(log_time_end)
+	log_event "$HOOK" "create" "success" "req=$req_id ext_id=$claude_task_id duration=$dur"
+else
+	exit_code=$?
+	dur=$(log_time_end)
+	log_event "$HOOK" "create" "FAILED" "req=$req_id ext_id=$claude_task_id exit=$exit_code duration=$dur"
+fi
 
 # Always exit 0 to not block the workflow
 exit 0
