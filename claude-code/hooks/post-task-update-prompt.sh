@@ -2,6 +2,8 @@
 # PostToolUse hook for TaskUpdate: inject auto-continue instructions
 # Only active during /build sessions (sentinel file present)
 
+source "$(dirname "$0")/log-helper.sh"
+
 BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
 [ ! -f "$BUILD_SENTINEL" ] && exit 0
 
