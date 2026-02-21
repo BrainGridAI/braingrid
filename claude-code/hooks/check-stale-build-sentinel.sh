@@ -13,6 +13,6 @@ VERIFICATION_STATE="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-verification.
 [ -f "$VERIFICATION_STATE" ] && exit 0
 
 # Sentinel exists without verification state = stale from a crashed session
-rm -f "$BUILD_SENTINEL"
+rm -f "${CLAUDE_PROJECT_DIR:-.}"/.braingrid/temp/* 2>/dev/null
 
 exit 0
