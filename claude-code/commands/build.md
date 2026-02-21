@@ -586,6 +586,30 @@ After displaying the final output summary, immediately begin implementing tasks:
 
 Do NOT ask "Would you like me to start implementing the first task?" — just start.
 
+**Sync Task Statuses to BrainGrid (Fallback):**
+
+After ALL tasks are marked `completed` in Claude Code (and before acceptance criteria verification), run a bulk sync to catch any statuses the PostToolUse hook missed (network errors, teammate shutdown races, sentinel issues):
+
+1. **Fetch current BrainGrid task states**:
+
+   ```bash
+   braingrid task list -r REQ-{id} --format json
+   ```
+
+2. **For each BrainGrid task with an `external_id`**:
+   - Look up the matching Claude Code task (by ID from `TaskList`)
+   - If the Claude Code task is `completed` but the BrainGrid task is NOT `COMPLETED`, sync it:
+
+     ```bash
+     braingrid task update TASK-X -r REQ-{id} --status COMPLETED
+     ```
+
+3. **Report results**:
+   - If any tasks were synced: "🔄 Synced {n} task(s) to COMPLETED in BrainGrid"
+   - If all tasks were already synced: "✅ All tasks already synced to BrainGrid"
+
+This is a safety net — most statuses should already be synced by the PostToolUse hook. Check `/tmp/braingrid-hook-debug.log` if any were missed to diagnose root cause.
+
 **Acceptance Criteria Verification Phase:**
 
 After ALL tasks are marked completed, the Stop hook will prevent you from stopping until every acceptance criterion is verified. This ensures nothing slips through.
@@ -629,7 +653,13 @@ After ALL acceptance criteria show `[x]` with proof (verification loop complete)
    braingrid requirement update REQ-{id} --status REVIEW
    ```
 
-6. **Confirm**: "✅ Requirement REQ-{id} updated with verified acceptance criteria and moved to REVIEW"
+6. **Clean up temp files**:
+   ```bash
+   rm -f .braingrid/temp/*
+   ```
+   Confirm: "🧹 Cleaned up build temp files"
+
+7. **Confirm**: "✅ Requirement REQ-{id} updated with verified acceptance criteria and moved to REVIEW"
 
 ---
 
