@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.46] - 2026-02-20
+
+### Fixed
+
+- **Build sync errors** — log sync errors and add bulk status fallback
+- **Cut-release command** — restore `/cut-release` slash command lost during previous refactor
+
 ## [0.2.45] - 2026-02-20
 
 ### Fixed
