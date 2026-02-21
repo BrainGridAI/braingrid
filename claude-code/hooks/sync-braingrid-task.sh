@@ -5,8 +5,9 @@
 # It uses the git branch to determine the requirement context (e.g., feature/REQ-4-description)
 # and queries BrainGrid for a task with matching external_id (Claude task ID).
 
-# Debug log — declared early so all exit paths can log breadcrumbs
-LOG_FILE="/tmp/braingrid-hook-debug.log"
+# Structured logging
+source "$(dirname "$0")/log-helper.sh"
+HOOK="sync-braingrid-task"
 
 # Only active during /build sessions (sentinel file present)
 BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
@@ -17,8 +18,7 @@ PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
 # Read input from stdin (JSON with tool_input and tool_response)
 input=$(cat)
-echo "=== $(date) ===" >> "$LOG_FILE"
-echo "$input" | jq . >> "$LOG_FILE"
+log_event "$HOOK" "start" "info" ""
 
 # Extract task ID and status from tool input
 task_id=$(echo "$input" | jq -r '.tool_input.taskId // empty')
@@ -44,22 +44,30 @@ fi
 # Query BrainGrid for task by external_id
 # Use temp file to avoid shell variable issues with control characters in JSON content
 TEMP_JSON=$(mktemp)
+log_time_start
 braingrid task list -r "$req_id" --format json > "$TEMP_JSON" 2>/dev/null
+list_dur=$(log_time_end)
 
 # Exit if braingrid command failed or file is empty
-[ ! -s "$TEMP_JSON" ] && { rm -f "$TEMP_JSON"; exit 0; }
+if [ ! -s "$TEMP_JSON" ]; then
+	log_event "$HOOK" "task_list" "FAILED" "req=$req_id empty_response duration=$list_dur"
+	rm -f "$TEMP_JSON"
+	exit 0
+fi
 
-# Find task with matching external_id
-# JSON output is an array, not {tasks: [...]}
+# Count tasks returned and find matching external_id
+task_count=$(jq 'length' "$TEMP_JSON" 2>/dev/null || echo 0)
 bg_task_id=$(jq -r --arg ext_id "$task_id" \
 	'.[] | select(.external_id == $ext_id) | .number // empty' "$TEMP_JSON" 2>/dev/null | head -1)
 
 # Clean up temp file
 rm -f "$TEMP_JSON"
 
+log_event "$HOOK" "task_list" "success" "req=$req_id count=$task_count duration=$list_dur"
+
 # Exit if this task isn't linked to BrainGrid via external_id
 if [ -z "$bg_task_id" ]; then
-	echo "SKIP: no BrainGrid task with external_id=$task_id for req=$req_id status=$new_status" >> "$LOG_FILE"
+	log_event "$HOOK" "match" "skip" "no BrainGrid task with external_id=$task_id req=$req_id"
 	exit 0
 fi
 
@@ -81,10 +89,14 @@ case "$new_status" in
 esac
 
 # Sync status to BrainGrid (log errors instead of silencing)
+log_time_start
 if braingrid task update "$bg_task_id" -r "$req_id" --status "$bg_status" >> "$LOG_FILE" 2>&1; then
-	echo "SYNCED: task=$bg_task_id req=$req_id status=$bg_status" >> "$LOG_FILE"
+	dur=$(log_time_end)
+	log_event "$HOOK" "sync" "success" "bg_task=$bg_task_id req=$req_id status=$bg_status duration=$dur"
 else
-	echo "SYNC FAILED: task=$bg_task_id req=$req_id status=$bg_status exit=$?" >> "$LOG_FILE"
+	exit_code=$?
+	dur=$(log_time_end)
+	log_event "$HOOK" "sync" "FAILED" "bg_task=$bg_task_id req=$req_id status=$bg_status exit=$exit_code duration=$dur"
 fi
 
 # Always exit 0 to not block the workflow
