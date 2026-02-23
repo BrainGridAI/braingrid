@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.48] - 2026-02-23
+
+### Added
+
+- **Frontend design skill** — new skill for creating production-grade frontend interfaces with design system references (color, typography, spacing, shadows, layout, accessibility, icons)
+- **UX skill** — new skill for designing excellent UX across web, mobile, and CLI with pattern references (forms, navigation, search, feedback, wizards, states, lists/tables)
+
+### Changed
+
+- **Setup command** — `braingrid setup claude-code` now installs frontend-design and ux skills alongside braingrid-cli skill
+- **Docs sync** — sync script updated to distribute both new skills to BrainGridAI/braingrid repo (17 → 39 files)
+
 ## [0.2.47] - 2026-02-20
 
 ### Fixed
