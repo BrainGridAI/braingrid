@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.51] - 2026-02-23
+
+### Fixed
+
+- **Docs sync** — add `log-helper.sh` to docs sync script so it gets distributed to the BrainGridAI/braingrid repo alongside hook scripts
+
 ## [0.2.50] - 2026-02-23
 
 ### Fixed
