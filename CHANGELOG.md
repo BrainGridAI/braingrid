@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.50] - 2026-02-23
+
+### Fixed
+
+- **Setup GitHub auth** — fall back to unauthenticated requests when `gh auth` token is expired, instead of failing every API call with 401
+
 ## [0.2.49] - 2026-02-23
 
 ### Added
