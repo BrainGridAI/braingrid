@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.49] - 2026-02-23
+
+### Added
+
+- **Build command** — save requirement content to temp file for context persistence across build sessions
+
+### Fixed
+
+- **Setup hooks** — distribute `log-helper.sh` utility script alongside hook scripts so hooks don't fail with "No such file or directory"
+
 ## [0.2.48] - 2026-02-23
 
 ### Added
