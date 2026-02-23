@@ -73,7 +73,11 @@ If the requirement ID is not yet known (auto-detection), create the sentinel aft
    - Capture requirement ID and task count from output
    - Extract requirement UUID for URL construction
 
-2. **Handle Errors Reactively**:
+2. **Save requirement to temp file**:
+   Write the full markdown build output to `.braingrid/temp/REQ-{id}-requirement.md` using the Write tool.
+   This persists the requirement so the agent can re-read it if context is compressed.
+
+3. **Handle Errors Reactively**:
    - If command fails, show clear error message and provide guidance
    - Common issues and how to handle them:
      - **CLI not installed** (command not found):
@@ -199,6 +203,8 @@ started_at: "{ISO timestamp}"
 Continue verifying acceptance criteria for REQ-{id}.
 
 Read the acceptance criteria at `.braingrid/temp/REQ-{id}-acceptance-criteria.md`.
+
+If you need to re-read the full requirement, it is saved at `.braingrid/temp/REQ-{id}-requirement.md`.
 
 For each unchecked criterion (line starting with `- []`):
 1. Examine the implementation code to verify the criterion is satisfied
@@ -374,6 +380,7 @@ Use this mode when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is set and there are 3
 2. **Spawn teammates**: Use the `Task` tool with `team_name` and `name` params (`braingrid-builder-1`, `braingrid-builder-2`, `braingrid-builder-3`). Each teammate's spawn prompt MUST include:
    - Requirement ID, name, and branch name
    - Self-claim workflow: call `TaskList` → claim an unowned/unblocked task with `TaskUpdate` (set owner to your name) → implement → mark `completed` → call `TaskList` again → repeat until no tasks remain
+   - Full requirement saved at `.braingrid/temp/REQ-{id}-requirement.md` — re-read if you need context
    - Reminder that PreToolUse hooks enforce commit-before-complete and naming conventions
    - `git pull --rebase` before starting each new task (to pick up other teammates' commits)
    - Additional instructions from `$ARGUMENTS` if provided
