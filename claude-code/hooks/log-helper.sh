@@ -4,6 +4,7 @@
 # Then:  log_event "create-braingrid-task" "api_call" "success" "req=REQ-9 duration=1.2s"
 
 LOG_FILE="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-debug.log"
+mkdir -p "$(dirname "$LOG_FILE")"
 exec 2>> "$LOG_FILE"
 
 # log_event HOOK EVENT STATUS DETAILS
