@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.52] - 2026-02-24
+
+### Fixed
+
+- **Project discovery** — surface real error when `.braingrid/project.json` exists but fails to load (e.g., corrupted JSON, Zod validation error) instead of misleading "no local project found" message
+
+### Changed
+
+- **Docs** — sync OpenAPI spec from braingrid-app
+
 ## [0.2.51] - 2026-02-23
 
 ### Fixed
