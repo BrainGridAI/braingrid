@@ -4,11 +4,17 @@
 
 source "$(dirname "$0")/log-helper.sh"
 
+HOOK="post-task-update-prompt"
+
 BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
 [ ! -f "$BUILD_SENTINEL" ] && exit 0
 
-# Read stdin (required for PostToolUse hooks)
-cat > /dev/null
+# Read stdin and extract key fields for logging
+input=$(cat)
+task_id=$(echo "$input" | jq -r '.tool_input.taskId // empty')
+status=$(echo "$input" | jq -r '.tool_input.status // empty')
+log_event "INFO" "$HOOK" "start" "task_id=$task_id status=${status:-<none>}"
+log_event "INFO" "$HOOK" "inject" "auto-continue guidance"
 
 # Output auto-continue instructions
 jq -n '{
