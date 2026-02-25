@@ -15,12 +15,13 @@ input=$(cat)
 # Extract subject from tool_input
 subject=$(echo "$input" | jq -r '.tool_input.subject // empty')
 [ -z "$subject" ] && exit 0
+log_event "INFO" "$HOOK" "start" "subject=$subject"
 
 # Validate subject matches: TASK N: type: description
 # Hash is NOT expected at creation time — it gets added after commit via TaskUpdate
 # Optional scope in parentheses after type, optional (blocked by N,...) suffix
 if echo "$subject" | grep -qE '^TASK [0-9]+: (feat|fix|docs|style|refactor|perf|test|chore)(\([^)]+\))?: .+'; then
-	log_event "$HOOK" "validate" "ALLOW" "subject=$subject"
+	log_event "INFO" "$HOOK" "allow" "subject=$subject"
 	jq -n '{
 		"decision": "allow",
 		"additionalContext": "Use sequential task numbering. N must be the next sequential number (1, 2, 3, ...) based on existing tasks in the current session.\n\nExamples:\n  TASK 1: feat: add user login\n  TASK 2: fix: resolve null pointer\n  TASK 3: feat(auth): add OAuth support (blocked by 1,2)\n\nWhen a task has addBlockedBy dependencies, append '\'' (blocked by N,N,...)'\'' at the end of the subject using the blocking task IDs."
@@ -29,7 +30,7 @@ if echo "$subject" | grep -qE '^TASK [0-9]+: (feat|fix|docs|style|refactor|perf|
 fi
 
 # Subject does not match convention - deny with explanation
-log_event "$HOOK" "validate" "DENY" "subject=$subject"
+log_event "WARN" "$HOOK" "deny" "subject=$subject"
 jq -n \
 	--arg subject "$subject" \
 	'{
