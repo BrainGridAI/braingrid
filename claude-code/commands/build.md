@@ -188,7 +188,7 @@ After fetching the build plan, extract the acceptance criteria into a checklist 
 
 After extracting acceptance criteria (only if criteria count > 0), create the verification state file that enables the Stop hook to enforce acceptance criteria verification after all tasks complete.
 
-Write `.braingrid/temp/build-verification.local.md` using the Write tool:
+Write `.braingrid/temp/REQ-{id}-build-verification.local.md` using the Write tool:
 
 ```markdown
 ---
