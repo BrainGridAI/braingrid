@@ -1,21 +1,38 @@
 #!/bin/bash
 # Structured logging helper for BrainGrid build hooks
 # Usage: source "$(dirname "$0")/log-helper.sh"
-# Then:  log_event "create-braingrid-task" "api_call" "success" "req=REQ-9 duration=1.2s"
+# Then:  log_event "INFO" "create-braingrid-task" "api_call" "req=REQ-9 duration=1.2s"
 
-LOG_FILE="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-debug.log"
+BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
+REQ_ID=""
+if [ -f "$BUILD_SENTINEL" ]; then
+	REQ_ID=$(cat "$BUILD_SENTINEL" | tr -d '[:space:]')
+fi
+export REQ_ID
+
+if [ -n "$REQ_ID" ]; then
+	LOG_FILE="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/${REQ_ID}-build-debug.log"
+else
+	LOG_FILE="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-debug.log"
+fi
 mkdir -p "$(dirname "$LOG_FILE")"
+
+# Write session delimiter before redirecting stderr (which creates the file)
+if [ -n "$REQ_ID" ] && [ ! -f "$LOG_FILE" ]; then
+	printf '\n=== BUILD %s started %s ===\n\n' "$REQ_ID" "$(date '+%Y-%m-%d %H:%M:%S')" >> "$LOG_FILE"
+fi
+
 exec 2>> "$LOG_FILE"
 
-# log_event HOOK EVENT STATUS DETAILS
-# Appends: TIMESTAMP | HOOK | EVENT | STATUS | DETAILS
+# log_event LEVEL HOOK EVENT DETAILS
+# Output: TIMESTAMP [LEVEL] HOOK | EVENT | DETAILS
 log_event() {
-	local hook="${1:-unknown}"
-	local event="${2:-unknown}"
-	local status="${3:-info}"
+	local level="${1:-INFO}"
+	local hook="${2:-unknown}"
+	local event="${3:-unknown}"
 	local details="${4:-}"
-	printf '%s | %s | %s | %s | %s\n' \
-		"$(date '+%H:%M:%S')" "$hook" "$event" "$status" "$details" \
+	printf '%s [%-5s] %s | %s | %s\n' \
+		"$(date '+%H:%M:%S')" "$level" "$hook" "$event" "$details" \
 		>> "$LOG_FILE"
 }
 
