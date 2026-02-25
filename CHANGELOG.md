@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.53] - 2026-02-25
+
+### Added
+
+- **Structured hook logging** — new leveled log format (`HH:MM:SS [LEVEL] hook | event | details`) with INFO/WARN/ERROR levels across all build hook scripts
+- **REQ-X prefixed temp files** — build-debug.log, build-verification, and verify-prev-unchecked files now use REQ-X prefix for multi-build isolation
+- **Build session delimiter** — log files show `=== BUILD REQ-X started ... ===` separator when a new build begins
+- **Comprehensive hook coverage** — every hook now logs start, decision, and early exits; `post-task-update-prompt` previously had zero logging
+- **CLI debug logging** — new `cli-logger.ts` utility with structured debug logs for `braingrid init` and `braingrid setup` commands (writes to `.braingrid/temp/init-debug.log` and `.braingrid/temp/setup-debug.log`)
+- **GitHub API logging** — log retries, auth fallbacks, and file fetches in setup-service
+
+### Fixed
+
+- **Silent error swallowing** — five catch blocks in init/setup handlers that discarded errors now log them with full context
+- **Session delimiter race** — delimiter check now runs before `exec 2>>` redirect which was creating the file prematurely
+- **Empty REQ_ID fallback** — `verify-acceptance-criteria` falls back to unprefixed paths when sentinel is empty instead of producing malformed paths
+- **Double initLogger leak** — guard against file descriptor leak when init triggers setup (which re-initializes the logger)
+
+### Changed
+
+- **Log noise reduction** — removed noisy SKIP log entries from sync-braingrid-task for non-status TaskUpdate calls
+
 ## [0.2.52] - 2026-02-24
 
 ### Fixed
