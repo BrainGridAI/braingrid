@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.54] - 2026-02-25
+
+### Added
+
+- **Logger file writing enabled by default** — `logToFile` now defaults to `true` so all `logger.debug()` calls in auth, JWT, and services actually write to `~/.braingrid/logs/braingrid-cli.log`
+- **Silent catch block logging** — 7 catch blocks in `auth.ts` and 1 in `jwt.ts` that silently swallowed errors now log debug messages with error context
+- **jq installer** — new cross-platform `jq-installer.ts` following the established git/gh installer pattern; `braingrid init` now checks for and offers to install jq (required by all hooks)
+- **jq in CLI tools registry** — `braingrid status` now shows jq version in "Installed Coding Tools" section
+- **Hook error wrapper** — new `log_braingrid_call()` function in `log-helper.sh` captures stderr separately and logs failed CLI calls with exit codes
+- **Hook jq availability check** — `log-helper.sh` warns on stderr if jq is not installed
+- **Hook early-exit logging** — sentinel and status skip conditions now log INFO events for audit trail
+- **Hook SIGTERM traps** — `sync-braingrid-task.sh` and `create-braingrid-task.sh` log timeout kills instead of dying silently
+- **JSON validation in sync hook** — validates `jq` can parse task list output before processing
+- **Debug Logs section in status** — `braingrid status` now shows CLI log and hook log file paths with sizes
+- **Log correlation** — Logger supports optional `sessionId` for requirement-scoped log entries
+- **Flush guarantee** — `flushLogger()` in cli-logger ensures write stream is drained before closing, with 1-second safety timeout
+
+### Fixed
+
+- **`$?` capture bug** — `sync-braingrid-task.sh` and `create-braingrid-task.sh` captured exit code after `log_time_end` (which reset `$?` via `date`)
+- **Error formatter `[object Object]`** — plain objects now JSON.stringify instead of showing `[object Object]`
+- **Error formatter context** — regular `Error` objects now include resource context prefix when provided
+
+### Changed
+
+- **Error formatter** — stack traces logged at debug level for Error objects
+
 ## [0.2.53] - 2026-02-25
 
 ### Added
