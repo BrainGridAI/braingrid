@@ -17,6 +17,11 @@ else
 fi
 mkdir -p "$(dirname "$LOG_FILE")"
 
+# Check jq availability (all hooks depend on it)
+if ! command -v jq >/dev/null 2>&1; then
+	echo "Warning: jq not found - BrainGrid hooks require jq" >&2
+fi
+
 # Write session delimiter before redirecting stderr (which creates the file)
 if [ -n "$REQ_ID" ] && [ ! -f "$LOG_FILE" ]; then
 	printf '\n=== BUILD %s started %s ===\n\n' "$REQ_ID" "$(date '+%Y-%m-%d %H:%M:%S')" >> "$LOG_FILE"
@@ -50,4 +55,22 @@ log_time_end() {
 	local duration=$(( end_time - ${_LOG_START_TIME:-$end_time} ))
 	echo "${duration}s"
 	_LOG_START_TIME=""
+}
+
+# Wrapper for braingrid CLI calls that captures stderr separately
+# CRITICAL: Do NOT mix stderr with stdout (2>&1) — hooks parse JSON from stdout
+log_braingrid_call() {
+	local hook="$1"; shift
+	local stderr_file exit_code
+	stderr_file=$(mktemp)
+	local stdout_output
+	stdout_output=$("$@" 2>"$stderr_file") && exit_code=0 || exit_code=$?
+	if [ $exit_code -ne 0 ]; then
+		local stderr_output
+		stderr_output=$(head -c 200 "$stderr_file")
+		log_event "ERROR" "$hook" "cli_call" "cmd=$1 exit=$exit_code stderr=$stderr_output"
+	fi
+	rm -f "$stderr_file"
+	echo "$stdout_output"
+	return $exit_code
 }
