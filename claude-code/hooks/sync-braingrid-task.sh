@@ -8,10 +8,11 @@
 # Structured logging
 source "$(dirname "$0")/log-helper.sh"
 HOOK="sync-braingrid-task"
+trap 'log_event "WARN" "$HOOK" "timeout" "killed by SIGTERM"; exit 0' TERM
 
 # Only active during /build sessions (sentinel file present)
 BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
-[ ! -f "$BUILD_SENTINEL" ] && exit 0
+[ ! -f "$BUILD_SENTINEL" ] && { log_event "INFO" "$HOOK" "skip" "no_sentinel"; exit 0; }
 
 # Get the project directory (where .claude folder lives)
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
@@ -25,9 +26,7 @@ new_status=$(echo "$input" | jq -r '.tool_input.status // empty')
 
 # Exit early if no task ID or no status update
 [ -z "$task_id" ] && { log_event "INFO" "$HOOK" "skip" "no_task_id"; exit 0; }
-if [ -z "$new_status" ]; then
-	exit 0
-fi
+[ -z "$new_status" ] && { log_event "INFO" "$HOOK" "skip" "no_status task_id=$task_id"; exit 0; }
 
 log_event "INFO" "$HOOK" "start" "task_id=$task_id status=$new_status"
 
@@ -45,12 +44,19 @@ fi
 # Use temp file to avoid shell variable issues with control characters in JSON content
 TEMP_JSON=$(mktemp)
 log_time_start
-braingrid task list -r "$req_id" --format json > "$TEMP_JSON" 2>/dev/null
+log_braingrid_call "$HOOK" braingrid task list -r "$req_id" --format json > "$TEMP_JSON"
 list_dur=$(log_time_end)
 
 # Exit if braingrid command failed or file is empty
 if [ ! -s "$TEMP_JSON" ]; then
 	log_event "ERROR" "$HOOK" "task_list" "req=$req_id empty_response duration=$list_dur"
+	rm -f "$TEMP_JSON"
+	exit 0
+fi
+
+# Validate JSON
+if ! jq empty "$TEMP_JSON" 2>/dev/null; then
+	log_event "ERROR" "$HOOK" "task_list" "req=$req_id invalid_json"
 	rm -f "$TEMP_JSON"
 	exit 0
 fi
@@ -90,13 +96,12 @@ esac
 
 # Sync status to BrainGrid (log errors instead of silencing)
 log_time_start
-if braingrid task update "$bg_task_id" -r "$req_id" --status "$bg_status" >> "$LOG_FILE" 2>&1; then
+if log_braingrid_call "$HOOK" braingrid task update "$bg_task_id" -r "$req_id" --status "$bg_status" >> "$LOG_FILE"; then
 	dur=$(log_time_end)
 	log_event "INFO" "$HOOK" "sync" "bg_task=$bg_task_id req=$req_id status=$bg_status duration=$dur"
 else
-	exit_code=$?
 	dur=$(log_time_end)
-	log_event "ERROR" "$HOOK" "sync" "bg_task=$bg_task_id req=$req_id status=$bg_status exit=$exit_code duration=$dur"
+	log_event "ERROR" "$HOOK" "sync" "bg_task=$bg_task_id req=$req_id status=$bg_status duration=$dur"
 fi
 
 # Always exit 0 to not block the workflow
