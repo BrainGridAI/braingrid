@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.55] - 2026-02-26
+
+### Fixed
+
+- **SSH git remote URLs rejected by Zod validation** — `loadProjectConfig()` failed when `.braingrid/project.json` contained an SSH URL (`git@github.com:owner/repo.git`) because Zod's `.url()` validator only accepts WHATWG URLs; relaxed to `.string()` since the field is informational
+
 ## [0.2.54] - 2026-02-25
 
 ### Added
