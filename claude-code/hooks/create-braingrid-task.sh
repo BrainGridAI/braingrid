@@ -7,15 +7,16 @@
 # The task is created as PLANNED (default). The sync-braingrid-task.sh hook
 # handles subsequent status transitions (IN_PROGRESS, COMPLETED) on TaskUpdate.
 
-# Only active during /build sessions (sentinel file present)
-BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
-[ ! -f "$BUILD_SENTINEL" ] && exit 0
-
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
-
 # Structured logging
 source "$(dirname "$0")/log-helper.sh"
 HOOK="create-braingrid-task"
+trap 'log_event "WARN" "$HOOK" "timeout" "killed by SIGTERM"; exit 0' TERM
+
+# Only active during /build sessions (sentinel file present)
+BUILD_SENTINEL="${CLAUDE_PROJECT_DIR:-.}/.braingrid/temp/build-active.local"
+[ ! -f "$BUILD_SENTINEL" ] && { log_event "INFO" "$HOOK" "skip" "no_sentinel"; exit 0; }
+
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 
 input=$(cat)
 
@@ -40,13 +41,12 @@ log_event "INFO" "$HOOK" "start" "subject=$subject claude_id=$claude_task_id req
 create_args=(task create -r "$req_id" --title "$subject" --external-id "$claude_task_id")
 [ -n "$description" ] && create_args+=(--content "$description")
 log_time_start
-if braingrid "${create_args[@]}" >> "$LOG_FILE" 2>&1; then
+if log_braingrid_call "$HOOK" braingrid "${create_args[@]}" >> "$LOG_FILE"; then
 	dur=$(log_time_end)
 	log_event "INFO" "$HOOK" "create" "req=$req_id ext_id=$claude_task_id duration=$dur"
 else
-	exit_code=$?
 	dur=$(log_time_end)
-	log_event "ERROR" "$HOOK" "create" "req=$req_id ext_id=$claude_task_id exit=$exit_code duration=$dur"
+	log_event "ERROR" "$HOOK" "create" "req=$req_id ext_id=$claude_task_id duration=$dur"
 fi
 
 # Always exit 0 to not block the workflow
