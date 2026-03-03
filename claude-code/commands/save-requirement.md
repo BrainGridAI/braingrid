@@ -104,7 +104,7 @@ After successfully creating the requirement, guide the user through the workflow
 2. **Build Implementation Plan**:
 
    ```bash
-   braingrid requirement build REQ-{id} --format markdown
+   braingrid requirement show REQ-{id} --format markdown
    ```
 
    - Exports the complete requirement with all task prompts
@@ -120,7 +120,7 @@ The typical workflow after saving a plan:
 
 1. **➡️ Save plan**: `/save-requirement "Plan Title"` (this command)
 2. Create git branch: `git checkout -b feature/REQ-X-description`
-3. Build implementation plan: `braingrid requirement build REQ-X`
+3. Build implementation plan: `braingrid requirement show REQ-X --format markdown`
 4. Start implementation, updating task status as you go
 
 **Example Interaction:**
@@ -136,7 +136,7 @@ Claude:
 3. Shows created requirement (REQ-123)
 4. Suggests next steps:
    - git checkout -b feature/REQ-123-user-auth
-   - braingrid requirement build REQ-123
+   - braingrid requirement show REQ-123 --format markdown
 ```
 
 **Alternative: Interactive mode**
@@ -186,7 +186,7 @@ Note: Extract the requirement UUID from the command output to construct the URL.
 **Next Steps:**
 
 1. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
-2. Build implementation plan: `braingrid requirement build REQ-{id}`
+2. Build implementation plan: `braingrid requirement show REQ-{id} --format markdown`
 
 **Ask**: "Would you like me to create a branch and build the implementation plan?"
 
