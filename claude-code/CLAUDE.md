@@ -7,7 +7,6 @@ Spec-driven development: turn ideas into AI-ready tasks.
 | Command                     | Description                   |
 | --------------------------- | ----------------------------- |
 | `/specify [prompt]`         | Create AI-refined requirement |
-| `/breakdown [req-id]`       | Break into tasks              |
 | `/build [req-id]`           | Get implementation plan       |
 | `/save-requirement [title]` | Save plan as requirement      |
 
@@ -15,7 +14,6 @@ Spec-driven development: turn ideas into AI-ready tasks.
 
 ```bash
 /specify "Add auth"  # → REQ-123
-/breakdown REQ-123   # → tasks
 /build REQ-123       # → plan
 ```
 
