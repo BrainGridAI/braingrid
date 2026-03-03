@@ -47,10 +47,10 @@ braingrid init
 braingrid specify --prompt "Add user authentication"
 
 # 3. Break down requirement into tasks with AI
-braingrid requirement breakdown REQ-1
+braingrid requirement show REQ-1 --format markdown
 
 # 4. Build requirement with all tasks (markdown with full content)
-braingrid requirement build REQ-1
+braingrid requirement show REQ-1
 ```
 
 ---
@@ -122,8 +122,7 @@ braingrid requirement create --name "Name" [--content "Description"] [--assigned
 braingrid requirement show [id]
 braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"]
 braingrid requirement delete [id] [--force]
-braingrid requirement breakdown [id]
-braingrid requirement build [id] [--format markdown|json|xml]
+braingrid requirement show [id] [--format table|json|xml|markdown]
 
 # Working with a different project:
 braingrid requirement list -p PROJ-456 [--status PLANNED]
