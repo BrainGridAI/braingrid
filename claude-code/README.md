@@ -80,12 +80,10 @@ This command installs:
 
 - **Slash commands** in `.claude/commands/`:
   - `specify.md` - Create AI-refined requirements
-  - `build.md` - Get complete implementation plan
   - `save-requirement.md` - Save discussed plans
-- **BrainGrid skill** in `.claude/skills/braingrid-cli/`:
-  - Comprehensive workflow guidance
-  - Command reference with examples
-  - Best practices documentation
+- **Skills** in `.claude/skills/`:
+  - `braingrid-cli/` - Comprehensive workflow guidance, command reference, best practices
+  - `build/` - Get complete implementation plan and start building
 - **Status line** in `.claude/statusline.sh`:
   - Shows project context: `PROJ-3`
   - Shows requirement context: `REQ-128`
@@ -380,8 +378,7 @@ braingrid requirement show [REQ-ID]
 braingrid requirement create --name "Name" [--tags "tag1,tag2"]
 braingrid requirement update REQ-ID --status IN_PROGRESS
 braingrid requirement update REQ-ID --content "markdown content"
-braingrid requirement breakdown REQ-ID [--format markdown]
-braingrid requirement build REQ-ID [--format markdown]
+braingrid requirement show REQ-ID [--format markdown]
 braingrid requirement tag list [REQ-ID]
 braingrid requirement tag add [REQ-ID] --name "Tag" --color "#FF0000"
 braingrid requirement tag remove [REQ-ID] --name "Tag"
