@@ -98,25 +98,12 @@ The AI refines the prompt into a detailed requirement document with:
 - Specify target users or use cases
 - Reference existing patterns if applicable
 
-### 3. Break Down Requirements
-
-Convert requirements into perfectly-prompted tasks:
-
-```bash
-braingrid requirement breakdown REQ-1
-```
-
-- Specific and actionable
-- Properly sequenced
-- Ready to feed to AI coding tools
-- Scoped to reasonable size
-
-### 4. Build Implementation Plan
+### 3. Build Implementation Plan
 
 Export the complete requirement with all tasks:
 
 ```bash
-braingrid requirement build REQ-1 --format markdown
+braingrid requirement show REQ-1 --format markdown
 ```
 
 **Available formats:**
@@ -187,11 +174,8 @@ braingrid requirement update REQ-1 --name "Updated Name"
 # Delete requirement
 braingrid requirement delete REQ-1 [--force]
 
-# Break into tasks (AI-powered)
-braingrid requirement breakdown REQ-1
-
-# Build complete plan
-braingrid requirement build REQ-1 [--format markdown|json|xml]
+# Show complete plan with tasks
+braingrid requirement show REQ-1 [--format markdown|json|xml]
 ```
 
 **Requirement Status Flow:**
@@ -307,7 +291,7 @@ see each others cursors and feel real time."
 After breaking down requirements:
 
 1. Review tasks with `braingrid task list -r REQ-1`
-2. Export build plan with `braingrid requirement build REQ-1`
+2. Export build plan with `braingrid requirement show REQ-1`
 3. Feed individual task prompts to AI coding tools
 4. Update task status as work progresses
 5. Use git branches matching requirement IDs for auto-detection
@@ -333,14 +317,11 @@ braingrid init
 # Create specification from a prompt
 braingrid specify --prompt "Implement dark mode toggle in settings"
 
-# Break into tasks
-braingrid requirement breakdown REQ-1
-
 # Create git branch
 git checkout -b feature/REQ-1-dark-mode
 
 # Get build plan
-braingrid requirement build REQ-1
+braingrid requirement show REQ-1
 
 # Work through tasks, updating status
 braingrid task update TASK-1 --status IN_PROGRESS
@@ -472,12 +453,11 @@ existing Express.js backend and React frontend. Security requirements: bcrypt \
 for passwords, secure HTTP-only cookies for tokens, rate limiting on auth \
 endpoints."
 
-This will create a refined requirement. Then we can break it into tasks:
+This will create a refined requirement. Then we can view the full plan:
 
-braingrid requirement breakdown REQ-1
-braingrid requirement build REQ-1
+braingrid requirement show REQ-1 --format markdown
 
-Would you like me to help implement the tasks once we have the breakdown?
+Would you like me to help implement the tasks?
 ```
 
 **User:** "Show me what tasks I have for this requirement"
