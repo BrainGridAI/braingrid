@@ -46,7 +46,7 @@ npm install -g @braingrid/cli
 braingrid setup claude-code
 ```
 
-Installs slash commands (`/specify`, `/breakdown`, `/build`), BrainGrid skill, and status line showing your project/requirement/task context in real-time.
+Installs slash commands (`/specify`, `/build`), BrainGrid skill, and status line showing your project/requirement/task context in real-time.
 
 [→ Full Claude Code setup guide](./.braingrid/README.md)
 
@@ -71,11 +71,8 @@ braingrid init
 # 2. Create a requirement with AI refinement
 braingrid specify --prompt "Add user authentication"
 
-# 3. Break down requirement into tasks with AI
-braingrid requirement breakdown REQ-1
-
-# 4. Build requirement with all tasks (markdown with full content)
-braingrid requirement build REQ-1
+# 3. Show requirement with all tasks (markdown with full content)
+braingrid requirement show REQ-1 --format markdown
 ```
 
 ---
@@ -145,15 +142,15 @@ braingrid setup cursor --dry-run
 **What gets installed:**
 
 - **Claude Code integration:**
-  - Commands in `.claude/commands/` (specify, breakdown, build, save-requirement)
-  - Skills in `.claude/skills/braingrid-cli/`
+  - Commands in `.claude/commands/` (specify, save-requirement)
+  - Skills in `.claude/skills/` (braingrid-cli, build, frontend-design, ux)
   - Status line script at `.claude/statusline.sh`
   - Hook script at `.claude/hooks/sync-braingrid-task.sh` for task status sync
   - Settings in `.claude/settings.json` (configures status line and hooks)
   - Content injected into `CLAUDE.md` (or creates it if it doesn't exist)
 
 - **Cursor integration:**
-  - Commands in `.cursor/commands/` (specify, breakdown, build, save-requirement)
+  - Commands in `.cursor/commands/` (specify, build, save-requirement)
   - Rules in `.cursor/rules/`
   - Content injected into `AGENTS.md` (or creates it if it doesn't exist)
 
@@ -216,8 +213,6 @@ braingrid requirement create --name "Name" [--content "Description"] [--assigned
 braingrid requirement show [id]
 braingrid requirement update [id] [--status IDEA|PLANNED|IN_PROGRESS|REVIEW|COMPLETED|CANCELLED] [--name "New Name"] [--content "markdown"]
 braingrid requirement delete [id] [--force]
-braingrid requirement breakdown [id] [--format markdown|json|xml]
-braingrid requirement build [id] [--format markdown|json|xml]
 braingrid requirement create-branch [id] [--name <branch-name>] [--base <branch>]
 braingrid requirement review [id] [--pr <number>]
 
@@ -335,7 +330,7 @@ eval "$(braingrid completion zsh)"
 ### What Gets Completed
 
 - **Commands**: `login`, `logout`, `project`, `requirement`, `task`, etc.
-- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `breakdown`, `build`, `create-branch`, `review`, `summary`, `specify`, `tag`
+- **Subcommands**: `list`, `show`, `create`, `update`, `delete`, `create-branch`, `review`, `summary`, `specify`, `tag`
 - **Options**: `--help`, `--format`, `--status`, `--project`, `--requirement`
 - **Values**: Status values (`IDEA`, `PLANNED`, `IN_PROGRESS`, etc.), format options (`table`, `json`, `xml`, `markdown`)
 
