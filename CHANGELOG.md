@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.56] - 2026-03-03
+
+### Changed
+
+- **`/build` converted from command to skill** — moved `.claude/commands/build.md` to `.claude/skills/build/skill.md` with skill-style frontmatter; setup handler now auto-detects and removes the deprecated command file on install, init, and update paths
+- **Removed `braingrid requirement build` and `braingrid requirement breakdown` CLI commands** — build workflow now handled entirely by the `/build` skill; `/specify` and `/save-requirement` updated to reference the skill
+- **Updated E2E and unit tests** — setup tests now expect 5 skill directories and validate deprecated file cleanup
+
 ## [0.2.55] - 2026-02-26
 
 ### Fixed
