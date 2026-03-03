@@ -351,16 +351,7 @@ Final: 4800 chars ✓
 
 After successfully creating the requirement, guide the user through the typical BrainGrid workflow:
 
-1. **Break Down into Tasks** (AI-powered):
-
-   ```bash
-   braingrid requirement breakdown REQ-{id}
-   ```
-
-   - This uses AI to convert the requirement into specific, actionable tasks
-   - Tasks are properly sequenced and ready to feed to AI coding tools
-
-2. **Create Git Branch** (enables auto-detection):
+1. **Create Git Branch** (enables auto-detection):
 
    ```bash
    git checkout -b feature/REQ-{id}-{description}
@@ -373,17 +364,17 @@ After successfully creating the requirement, guide the user through the typical 
      - `REQ-123-fix-bug`
      - `req-456-new-feature`
 
-3. **Build Implementation Plan**:
+2. **Build Implementation Plan**:
 
    ```bash
-   braingrid requirement build REQ-{id} --format markdown
+   braingrid requirement show REQ-{id} --format markdown
    ```
 
    - Exports the complete requirement with all task prompts
-   - Available formats: `markdown` (default, best for AI), `json`, `xml`, `table`
+   - Available formats: `table` (default), `json`, `xml`, `markdown` (best for AI)
    - Perfect for feeding to AI coding tools like Cursor or Claude Code
 
-4. **Update Requirement Status**:
+3. **Update Requirement Status**:
 
    ```bash
    braingrid requirement update REQ-{id} --status IN_PROGRESS
@@ -397,11 +388,10 @@ After successfully creating the requirement, guide the user through the typical 
 The complete BrainGrid workflow is:
 
 1. `braingrid specify --prompt "..."` - Create AI-refined requirement
-2. `braingrid requirement breakdown REQ-X` - Break into tasks
-3. `git checkout -b feature/REQ-X-description` - Create branch
-4. `braingrid requirement build REQ-X` - Get implementation plan
-5. Work through tasks, updating status as you go
-6. `braingrid requirement update REQ-X --status REVIEW` - Mark for review
+2. `git checkout -b feature/REQ-X-description` - Create branch
+3. `braingrid requirement show REQ-X --format markdown` - Get implementation plan
+4. Work through tasks, updating status as you go
+5. `braingrid requirement update REQ-X --status REVIEW` - Mark for review
 
 **Example Interactions:**
 
@@ -571,8 +561,7 @@ Note: Extract the requirement UUID from the command output to construct the URL.
 
 **Next Steps:**
 
-1. Break down into tasks: `braingrid requirement breakdown REQ-{id}`
-2. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
-3. Build implementation plan: `braingrid requirement build REQ-{id}`
+1. Create git branch: `git checkout -b feature/REQ-{id}-{description}`
+2. Build implementation plan: `braingrid requirement show REQ-{id} --format markdown`
 
 **Ask**: "Would you like me to help you break this down into tasks?"
