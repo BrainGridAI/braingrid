@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.57] - 2026-03-03
+
+### Fixed
+
+- **Missing build skill** — added build skill that was not included in previous release
+
 ## [0.2.56] - 2026-03-03
 
 ### Changed
