@@ -23,7 +23,6 @@ and scope tasks that your AI coding tools can build right the first time.</h3>
 **BrainGrid CLI** is the command-line interface for managing your requirements, and tasks on the BrainGrid platform.
 
 - ✨ **Specify Requirements** - Create build-ready requirement documents from messy ideas
-- 🎯 **Break Down into Tasks** - Create perfectly-prompted tasks from requirements
 - 🤖 **Build with AI Agents** - Get an implementation plan with prompts for each task to feed to Cursor, Claude Code, and other AI coding tools
 - 📊 **Track Progress** - Manage and update task statuses
 - 💾 **Multiple Output Formats** - View task prompts as formatted tables, JSON, Markdown, or XML for scripting
