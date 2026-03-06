@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.58] - 2026-03-06
+
+### Added
+
+- **Frontmatter fields for build skill** — added frontmatter metadata to the `/build` skill for improved skill discovery and configuration
+
+### Fixed
+
+- **Vercel protection bypass header missing from auth API calls** — added the `x-vercel-protection-bypass` header to authentication requests so the CLI can reach Vercel-protected dev/staging environments
+
 ## [0.2.57] - 2026-03-03
 
 ### Fixed
