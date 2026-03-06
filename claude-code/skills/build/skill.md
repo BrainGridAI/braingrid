@@ -1,6 +1,8 @@
 ---
 name: build
 description: Build a requirement with full task details and optional instructions
+allowed-tools: Bash(braingrid:*), Bash(git:*), Bash(npm:*), Read, Write, Grep, Glob, Skill(braingrid-cli), TaskCreate, TaskUpdate, TaskList, TeamCreate, TeamDelete, SendMessage, Task
+argument-hint: [requirement-id] [additional-instructions]
 ---
 
 Fetch a requirement's complete implementation plan and start building it with additional context.
