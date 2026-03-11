@@ -663,7 +663,7 @@ After ALL acceptance criteria show `[x]` with proof (verification loop complete)
 
 6. **Clean up temp files**:
    ```bash
-   rm -f .braingrid/temp/*
+   rm -f .braingrid/temp/build-active.local .braingrid/temp/REQ-*.md
    ```
    Confirm: "🧹 Cleaned up build temp files"
 
