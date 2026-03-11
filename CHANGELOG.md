@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.59] - 2026-03-11
+
+### Fixed
+
+- **`braingrid init` should continue after update** — init now continues the setup flow after updating instead of exiting early, and saves `project.json` after project creation
+- **Skip deprecated files during setup** — setup no longer fails when encountering deprecated files that were already removed
+
 ## [0.2.58] - 2026-03-06
 
 ### Added
