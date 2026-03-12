@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.60] - 2026-03-12
+
+### Changed
+
+- **Rename skill.md to SKILL.md** — standardized skill file naming to uppercase for consistency across all skill directories
+
 ## [0.2.59] - 2026-03-11
 
 ### Fixed
