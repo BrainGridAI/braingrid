@@ -173,11 +173,11 @@ When users run `braingrid setup claude-code`, files from `claude-code/` are inst
 
 When users run `braingrid setup cursor`, files from `cursor/` are installed:
 
-| Source                    | Destination               |
-|---------------------------|---------------------------|
-| `cursor/commands/*.md`    | `.cursor/commands/`       |
-| `cursor/rules/*.mdc`     | `.cursor/rules/`          |
-| `cursor/AGENTS.md`       | Injected into `AGENTS.md` |
+| Source                    | Destination                 |
+|---------------------------|-----------------------------|
+| `cursor/commands/*.md`    | `.cursor/commands/`         |
+| `cursor/rules/*.mdc`      | `.cursor/rules/`            |
+| `cursor/AGENTS.md`        | Injected into `AGENTS.md`   |
 
 ### Hook System (Claude Code)
 
