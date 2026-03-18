@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.61] - 2026-03-17
+
+### Added
+
+- **`braingrid setup openclaw` command** — new setup command to configure OpenClaw integration
+
+### Changed
+
+- **Simplify init by removing GitHubService dependency** — streamlined the init flow by eliminating unnecessary GitHub service coupling
+
 ## [0.2.60] - 2026-03-12
 
 ### Changed
