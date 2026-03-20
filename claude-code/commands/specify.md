@@ -545,7 +545,7 @@ If the command fails, handle reactively based on the error:
 
 - Requirement created with valid ID (REQ-XXX)
 - User understands next steps
-- Offered to help with breakdown/build commands
+- Offered to help with build commands
 
 **Final Output:**
 
