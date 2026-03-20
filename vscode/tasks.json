@@ -1,0 +1,141 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "BrainGrid: Specify",
+      "type": "shell",
+      "command": "braingrid specify --prompt \"${input:specifyPrompt}\"",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Breakdown",
+      "type": "shell",
+      "command": "braingrid requirement breakdown ${input:requirementId}",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Build",
+      "type": "shell",
+      "command": "braingrid requirement show ${input:buildRequirementId} --format markdown",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Requirement List",
+      "type": "shell",
+      "command": "braingrid requirement list",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Task List",
+      "type": "shell",
+      "command": "braingrid task list -r ${input:taskListRequirementId}",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Status",
+      "type": "shell",
+      "command": "braingrid status",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Update CLI",
+      "type": "shell",
+      "command": "braingrid update",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "BrainGrid: Requirement Show",
+      "type": "shell",
+      "command": "braingrid requirement show ${input:showRequirementId} --format markdown",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "specifyPrompt",
+      "type": "promptString",
+      "description": "Describe your idea or feature (10-5000 characters)",
+      "default": ""
+    },
+    {
+      "id": "requirementId",
+      "type": "promptString",
+      "description": "Requirement ID (e.g. REQ-123 or 123). Leave blank to auto-detect from branch.",
+      "default": ""
+    },
+    {
+      "id": "buildRequirementId",
+      "type": "promptString",
+      "description": "Requirement ID to build (e.g. REQ-123). Leave blank to auto-detect from branch.",
+      "default": ""
+    },
+    {
+      "id": "taskListRequirementId",
+      "type": "promptString",
+      "description": "Requirement ID to list tasks for (e.g. REQ-123 or 123)",
+      "default": ""
+    },
+    {
+      "id": "showRequirementId",
+      "type": "promptString",
+      "description": "Requirement ID to show (e.g. REQ-123). Leave blank to auto-detect from branch.",
+      "default": ""
+    }
+  ]
+}

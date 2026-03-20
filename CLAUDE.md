@@ -10,7 +10,7 @@
 Vague Idea → AI-Refined Requirement → Breakdown into Tasks → Build with AI
 ```
 
-**This repository** is a **distribution/template repository** — it contains IDE integration files, slash commands, hook scripts, skills, and documentation that get installed into user projects via `braingrid setup claude-code` or `braingrid setup cursor`. The main CLI source code lives in a separate repository (published as `@braingrid/cli` on npm).
+**This repository** is a **distribution/template repository** — it contains IDE integration files, slash commands, hook scripts, skills, and documentation that get installed into user projects via `braingrid setup claude-code`, `braingrid setup cursor`, or `braingrid setup vscode`. The main CLI source code lives in a separate repository (published as `@braingrid/cli` on npm).
 
 - **Current Version:** 0.2.60
 - **License:** Proprietary (Braingrid AI, Inc 2025)
@@ -51,16 +51,23 @@ braingrid/
 │       ├── ux/SKILL.md                # UX and product design patterns
 │       └── frontend-design/SKILL.md   # Design system and frontend best practices
 │
-└── cursor/                            # Cursor IDE integration files
-    ├── README.md                      # Full Cursor setup guide
-    ├── AGENTS.md                      # Quick-reference injected into user AGENTS.md
-    ├── commands/                      # Slash commands (installed to .cursor/commands/)
-    │   ├── specify.md                 # /specify — create AI-refined requirement
-    │   ├── breakdown.md               # /breakdown — break requirement into tasks
-    │   ├── build.md                   # /build — fetch implementation plan
-    │   └── save-requirement.md        # /save-requirement — save plan as requirement
-    └── rules/                         # Always-on rules (installed to .cursor/rules/)
-        └── braingrid.mdc             # System rule for spec-driven workflow
+├── cursor/                            # Cursor IDE integration files
+│   ├── README.md                      # Full Cursor setup guide
+│   ├── AGENTS.md                      # Quick-reference injected into user AGENTS.md
+│   ├── commands/                      # Slash commands (installed to .cursor/commands/)
+│   │   ├── specify.md                 # /specify — create AI-refined requirement
+│   │   ├── breakdown.md               # /breakdown — break requirement into tasks
+│   │   ├── build.md                   # /build — fetch implementation plan
+│   │   └── save-requirement.md        # /save-requirement — save plan as requirement
+│   └── rules/                         # Always-on rules (installed to .cursor/rules/)
+│       └── braingrid.mdc             # System rule for spec-driven workflow
+│
+└── vscode/                            # VS Code IDE integration files
+    ├── README.md                      # Full VS Code setup guide
+    ├── VSCODE.md                      # Quick-reference injected into user VSCODE.md
+    ├── tasks.json                     # VS Code tasks (installed to .vscode/tasks.json)
+    ├── clinerules.md                  # Cline rules content (installed to .clinerules)
+    └── continue-config.json           # Continue.dev slash commands (installed to .continue/config.json)
 ```
 
 ---
@@ -178,6 +185,22 @@ When users run `braingrid setup cursor`, files from `cursor/` are installed:
 | `cursor/commands/*.md`    | `.cursor/commands/`         |
 | `cursor/rules/*.mdc`      | `.cursor/rules/`            |
 | `cursor/AGENTS.md`        | Injected into `AGENTS.md`   |
+
+### VS Code Integration
+
+When users run `braingrid setup vscode`, files from `vscode/` are installed:
+
+| Source                          | Destination                        |
+|---------------------------------|------------------------------------|
+| `vscode/tasks.json`             | `.vscode/tasks.json`               |
+| `vscode/clinerules.md`          | Injected into `.clinerules`        |
+| `vscode/continue-config.json`   | Merged into `.continue/config.json`|
+| `vscode/VSCODE.md`              | Injected into root `VSCODE.md`     |
+
+**VS Code-specific approach:** Unlike Claude Code (hooks + skills) and Cursor (slash commands + rules), the VS Code integration uses:
+- **VS Code Tasks** — native task runner for BrainGrid CLI commands, accessible via Command Palette
+- **Cline rules** — `.clinerules` file teaches the Cline extension about BrainGrid (equivalent to Cursor's `.cursorrules`)
+- **Continue.dev config** — slash commands (`/specify`, `/breakdown`, `/build`) for the Continue extension
 
 ### Hook System (Claude Code)
 
