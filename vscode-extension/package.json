@@ -1,0 +1,189 @@
+{
+  "name": "braingrid",
+  "displayName": "BrainGrid",
+  "description": "Spec-driven development: turn vague ideas into AI-ready tasks inside VS Code",
+  "version": "0.2.60",
+  "publisher": "BrainGridAI",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrainGridAI/braingrid"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "keywords": [
+    "braingrid",
+    "spec",
+    "requirements",
+    "tasks",
+    "ai",
+    "planning"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "braingrid.specify",
+        "title": "BrainGrid: Specify",
+        "category": "BrainGrid",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "braingrid.breakdown",
+        "title": "BrainGrid: Breakdown",
+        "category": "BrainGrid",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "braingrid.build",
+        "title": "BrainGrid: Build",
+        "category": "BrainGrid",
+        "icon": "$(play)"
+      },
+      {
+        "command": "braingrid.requirementList",
+        "title": "BrainGrid: List Requirements",
+        "category": "BrainGrid",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "braingrid.taskList",
+        "title": "BrainGrid: List Tasks",
+        "category": "BrainGrid",
+        "icon": "$(tasklist)"
+      },
+      {
+        "command": "braingrid.status",
+        "title": "BrainGrid: Status",
+        "category": "BrainGrid",
+        "icon": "$(info)"
+      },
+      {
+        "command": "braingrid.openPanel",
+        "title": "BrainGrid: Open Panel",
+        "category": "BrainGrid",
+        "icon": "$(layout-sidebar-right)"
+      },
+      {
+        "command": "braingrid.login",
+        "title": "BrainGrid: Login",
+        "category": "BrainGrid",
+        "icon": "$(key)"
+      },
+      {
+        "command": "braingrid.init",
+        "title": "BrainGrid: Init Project",
+        "category": "BrainGrid",
+        "icon": "$(folder-opened)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "braingrid.specify",
+        "key": "ctrl+shift+g s",
+        "mac": "cmd+shift+g s",
+        "when": "editorFocus"
+      },
+      {
+        "command": "braingrid.build",
+        "key": "ctrl+shift+g b",
+        "mac": "cmd+shift+g b",
+        "when": "editorFocus"
+      },
+      {
+        "command": "braingrid.breakdown",
+        "key": "ctrl+shift+g d",
+        "mac": "cmd+shift+g d",
+        "when": "editorFocus"
+      },
+      {
+        "command": "braingrid.openPanel",
+        "key": "ctrl+shift+g p",
+        "mac": "cmd+shift+g p"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "braingrid",
+          "title": "BrainGrid",
+          "icon": "assets/icon-mono.svg"
+        }
+      ]
+    },
+    "views": {
+      "braingrid": [
+        {
+          "id": "braingrid.requirementsView",
+          "name": "Requirements",
+          "type": "tree"
+        },
+        {
+          "id": "braingrid.tasksView",
+          "name": "Tasks",
+          "type": "tree"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "BrainGrid",
+      "properties": {
+        "braingrid.cliPath": {
+          "type": "string",
+          "default": "braingrid",
+          "description": "Path to the BrainGrid CLI executable"
+        },
+        "braingrid.autoDetect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-detect requirement ID from git branch name"
+        },
+        "braingrid.statusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show BrainGrid context in the status bar"
+        },
+        "braingrid.defaultFormat": {
+          "type": "string",
+          "enum": ["markdown", "table", "json"],
+          "default": "markdown",
+          "description": "Default output format for requirement/task display"
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        { "command": "braingrid.specify" },
+        { "command": "braingrid.breakdown" },
+        { "command": "braingrid.build" },
+        { "command": "braingrid.requirementList" },
+        { "command": "braingrid.taskList" },
+        { "command": "braingrid.status" },
+        { "command": "braingrid.openPanel" },
+        { "command": "braingrid.login" },
+        { "command": "braingrid.init" }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
+  }
+}
