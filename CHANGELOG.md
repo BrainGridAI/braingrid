@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.62] - 2026-03-20
+
+### Changed
+
+- **Deprecate breakdown command from setup** — removed the breakdown command from the setup flow as it is no longer needed
+
 ## [0.2.61] - 2026-03-17
 
 ### Added
