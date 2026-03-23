@@ -47,6 +47,7 @@ Consult these references when implementing specific systems:
 | Elevation, cards, modals | `references/shadow-and-depth.md` |
 | Page layout, responsive | `references/layout-and-responsive.md` |
 | Icons (Lucide via CSS) | `references/icons-lucide.md` |
+| Photos (Unsplash embeds) | `references/images-unsplash.md` |
 | Forms, empty states, buttons, nav | `references/ux-patterns.md` |
 | Accessibility (WCAG 2.1) | `references/accessibility.md` |
 | What NOT to do | `references/anti-patterns.md` |
