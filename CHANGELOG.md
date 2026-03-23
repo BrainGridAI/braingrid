@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.64] - 2026-03-23
+
+### Added
+
+- **Unsplash image integration for frontend design skill** — added Unsplash image search and integration support to the frontend design skill, including search script and reference documentation
+
+## [0.2.63] - 2026-03-20
+
+### Fixed
+
+- **Skip branch creation in bg-build for CONV-\* branches** — bg-build no longer attempts to create branches when working on CONV-* conversation branches
+- **Handle null SHA in sync-claude script** — fixed sync-claude script crashing when encountering null SHA values
+
 ## [0.2.62] - 2026-03-20
 
 ### Changed
