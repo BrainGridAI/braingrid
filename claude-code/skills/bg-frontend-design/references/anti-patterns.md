@@ -19,3 +19,6 @@ These violate the core design principles. Avoid all of them.
 15. **Fixed-width containers** (`width: 600px`) instead of fluid (`width: 100%; max-width: 600px`) — breaks at narrow viewports
 16. **Fixed-px grid columns** (`grid-template-columns: 300px 500px`) — use `repeat(auto-fit, minmax(280px, 1fr))` instead
 17. **Missing @media (max-width: 600px) block** — every design needs one for mobile reflow
+18. **Unsplash page URLs in img src** (`unsplash.com/photos/...`) — use `images.unsplash.com/photo-...` embed URLs
+19. **Placeholder image services** (placeholder.com, placehold.co) — use real Unsplash photos
+20. **Full-res images without size params** — always append `?w=` to avoid serving 5000px originals
