@@ -8,7 +8,7 @@ argument-hint: [requirement-id] [additional-instructions]
 Fetch a requirement's complete implementation plan and start building it with additional context.
 
 **Use BrainGrid CLI Skill:**
-If the `braingrid-cli` skill is available, invoke it for detailed workflow guidance and best practices. The skill provides comprehensive context about BrainGrid commands, auto-detection features, and recommended workflows.
+If the `bg-cli` skill is available, invoke it for detailed workflow guidance and best practices. The skill provides comprehensive context about BrainGrid commands, auto-detection features, and recommended workflows.
 
 **About This Command:**
 Use this command to fetch a requirement's complete implementation plan using `braingrid requirement show`. This retrieves the requirement details along with all task prompts in markdown format (perfect for AI coding tools). You can optionally provide additional instructions or context to guide the implementation.
@@ -104,48 +104,37 @@ If the requirement ID is not yet known (auto-detection), create the sentinel aft
      - **No git branch/ID**: Ask user to provide requirement ID or create git branch
      - **Network/API errors**: Show full error message and suggest retry
 
-**REQUIRED - Create BrainGrid Branch:**
+**Branch Setup:**
 
-CRITICAL: You MUST run `braingrid requirement create-branch` to create the branch. Do NOT skip this step. Do NOT use `git checkout -b` instead. The BrainGrid CLI command creates the branch on GitHub AND registers it with BrainGrid for requirement tracking. A local `git checkout -b` does neither.
+Check the current branch before doing anything else:
 
-1. **Check if already on the correct branch**:
+```bash
+git rev-parse --abbrev-ref HEAD
+```
 
-   ```bash
-   git rev-parse --abbrev-ref HEAD
-   ```
+**Skip branch creation if any of these are true** — go straight to Task Creation:
+- Branch contains `REQ-{id}` (e.g., `tyler/REQ-12-some-feature`, `feature/REQ-12-foo`)
+- Branch matches `CONV-*` pattern (Conductor conversation branch — already has an isolated workspace)
 
-   If the current branch name already contains `REQ-{id}` (e.g., `tyler/REQ-12-some-feature` or `feature/REQ-12-foo`), skip to Task Creation. Otherwise, continue to step 2.
+**Otherwise, create a BrainGrid branch:**
 
-2. **Run BrainGrid create-branch** (REQUIRED):
+Use `braingrid requirement create-branch` — not `git checkout -b`. The CLI creates the branch on GitHub AND registers it with BrainGrid for tracking.
 
-   ```bash
-   braingrid requirement create-branch REQ-{id}
-   ```
+```bash
+braingrid requirement create-branch REQ-{id}
+```
 
-   The command will output:
+Then checkout using the branch name from the output:
 
-   ```
-   ✅ Created branch: {branch-name}
+```bash
+git fetch origin && git checkout {branch-name}
+```
 
-   SHA: abc123d
-
-   To checkout: git fetch origin && git checkout {branch-name}
-   ```
-
-3. **Checkout the branch** - extract the checkout command from the output and run it:
-
-   ```bash
-   git fetch origin && git checkout {branch-name}
-   ```
-
-   Replace `{branch-name}` with the actual branch name from the `✅ Created branch:` line (e.g., `tyler/REQ-12-user-authentication`).
-
-4. **Fallback** - ONLY if `create-branch` fails with an actual error (not found, network error, GitHub not configured):
-   - Create a local branch as a last resort:
-     ```bash
-     git checkout -b feature/REQ-{id}-{slug}
-     ```
-   - Warn: "⚠️ Branch created locally only. It is not tracked in BrainGrid. Run `braingrid requirement create-branch REQ-{id}` later to register it."
+**Fallback** — only if `create-branch` fails (not found, network error, GitHub not configured):
+```bash
+git checkout -b feature/REQ-{id}-{slug}
+```
+Warn: "⚠️ Branch created locally only. Not tracked in BrainGrid. Run `braingrid requirement create-branch REQ-{id}` later to register it."
 
 ---
 
