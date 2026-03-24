@@ -1,0 +1,39 @@
+{
+  "slashCommands": [
+    {
+      "name": "specify",
+      "description": "Create an AI-refined BrainGrid requirement from a vague idea",
+      "params": {
+        "prompt": "Use the BrainGrid CLI to turn the user's idea into a detailed, structured requirement.\n\nSteps:\n1. If $input is provided, use it as the prompt. Otherwise ask the user for their idea.\n2. Run: braingrid specify --prompt \"<user's idea>\"\n3. Show the created requirement ID and name.\n4. Ask if the user wants to break it down into tasks now.\n\nIf CLI is not installed: npm install -g @braingrid/cli\nIf not authenticated: braingrid login\nIf no project: braingrid init\n\nOutput formats: Use --format markdown for full content."
+      }
+    },
+    {
+      "name": "breakdown",
+      "description": "Break a BrainGrid requirement into implementation tasks",
+      "params": {
+        "prompt": "Break down a BrainGrid requirement into AI-ready implementation tasks.\n\nSteps:\n1. Get requirement ID from $input (accepts REQ-123, req-123, or 123).\n   If not provided, auto-detect from git branch (feature/REQ-X-description).\n   If auto-detection fails, ask the user.\n2. Run: braingrid requirement breakdown <REQ-ID>\n3. Show the tasks created.\n4. Suggest creating a git branch: git checkout -b feature/REQ-<id>-<slug>\n5. Suggest running /build to get the full implementation plan.\n\nHandle errors reactively: install CLI if missing, login if not authenticated."
+      }
+    },
+    {
+      "name": "build",
+      "description": "Fetch the complete BrainGrid implementation plan with all task prompts",
+      "params": {
+        "prompt": "Fetch a BrainGrid requirement's complete implementation plan.\n\nSteps:\n1. Get requirement ID from $input (accepts REQ-123, req-123, or 123).\n   If not provided, auto-detect from git branch (feature/REQ-X-description).\n   If auto-detection fails, ask the user.\n2. Run: braingrid requirement show <REQ-ID> --format markdown\n3. Display the full output: requirement details + all task prompts.\n4. Show task count and summary.\n5. Suggest starting implementation with the first task.\n6. Update requirement status: braingrid requirement update <REQ-ID> --status IN_PROGRESS\n\nIf additional instructions are in $input after the requirement ID, acknowledge them and apply to the implementation plan.\n\nHandle errors reactively."
+      }
+    },
+    {
+      "name": "save-requirement",
+      "description": "Save the current discussed plan as a BrainGrid requirement",
+      "params": {
+        "prompt": "Save the current conversation's plan as a structured BrainGrid requirement.\n\nSteps:\n1. Review the conversation to understand what feature/plan was discussed.\n2. Get a title from $input, or derive one from the discussion.\n3. Summarize the full discussed plan into a detailed description.\n4. Run: braingrid requirement create --name \"<title>\" --content \"<full description>\"\n5. Show the created REQ-ID.\n6. Ask if the user wants to break it down: braingrid requirement breakdown REQ-X\n\nHandle errors reactively."
+      }
+    }
+  ],
+  "contextProviders": [
+    {
+      "name": "braingrid",
+      "description": "Fetch the current BrainGrid requirement and task context",
+      "params": {}
+    }
+  ]
+}
