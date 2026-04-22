@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.66] - 2026-04-22
+
+### Added
+
+- **`bg-fix-conflicts` skill** — new Claude Code / OpenClaw skill for resolving merge conflicts when a workspace branch falls behind `main`. Distributed via `braingrid setup claude-code` and `braingrid setup openclaw`; invoked by the builder agent when a workspace enters CONFLICT state after an automatic rebase fails.
+
+## [0.2.65] - 2026-04-02
+
+### Added
+
+- **API-provided URL field for requirement deep links** — deep links now use the URL field returned by the API instead of constructing URLs client-side
+
+### Fixed
+
+- **Guard against undefined full_name in init repository config** — init no longer crashes when full_name is undefined during repository configuration
+
 ## [0.2.64] - 2026-03-23
 
 ### Added
