@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.67] - 2026-05-18
+
+### Changed
+
+- **`.braingrid/` gitignore policy** — `braingrid init` now ignores everything under `.braingrid/` except `.braingrid/memory/`, so builder agent memory persists across sessions, branches, and merges while per-session files stay untracked. A tracked `.braingrid/memory/.gitkeep` is seeded so the directory survives `git clone` and orchestrator `git clean`. The legacy `.braingrid/temp/` entry is migrated automatically.
+
+### Fixed
+
+- **Robust gitignore idempotency and error surfacing** — the policy block is now detected via its unique header comment, preventing a stray `!.braingrid/memory/` line from suppressing the full policy, and non-`EEXIST` errors while seeding the memory anchor are surfaced instead of silently swallowed.
+
 ## [0.2.66] - 2026-04-22
 
 ### Added
