@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.68] - 2026-05-29
+
+### Added
+
+- **`project provision database` and `project provision auth` commands** — new subcommands that wrap the provisioning API endpoints to enable a managed database or configure authentication for a project. Both prompt for confirmation before provisioning, skippable with `--force`/`--yes`, and are backed by new `ProjectService.provisionDatabase` / `provisionAuthentication` methods.
+- **Read-only `manage_database` and `auth_mode` fields on `project show`** — project details now surface the managed-database and auth-mode state across table, markdown, xml, and json output.
+
 ## [0.2.67] - 2026-05-18
 
 ### Changed
