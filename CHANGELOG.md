@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.69] - 2026-06-02
+
+### Fixed
+
+- **Clean JSON on stdout for `project provision`** — provisioning commands no longer interleave spinner output with structured JSON on stdout, so machine-readable output stays parseable when piped or captured.
+- **Guard against re-provisioning a managed database** — `project provision database` now detects when a project already has a managed database and refuses to re-provision instead of issuing a redundant request.
+
 ## [0.2.68] - 2026-05-29
 
 ### Added
